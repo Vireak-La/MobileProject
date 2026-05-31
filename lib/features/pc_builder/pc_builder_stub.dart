@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../checkout/cart.dart';
 import '../../theme/app_colors.dart';
 
 class PcBuilderStubScreen extends StatefulWidget {
@@ -116,6 +117,19 @@ class _PcBuilderStubScreenState extends State<PcBuilderStubScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('CUSTOM RIG BUILDER'),
+        actions: [
+          IconButton(
+            tooltip: 'Open cart',
+            onPressed: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (_) => const CartScreen(),
+                ),
+              );
+            },
+            icon: const Icon(Icons.shopping_cart_outlined),
+          ),
+        ],
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
@@ -219,44 +233,6 @@ class _PcBuilderStubScreenState extends State<PcBuilderStubScreen> {
             const SizedBox(height: 12),
             Text('Live Total: \$$totalCost.00', style: const TextStyle(fontFamily: 'Courier', fontSize: 16, fontWeight: FontWeight.bold, color: AppColors.neonGreen)),
           ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildComponentRow(String title, String name, String price, bool isSelected) {
-    return Card(
-      margin: const EdgeInsets.only(bottom: 10),
-      child: ListTile(
-        leading: Icon(
-          isSelected ? Icons.check_circle : Icons.circle_outlined,
-          color: isSelected ? AppColors.neonCyan : AppColors.textMuted,
-        ),
-        title: Text(
-          title.toUpperCase(),
-          style: const TextStyle(
-            fontFamily: 'Courier',
-            fontSize: 10,
-            color: AppColors.textSecondary,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        subtitle: Text(
-          name,
-          style: TextStyle(
-            fontSize: 12,
-            color: isSelected ? Colors.white : AppColors.textMuted,
-            fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
-          ),
-        ),
-        trailing: Text(
-          price,
-          style: const TextStyle(
-            fontFamily: 'Courier',
-            fontSize: 12,
-            fontWeight: FontWeight.bold,
-            color: AppColors.neonGreen,
-          ),
         ),
       ),
     );
