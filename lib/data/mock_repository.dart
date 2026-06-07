@@ -205,7 +205,7 @@ class MockRepository {
         author: 'TechPro_Steve',
         description: 'Testing Pea method vs Cross method vs Spread method. Which one gives the lowest delta-T? Find out in this 2-minute masterclass.',
         thumbnailUrl: 'https://images.unsplash.com/photo-1591488320449-011701bb6704?w=600&auto=format&fit=crop&q=60',
-        videoUrl: 'https://www.w3schools.com/html/mov_bbb.mp4', // Demo video file
+        videoUrl: 'https://www.youtube.com/watch?v=6t8YhRTqLfA', // How to Apply Thermal Paste correctly
         isVideo: true,
         tags: ['Tutorial', 'Cooling', 'CPU'],
         likes: 852,
@@ -224,13 +224,13 @@ class MockRepository {
       ),
       GalleryItem(
         id: 'gal-4',
-        title: 'Tutorial: Sourcing compatible RAM for Ryzen CPUs',
-        author: 'RyzenMaster',
-        description: 'Quick walkthrough on understanding DDR5 profiles, AMD EXPO, and selecting the optimal speed spot (6000MHz CL30).',
+        title: 'Tutorial: How to Build a Gaming PC Step by Step',
+        author: 'LinusTechTips',
+        description: 'Complete beginner-friendly walkthrough on assembling your first gaming PC — from installing the CPU and RAM to cable management and first boot.',
         thumbnailUrl: 'https://images.unsplash.com/photo-1544244015-0df4b3ffc6b0?w=600&auto=format&fit=crop&q=60',
-        videoUrl: 'https://flutter.github.io/assets-for-api-docs/assets/videos/butterfly.mp4',
+        videoUrl: 'https://www.youtube.com/watch?v=2joA_S92p64', // How to Build a PC - Linus Tech Tips
         isVideo: true,
-        tags: ['Tutorial', 'RAM', 'AMD'],
+        tags: ['Tutorial', 'Build Guide', 'Beginner'],
         likes: 412,
         views: 3100,
       ),
