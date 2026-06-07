@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 import '../../data/mock_repository.dart';
 import '../../theme/app_colors.dart';
 
@@ -296,29 +297,110 @@ class _GalleryScreenState extends State<GalleryScreen> {
     );
   }
 
-  // Simulated Video Player with full controls
+  // Video Player with full controls
   void _showVideoPlayer(BuildContext context, GalleryItem item) {
     showDialog(
       context: context,
-      builder: (context) => _MockVideoPlayerDialog(item: item),
+      builder: (context) => _VideoPlayerDialog(item: item),
     );
   }
 }
 
-class _MockVideoPlayerDialog extends StatefulWidget {
+class _VideoPlayerDialog extends StatefulWidget {
   final GalleryItem item;
-  const _MockVideoPlayerDialog({required this.item});
+  const _VideoPlayerDialog({required this.item});
 
   @override
-  State<_MockVideoPlayerDialog> createState() => _MockVideoPlayerDialogState();
+  State<_VideoPlayerDialog> createState() => _VideoPlayerDialogState();
 }
 
-class _MockVideoPlayerDialogState extends State<_MockVideoPlayerDialog> {
-  bool isPlaying = true;
-  double progress = 0.35;
+class _VideoPlayerDialogState extends State<_VideoPlayerDialog> {
+  late YoutubePlayerController _controller;
+  bool _hasError = false;
+  String? _errorMessage;
+  bool _isLoading = true;
+
+  String? _extractVideoId(String url) {
+    if (url.contains('youtu.be/')) {
+      return url.split('youtu.be/').last.split('?').first;
+    }
+    if (url.contains('v=')) {
+      return url.split('v=').last.split('&').first;
+    }
+    if (url.contains('embed/')) {
+      return url.split('embed/').last.split('?').first;
+    }
+    return null;
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    final url = widget.item.videoUrl ?? '';
+    final videoId = _extractVideoId(url);
+    if (videoId == null) {
+      _hasError = true;
+      _errorMessage = 'Could not parse YouTube video ID from URL: $url';
+      return;
+    }
+    _controller = YoutubePlayerController.fromVideoId(
+      videoId: videoId,
+      autoPlay: false,
+      params: const YoutubePlayerParams(
+        showFullscreenButton: true,
+        showControls: true,
+        mute: false,
+        enableCaption: false,        // reduces JS/caption processing
+        strictRelatedVideos: true,   // avoids loading extra content
+        loop: false,
+      ),
+    );
+    // Mark as loaded once controller is ready
+    _controller.listen((state) {
+      if (_isLoading && mounted) {
+        setState(() => _isLoading = false);
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    if (!_hasError) {
+      _controller.close();
+    }
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
+    if (_hasError) {
+      return Dialog(
+        backgroundColor: AppColors.background,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(16),
+          side: const BorderSide(color: AppColors.neonCyan, width: 1.5),
+        ),
+        clipBehavior: Clip.antiAlias,
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                'Error: $_errorMessage',
+                style: const TextStyle(color: Colors.redAccent, fontSize: 13),
+              ),
+              const SizedBox(height: 12),
+              TextButton(
+                child: const Text('CLOSE', style: TextStyle(color: AppColors.neonMagenta)),
+                onPressed: () => Navigator.pop(context),
+              ),
+            ],
+          ),
+        ),
+      );
+    }
+
     return Dialog(
       backgroundColor: AppColors.background,
       shape: RoundedRectangleBorder(
@@ -329,69 +411,37 @@ class _MockVideoPlayerDialogState extends State<_MockVideoPlayerDialog> {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          // Simulated Video screen
           AspectRatio(
             aspectRatio: 16 / 9,
             child: Stack(
-              fit: StackFit.expand,
+              alignment: Alignment.center,
               children: [
-                CachedNetworkImage(
-                  imageUrl: widget.item.thumbnailUrl,
-                  fit: BoxFit.cover,
+                YoutubePlayer(
+                  controller: _controller,
+                  aspectRatio: 16 / 9,
                 ),
-                // Play overlay status
-                Container(
-                  color: Colors.black.withOpacity(isPlaying ? 0.2 : 0.6),
-                ),
-                if (!isPlaying)
-                  const Center(
-                    child: Icon(
-                      Icons.play_arrow,
-                      color: AppColors.neonCyan,
-                      size: 64,
+                if (_isLoading)
+                  Container(
+                    color: Colors.black87,
+                    child: const Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        CircularProgressIndicator(
+                          color: AppColors.neonCyan,
+                          strokeWidth: 2,
+                        ),
+                        SizedBox(height: 12),
+                        Text(
+                          'Loading player...',
+                          style: TextStyle(
+                            color: AppColors.neonCyan,
+                            fontSize: 12,
+                            fontFamily: 'Courier',
+                          ),
+                        ),
+                      ],
                     ),
                   ),
-                Positioned(
-                  bottom: 8,
-                  left: 12,
-                  right: 12,
-                  child: Row(
-                    children: [
-                      IconButton(
-                        icon: Icon(
-                          isPlaying ? Icons.pause : Icons.play_arrow,
-                          color: Colors.white,
-                        ),
-                        onPressed: () {
-                          setState(() {
-                            isPlaying = !isPlaying;
-                          });
-                        },
-                      ),
-                      const SizedBox(width: 8),
-                      Expanded(
-                        child: Slider(
-                          value: progress,
-                          onChanged: (value) {
-                            setState(() {
-                              progress = value;
-                            });
-                          },
-                          activeColor: AppColors.neonCyan,
-                          inactiveColor: Colors.grey.shade700,
-                        ),
-                      ),
-                      const Text(
-                        '0:45 / 2:12',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 10,
-                          fontFamily: 'Courier',
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
               ],
             ),
           ),
