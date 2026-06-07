@@ -1,7 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'state/app_state.dart';
-import 'theme/app_theme.dart';
+
+// Authentication Feature Components
+import 'package:mobileproject/features/auth/start_screen.dart';
+import 'package:mobileproject/features/auth/login_screen.dart';
+import 'package:mobileproject/features/auth/register_screen.dart';
+import 'package:mobileproject/features/auth/verify_email_screen.dart';
+import 'package:mobileproject/features/auth/forget_password_screen.dart';
+import 'package:mobileproject/features/auth/new_password_screen.dart';
+
+// Dashboard / Core Business Modules
 import 'features/home/home_stub.dart';
 import 'features/pc_builder/pc_builder_stub.dart';
 import 'features/booking/booking_screen.dart';
@@ -9,7 +17,15 @@ import 'features/booking/repair_tracker_screen.dart';
 import 'features/map/map_screen.dart';
 import 'features/chat/chat_screen.dart';
 import 'features/gallery/gallery_screen.dart';
+
+// Global Architectural Resources
+import 'state/app_state.dart';
+import 'theme/app_theme.dart';
 import 'theme/app_colors.dart';
+
+void main() {
+  runApp(const MyApp());
+}
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -22,9 +38,32 @@ class MyApp extends StatelessWidget {
         title: 'RGB Nexus - Computer Shop',
         theme: AppTheme.darkTheme,
         debugShowCheckedModeBanner: false,
-        home: const MainAppShell(),
+        initialRoute: AppRoutes.start,
+        routes: AppRoutes.define(),
       ),
     );
+  }
+}
+
+class AppRoutes {
+  static const String start = '/';
+  static const String login = '/login';
+  static const String register = '/register';
+  static const String verifyEmail = '/verify-email';
+  static const String forgetPassword = '/forget-password';
+  static const String newPassword = '/new-password';
+  static const String mainDashboard = '/dashboard';
+
+  static Map<String, WidgetBuilder> define() {
+    return {
+      start: (context) => const CyberRigStartPage(),
+      login: (context) => const CyberRigLoginPage(),
+      register: (context) => const CyberRigRegisterPage(),
+      verifyEmail: (context) => const CyberRigVerifyEmailPage(),
+      forgetPassword: (context) => const CyberRigForgetPasswordPage(),
+      newPassword: (context) => const CyberRigNewPasswordPage(),
+      mainDashboard: (context) => const MainAppShell(), 
+    };
   }
 }
 
@@ -39,33 +78,39 @@ class _MainAppShellState extends State<MainAppShell> {
   int _currentIndex = 0;
   String? _trackerTicketCode;
 
-  // We handle nested views inside Services and Gallery tabs
   bool _showingChat = false;
   bool _showingBooking = false;
 
   void _navigateToTracker(String ticketCode) {
     setState(() {
       _trackerTicketCode = ticketCode;
-      _currentIndex = 2; // Jump to Services tab
-      _showingBooking = false; // Close booking wizard
+      _currentIndex = 2; // Jump cleanly straight back into the Services Hub
+      _showingBooking = false; 
       _showingChat = false;
     });
   }
 
+  Widget _getActiveScreen() {
+    switch (_currentIndex) {
+      case 0:
+        return const HomeStubScreen(); 
+      case 1:
+        return const PcBuilderStubScreen();
+      case 2:
+        return _buildServicesTab();
+      case 3:
+        return const GalleryScreen();
+      case 4:
+        return const MapScreen();
+      default:
+        return const HomeStubScreen();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    // List of tab root views
-    final List<Widget> rootScreens = [
-      const HomeStubScreen(),
-      const PcBuilderStubScreen(),
-      // Services tab: contains choice between Tracker, Booking, and Chat
-      _buildServicesTab(),
-      const GalleryScreen(),
-      const MapScreen(),
-    ];
-
     return Scaffold(
-      body: rootScreens[_currentIndex],
+      body: _getActiveScreen(),
       bottomNavigationBar: Container(
         decoration: const BoxDecoration(
           border: Border(
@@ -77,11 +122,8 @@ class _MainAppShellState extends State<MainAppShell> {
           onTap: (index) {
             setState(() {
               _currentIndex = index;
-              // Reset nested view flags on navigation tab changes
-              if (index != 2) {
-                _showingChat = false;
-                _showingBooking = false;
-              }
+              // FIXED: Removed state destruction logic here so user doesn't lose
+              // progress if they temporarily switch tabs.
             });
           },
           type: BottomNavigationBarType.fixed,
@@ -122,46 +164,64 @@ class _MainAppShellState extends State<MainAppShell> {
     );
   }
 
-  // Nested Navigation flow for Services and Support Tab
-  Widget _buildServicesTab() {
+Widget _buildServicesTab() {
+    // FIXED: Wrap BookingScreen in a local Scaffold with a back button to avoid modifying its constructor
     if (_showingBooking) {
-      return BookingScreen(
-        onBookingComplete: (ticketNumber) {
-          _navigateToTracker(ticketNumber);
-        },
-      );
-    }
-
-    if (_showingChat) {
-      return WillPopScope(
-        onWillPop: () async {
+      return PopScope(
+        canPop: false,
+        onPopInvokedWithResult: (didPop, result) {
+          if (didPop) return;
           setState(() {
-            _showingChat = false;
+            _showingBooking = false;
           });
-          return false;
         },
-        child: Navigator(
-          onGenerateRoute: (settings) => MaterialPageRoute(
-            builder: (context) => Scaffold(
-              appBar: AppBar(
-                leading: IconButton(
-                  icon: const Icon(Icons.arrow_back),
-                  onPressed: () {
-                    setState(() {
-                      _showingChat = false;
-                    });
-                  },
-                ),
-                title: const Text('SUPPORT CHAT'),
-              ),
-              body: const ChatScreen(),
+        child: Scaffold(
+          appBar: AppBar(
+            leading: IconButton(
+              icon: const Icon(Icons.arrow_back),
+              onPressed: () {
+                setState(() {
+                  _showingBooking = false;
+                });
+              },
             ),
+            title: const Text('INTAKE WIZARD'),
+          ),
+          body: BookingScreen(
+            onBookingComplete: (ticketNumber) {
+              _navigateToTracker(ticketNumber);
+            },
           ),
         ),
       );
     }
 
-    // Default Services hub selection dashboard
+    if (_showingChat) {
+      return PopScope(
+        canPop: false,
+        onPopInvokedWithResult: (didPop, result) {
+          if (didPop) return;
+          setState(() {
+            _showingChat = false;
+          });
+        },
+        child: Scaffold(
+          appBar: AppBar(
+            leading: IconButton(
+              icon: const Icon(Icons.arrow_back),
+              onPressed: () {
+                setState(() {
+                  _showingChat = false;
+                });
+              },
+            ),
+            title: const Text('SUPPORT CHAT'),
+          ),
+          body: const ChatScreen(),
+        ),
+      );
+    }
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('SERVICE HUBS'),
@@ -181,8 +241,6 @@ class _MainAppShellState extends State<MainAppShell> {
               ),
             ),
             const SizedBox(height: 16),
-
-            // 1. Repair intake booking wizard
             _buildHubOptionCard(
               title: 'BOOK A REPAIR / INTAKE WIZARD',
               description: 'Thermal cleanup, RAM upgrades, GPU failures. Generate diagnostics ticket.',
@@ -196,8 +254,6 @@ class _MainAppShellState extends State<MainAppShell> {
               },
             ),
             const SizedBox(height: 16),
-
-            // 2. Status tracker (with dynamic prefill)
             _buildHubOptionCard(
               title: 'TRACK CURRENT SERVICE TICKETS',
               description: 'Enter your 6-digit order tag code to track thermal states and pickup times.',
@@ -216,8 +272,6 @@ class _MainAppShellState extends State<MainAppShell> {
               },
             ),
             const SizedBox(height: 16),
-
-            // 3. Technical support chat
             _buildHubOptionCard(
               title: 'CYBER FAQ & TECHNICAL HELP',
               description: 'Instant automated replies on component compatibilities and opening hours.',
