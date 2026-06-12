@@ -3,6 +3,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 import '../../data/mock_repository.dart';
 import '../../theme/app_colors.dart';
+import '../../components/cyber_drawer.dart';
 
 class GalleryScreen extends StatefulWidget {
   const GalleryScreen({super.key});
@@ -23,6 +24,7 @@ class _GalleryScreenState extends State<GalleryScreen> {
         : allItems.where((item) => item.tags.contains(selectedFilter)).toList();
 
     return Scaffold(
+      drawer: const CyberDrawer(),
       appBar: AppBar(
         title: const Text('BUILD SHOWCASE'),
       ),

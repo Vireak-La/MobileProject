@@ -22,6 +22,7 @@ import 'features/gallery/gallery_screen.dart';
 import 'state/app_state.dart';
 import 'theme/app_theme.dart';
 import 'theme/app_colors.dart';
+import 'components/cyber_drawer.dart';
 
 void main() {
   runApp(const MyApp());
@@ -223,6 +224,7 @@ Widget _buildServicesTab() {
     }
 
     return Scaffold(
+      drawer: const CyberDrawer(),
       appBar: AppBar(
         title: const Text('SERVICE HUBS'),
       ),

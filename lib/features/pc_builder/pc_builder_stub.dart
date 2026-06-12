@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../checkout/cart.dart';
 import '../../theme/app_colors.dart';
+import '../../components/cyber_drawer.dart';
 
 class PcBuilderStubScreen extends StatefulWidget {
   const PcBuilderStubScreen({super.key});
@@ -115,6 +116,7 @@ class _PcBuilderStubScreenState extends State<PcBuilderStubScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      drawer: const CyberDrawer(),
       appBar: AppBar(
         title: const Text('CUSTOM RIG BUILDER'),
         actions: [
