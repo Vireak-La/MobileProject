@@ -1,5 +1,10 @@
 import 'package:flutter/material.dart';
 import '../theme/app_colors.dart';
+import '../features/checkout/cart.dart';
+import '../features/map/map_screen.dart';
+import '../features/chat/chat_screen.dart';
+import '../features/services/service_screen.dart';
+import '../features/home/home_stub.dart';
 
 class CyberDrawer extends StatelessWidget {
   const CyberDrawer({super.key});
@@ -50,9 +55,24 @@ class CyberDrawer extends StatelessWidget {
               padding: const EdgeInsets.symmetric(vertical: 8),
               children: [
                 _buildDrawerItem(
+                  icon: Icons.home_outlined,
+                  title: 'Home',
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => const HomeStubScreen()),
+                    );
+                  },
+                ),
+                _buildDrawerItem(
                   icon: Icons.shopping_cart_outlined,
                   title: 'Cart',
-                  onTap: () {},
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => const CartScreen()),
+                    );
+                  },
                 ),
                 _buildDrawerItem(
                   icon: Icons.favorite_border,
@@ -65,14 +85,14 @@ class CyberDrawer extends StatelessWidget {
                   onTap: () {},
                 ),
                 _buildDrawerItem(
-                  icon: Icons.build_circle_outlined, // using build_circle_outlined as placeholder for wrench in circle
-                  title: 'Book Repair',
-                  onTap: () {},
-                ),
-                _buildDrawerItem(
-                  icon: Icons.build_circle_outlined,
-                  title: 'Track Repair',
-                  onTap: () {},
+                  icon: Icons.build_circle_outlined, 
+                  title: 'Book/Track Repair',
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => const ServiceScreen()),
+                    );
+                  },
                 ),
                 _buildDrawerItem(
                   icon: Icons.local_offer_outlined,
@@ -82,12 +102,22 @@ class CyberDrawer extends StatelessWidget {
                 _buildDrawerItem(
                   icon: Icons.location_on_outlined,
                   title: 'Locations',
-                  onTap: () {},
+                  onTap: () { 
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => const MapScreen()),
+                    );
+                  },
                 ),
                 _buildDrawerItem(
                   icon: Icons.support_agent_outlined, // Headset icon
                   title: 'Chat',
-                  onTap: () {},
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => const ChatScreen()),
+                    );
+                  },
                 ),
                 _buildDrawerItem(
                   icon: Icons.support_agent_outlined,
