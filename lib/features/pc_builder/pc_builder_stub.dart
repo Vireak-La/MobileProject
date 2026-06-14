@@ -202,6 +202,15 @@ class _PcBuilderStubScreenState extends State<PcBuilderStubScreen> {
                 ],
               ),
             ),
+            const SizedBox(height: 10),
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                minimumSize: const Size(double.infinity, 35),
+                backgroundColor: AppColors.surfaceElevated,
+              ),
+              onPressed: _atc,
+              child: const Text('ADD TO CART'),
+            ),
             const SizedBox(height: 24),
 
             // Build stages checklist
@@ -223,15 +232,26 @@ class _PcBuilderStubScreenState extends State<PcBuilderStubScreen> {
             _buildSelectableRow('Power Supply (PSU)', currentPsu, _priceOf(currentPsu), () => _selectPsu()),
             _buildSelectableRow('PC Chassis (Case)', currentCase, _priceOf(currentCase), () => _selectCase()),
 
-            const SizedBox(height: 24),
+            const SizedBox(height: 10),
             ElevatedButton(
               style: ElevatedButton.styleFrom(
-                minimumSize: const Size(double.infinity, 50),
+                minimumSize: const Size(double.infinity, 35),
                 backgroundColor: AppColors.surfaceElevated,
               ),
               onPressed: _checkCompatibility,
               child: const Text('CHECK COMPATIBILITY RULES'),
             ),
+
+            const SizedBox(height: 10),
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                minimumSize: const Size(double.infinity, 35),
+                backgroundColor: AppColors.surfaceElevated,
+              ),
+              onPressed: _savedBuilds,
+              child: const Text('SAVE BUILDS'),
+            ),
+            
             const SizedBox(height: 12),
             Text('Live Total: \$$totalCost.00', style: const TextStyle(fontFamily: 'Courier', fontSize: 16, fontWeight: FontWeight.bold, color: AppColors.neonGreen)),
           ],
@@ -501,5 +521,72 @@ class _PcBuilderStubScreenState extends State<PcBuilderStubScreen> {
     });
     final snack = isCompatible ? 'Build looks compatible!' : 'Incompatible: check socket or PSU wattage.';
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(snack)));
+  }
+  // 1. Create a controller to track the text input
+final TextEditingController _buildNameController = TextEditingController();
+
+void _savedBuilds() {
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        title: const Text('Save Build'),
+        content: Column(
+          mainAxisSize: MainAxisSize.min, // Keeps the lightbox compact
+          children: [
+            const Text('Enter build name:'),
+            const SizedBox(height: 10),
+            TextField(
+              controller: _buildNameController,
+              decoration: const InputDecoration(
+                hintText: 'e.g., Ultimate Gaming Setup',
+                border: OutlineInputBorder(),
+              ),
+            ),
+          ],
+        ),
+        actions: [
+          // Cancel Button
+          TextButton(
+            onPressed: () {
+              _buildNameController.clear(); // Clear input
+              Navigator.of(context).pop();  // Close lightbox
+            },
+            child: const Text('CANCEL'),
+          ),
+          // Save Button
+          ElevatedButton(
+            onPressed: () {
+              String enteredName = _buildNameController.text;
+              
+              if (enteredName.trim().isNotEmpty) {
+                // TODO: Put your actual saving logic here (e.g., save to database)
+                ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(content: Text('Build Added')),
+              );
+
+                _buildNameController.clear(); // Clear input
+                Navigator.of(context).pop();  // Close lightbox
+              }
+            },
+            child: const Text('SAVE BUILD'),
+          ),
+        ],
+      );
+    },
+  );
+}
+
+// 2. Remember to dispose of the controller when the widget is destroyed
+@override
+void dispose() {
+  _buildNameController.dispose();
+  super.dispose();
+}
+
+  void _atc() {
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text('Build added to Cart')),
+    );
   }
 }
