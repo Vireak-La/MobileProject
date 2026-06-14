@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../theme/app_colors.dart';
 import 'product_detail.dart';
+import '../../components/cyber_drawer.dart';
 
 class HomeStubScreen extends StatelessWidget {
   const HomeStubScreen({super.key});
@@ -8,14 +9,22 @@ class HomeStubScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      drawer: const CyberDrawer(),
+      appBar: AppBar(
+        title: const Text('CYBER-RIG PRO'),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.search, color: AppColors.neonCyan),
+            onPressed: () {},
+          )
+        ],
+      ),
       body: SafeArea(
         child: Container(
           color: AppColors.background,
           child: ListView(
             padding: const EdgeInsets.fromLTRB(18, 12, 18, 24),
             children: const [
-              _TopBar(),
-              SizedBox(height: 18),
               _HeroPanel(),
               SizedBox(height: 20),
               _SectionHeader(title: 'HARDWARE MATRIX', accentColor: AppColors.neonCyan, showPagerDots: true),

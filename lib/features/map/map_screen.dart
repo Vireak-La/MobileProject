@@ -3,6 +3,7 @@ import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
 import '../../data/mock_repository.dart';
 import '../../theme/app_colors.dart';
+import '../../components/cyber_drawer.dart';
 
 class MapScreen extends StatefulWidget {
   const MapScreen({super.key});
@@ -53,6 +54,7 @@ class _MapScreenState extends State<MapScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      drawer: const CyberDrawer(),
       appBar: AppBar(
         title: const Text('STORE FINDER'),
       ),
