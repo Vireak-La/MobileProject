@@ -12,6 +12,7 @@ import 'package:mobileproject/features/auth/new_password_screen.dart';
 // Dashboard / Core Business Modules
 import 'features/home/home_stub.dart';
 import 'features/pc_builder/pc_builder_stub.dart';
+import 'features/pc_builder/product_page.dart';
 import 'features/map/map_screen.dart';
 import 'features/gallery/gallery_screen.dart';
 import 'features/home/product_detail.dart';
@@ -83,7 +84,7 @@ class _MainAppShellState extends State<MainAppShell> {
       case 1:
         return const PcBuilderStubScreen();
       case 2:
-        return const ProductDetailScreen();
+        return const ProductPage();
       case 3:
         return const GalleryScreen();
       case 4:
