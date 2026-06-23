@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mobileproject/features/user/ProfilePage.dart';
 import 'package:provider/provider.dart';
 
 // Authentication Feature Components
@@ -13,7 +14,6 @@ import 'package:mobileproject/features/auth/new_password_screen.dart';
 import 'features/home/home_stub.dart';
 import 'features/pc_builder/pc_builder_stub.dart';
 import 'features/pc_builder/product_page.dart';
-import 'features/map/map_screen.dart';
 import 'features/gallery/gallery_screen.dart';
 
 // Global Architectural Resources
@@ -51,6 +51,7 @@ class AppRoutes {
   static const String forgetPassword = '/forget-password';
   static const String newPassword = '/new-password';
   static const String mainDashboard = '/dashboard';
+  static const String profile = '/profile';
 
   static Map<String, WidgetBuilder> define() {
     return {
@@ -61,6 +62,7 @@ class AppRoutes {
       forgetPassword: (context) => const CyberRigForgetPasswordPage(),
       newPassword: (context) => const CyberRigNewPasswordPage(),
       mainDashboard: (context) => const MainAppShell(), 
+      profile: (context) => ProfilePage(),
     };
   }
 }
@@ -75,27 +77,19 @@ class MainAppShell extends StatefulWidget {
 class _MainAppShellState extends State<MainAppShell> {
   int _currentIndex = 0;
 
-  Widget _getActiveScreen() {
-    switch (_currentIndex) {
-      case 0:
-        return const HomeStubScreen(); 
-      case 1:
-        return const PcBuilderStubScreen();
-      case 2:
-        return const ProductPage();
-      case 3:
-        return const GalleryScreen();
-      case 4:
-        return const MapScreen();
-      default:
-        return const HomeStubScreen();
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: _getActiveScreen(),
+      body: IndexedStack(
+        index: _currentIndex,
+        children: [
+          const HomeStubScreen(),
+          const PcBuilderStubScreen(),
+          const ProductPage(),
+          const GalleryScreen(),
+          ProfilePage(),
+        ],
+      ),
       bottomNavigationBar: Container(
         decoration: BoxDecoration(
           color: const Color(0xFF1E1E1E),
@@ -123,8 +117,8 @@ class _MainAppShellState extends State<MainAppShell> {
               _buildNavItem(Icons.home_outlined, Icons.home, 'HOME'),
               _buildNavItem(Icons.memory_outlined, Icons.memory, 'BUILD'),
               _buildNavItem(Icons.shopping_cart_outlined, Icons.shopping_cart, 'SHOP'),
-              _buildNavItem(Icons.photo_library_outlined, Icons.photo_library, 'Show Room'),
-              _buildNavItem(Icons.person_outline, Icons.person, 'PROFILE'),
+              _buildNavItem(Icons.photo_library_outlined, Icons.photo_library, 'GALLERY'),
+              _buildNavItem(Icons.person_outline, Icons.person, 'PROFILE'), // Now index 5
             ],
           ),
         ),
