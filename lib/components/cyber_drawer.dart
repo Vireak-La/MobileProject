@@ -1,11 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import '../theme/app_colors.dart';
-import '../features/checkout/cart.dart';
-import '../features/map/map_screen.dart';
-import '../features/chat/chat_screen.dart';
-import '../features/services/service_screen.dart';
-import '../features/home/home_stub.dart';
-import '../features/home/compare_page.dart';
+import '../state/app_state.dart';
 
 class CyberDrawer extends StatelessWidget {
   const CyberDrawer({super.key});
@@ -59,30 +55,24 @@ class CyberDrawer extends StatelessWidget {
                   icon: Icons.home_outlined,
                   title: 'Home',
                   onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => const HomeStubScreen()),
-                    );
+                    Navigator.of(context).pop();
+                    context.read<AppStateNotifier>().setScreen(AppScreen.home);
                   },
                 ),
                 _buildDrawerItem(
                   icon: Icons.shopping_cart_outlined,
                   title: 'Cart',
                   onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => const CartScreen()),
-                    );
+                    Navigator.of(context).pop();
+                    context.read<AppStateNotifier>().setScreen(AppScreen.cart);
                   },
                 ),
                 _buildDrawerItem(
                   icon: Icons.compare_arrows,
                   title: 'Compare Components',
                   onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => const ComparePage()),
-                    );
+                    Navigator.of(context).pop();
+                    context.read<AppStateNotifier>().setScreen(AppScreen.compare);
                   },
                 ),
                 _buildDrawerItem(
@@ -94,10 +84,8 @@ class CyberDrawer extends StatelessWidget {
                   icon: Icons.build_circle_outlined, 
                   title: 'Book/Track Repair',
                   onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => const ServiceScreen()),
-                    );
+                    Navigator.of(context).pop();
+                    context.read<AppStateNotifier>().setScreen(AppScreen.services);
                   },
                 ),
                 _buildDrawerItem(
@@ -109,20 +97,16 @@ class CyberDrawer extends StatelessWidget {
                   icon: Icons.location_on_outlined,
                   title: 'Locations',
                   onTap: () { 
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => const MapScreen()),
-                    );
+                    Navigator.of(context).pop();
+                    context.read<AppStateNotifier>().setScreen(AppScreen.profile);
                   },
                 ),
                 _buildDrawerItem(
                   icon: Icons.support_agent_outlined, // Headset icon
                   title: 'Chat',
                   onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => const ChatScreen()),
-                    );
+                    Navigator.of(context).pop();
+                    context.read<AppStateNotifier>().setScreen(AppScreen.chat);
                   },
                 ),
                 _buildDrawerItem(
