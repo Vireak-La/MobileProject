@@ -17,6 +17,23 @@ class ChatMessage {
   });
 }
 
+enum AppScreen {
+  home,
+  pcBuilder,
+  shop,
+  gallery,
+  profile,
+  compare,
+  cart,
+  services,
+  chat,
+  aboutUs,
+  helpSupport,
+  dealsSales,
+  community,
+  savedBuilds,
+}
+
 class User {
   String name;
   String email;
@@ -26,6 +43,30 @@ class User {
 }
 
 class AppStateNotifier extends ChangeNotifier {
+  // Navigation State
+  AppScreen _currentScreen = AppScreen.home;
+  AppScreen get currentScreen => _currentScreen;
+
+  final List<AppScreen> _navigationHistory = [AppScreen.home];
+  int get historyLength => _navigationHistory.length;
+
+  void setScreen(AppScreen screen) {
+    if (_currentScreen == screen) return;
+    _currentScreen = screen;
+    _navigationHistory.add(screen);
+    notifyListeners();
+  }
+
+  bool goBack() {
+    if (_navigationHistory.length > 1) {
+      _navigationHistory.removeLast();
+      _currentScreen = _navigationHistory.last;
+      notifyListeners();
+      return true;
+    }
+    return false;
+  }
+
   // Repair tickets
   final List<RepairTicket> _tickets = MockRepository.getDefaultTickets();
   List<RepairTicket> get tickets => _tickets;
@@ -153,39 +194,5 @@ class AppStateNotifier extends ChangeNotifier {
       _favoriteProductIds.add(productId);
     }
     notifyListeners();
-  }
-
-// 2. Define the private variables
-  User? _currentUser = User(name: "Im Chheangngim", email: "ngim@gmail.com");
-  bool _notificationsEnabled = true;
-
-  // 3. Define the public getters
-  User? get currentUser => _currentUser;
-  bool get notificationsEnabled => _notificationsEnabled;
-
-  // 4. Define the methods used in your UI
-  void toggleNotifications(bool val) {
-    _notificationsEnabled = val;
-    notifyListeners();
-  }
-
-  void logout() {
-    _currentUser = null;
-    notifyListeners();
-  }
-
-  void updateName(String newName) {
-    if (_currentUser != null) {
-      _currentUser = User(name: newName, email: _currentUser!.email);
-      notifyListeners();
-    }
-  }
-
-  void updateProfile(String newName, Uint8List? newImageBytes) {
-    if (_currentUser != null) { 
-      _currentUser!.name = newName;
-      if (newImageBytes != null) _currentUser!.profileImageBytes = newImageBytes;
-      notifyListeners();
-    }
   }
 }

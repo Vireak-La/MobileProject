@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mobileproject/features/map/map_screen.dart';
 import 'package:mobileproject/features/user/ProfilePage.dart';
 import 'package:provider/provider.dart';
 
@@ -15,6 +16,7 @@ import 'features/home/home_stub.dart';
 import 'features/pc_builder/pc_builder_stub.dart';
 import 'features/pc_builder/product_page.dart';
 import 'features/gallery/gallery_screen.dart';
+import 'features/home/product_detail.dart';
 
 // Global Architectural Resources
 import 'state/app_state.dart';
@@ -77,19 +79,27 @@ class MainAppShell extends StatefulWidget {
 class _MainAppShellState extends State<MainAppShell> {
   int _currentIndex = 0;
 
+  Widget _getActiveScreen() {
+    switch (_currentIndex) {
+      case 0:
+        return const HomeStubScreen(); 
+      case 1:
+        return const PcBuilderStubScreen();
+      case 2:
+        return const ProductPage();
+      case 3:
+        return const GalleryScreen();
+      case 4:
+        return const MapScreen();
+      default:
+        return const HomeStubScreen();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: IndexedStack(
-        index: _currentIndex,
-        children: [
-          const HomeStubScreen(),
-          const PcBuilderStubScreen(),
-          const ProductPage(),
-          const GalleryScreen(),
-          ProfilePage(),
-        ],
-      ),
+      body: _getActiveScreen(),
       bottomNavigationBar: Container(
         decoration: BoxDecoration(
           color: const Color(0xFF1E1E1E),
@@ -117,8 +127,8 @@ class _MainAppShellState extends State<MainAppShell> {
               _buildNavItem(Icons.home_outlined, Icons.home, 'HOME'),
               _buildNavItem(Icons.memory_outlined, Icons.memory, 'BUILD'),
               _buildNavItem(Icons.shopping_cart_outlined, Icons.shopping_cart, 'SHOP'),
-              _buildNavItem(Icons.photo_library_outlined, Icons.photo_library, 'GALLERY'),
-              _buildNavItem(Icons.person_outline, Icons.person, 'PROFILE'), // Now index 5
+              _buildNavItem(Icons.photo_library_outlined, Icons.photo_library, 'Show Room'),
+              _buildNavItem(Icons.person_outline, Icons.person, 'PROFILE'),
             ],
           ),
         ),

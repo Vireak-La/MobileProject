@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../theme/app_colors.dart';
 import 'checkout_models.dart';
+import 'order_success_page.dart';
 
 class CheckoutScreen extends StatefulWidget {
 	const CheckoutScreen({super.key, required this.items});
@@ -21,8 +22,6 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
 
 	String _paymentMethod = 'Card';
 	bool _isPlacingOrder = false;
-	bool _orderPlaced = false;
-	late String _orderNumber;
 
 	double get _subtotal => CheckoutPricing.subtotal(widget.items);
 	double get _tax => CheckoutPricing.tax(_subtotal);
@@ -53,11 +52,26 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
 
 		await Future<void>.delayed(const Duration(milliseconds: 900));
 
+		if (!mounted) return;
+
 		setState(() {
-			_orderNumber = _nextOrderNumber();
 			_isPlacingOrder = false;
-			_orderPlaced = true;
 		});
+
+		final orderNo = _nextOrderNumber();
+
+		Navigator.of(context).pushReplacement(
+			MaterialPageRoute(
+				builder: (_) => OrderSuccessScreen(
+					orderNumber: orderNo,
+					items: widget.items,
+					total: _total,
+					paymentMethod: _paymentMethod,
+					name: _nameController.text,
+					address: _addressController.text,
+				),
+			),
+		);
 	}
 
 	@override
@@ -67,10 +81,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
 			appBar: AppBar(
 				title: const Text('CHECKOUT // MOCK FLOW'),
 			),
-			body: AnimatedSwitcher(
-				duration: const Duration(milliseconds: 300),
-				child: _orderPlaced ? _buildSuccessView(context) : _buildCheckoutView(context),
-			),
+			body: _buildCheckoutView(context),
 		);
 	}
 
@@ -289,94 +300,6 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
 					),
 				],
 			),
-		);
-	}
-
-	Widget _buildSuccessView(BuildContext context) {
-		return ListView(
-			key: const ValueKey('checkout-success'),
-			padding: const EdgeInsets.all(16),
-			children: [
-				Container(
-					padding: const EdgeInsets.all(18),
-					decoration: BoxDecoration(
-						borderRadius: BorderRadius.circular(22),
-						gradient: const LinearGradient(
-							colors: [Color(0xFF102032), Color(0xFF091017)],
-							begin: Alignment.topLeft,
-							end: Alignment.bottomRight,
-						),
-						border: Border.all(color: AppColors.neonGreen.withOpacity(0.35)),
-					),
-					child: Column(
-						crossAxisAlignment: CrossAxisAlignment.start,
-						children: [
-							ClipRRect(
-								borderRadius: BorderRadius.circular(18),
-								child: Image.asset(
-									'assets/images/buildofthemonth.webp',
-									height: 180,
-									width: double.infinity,
-									fit: BoxFit.cover,
-								),
-							),
-							const SizedBox(height: 16),
-							const Text(
-								'ORDER SUCCESSFUL',
-								style: TextStyle(
-									fontFamily: 'Courier',
-									color: AppColors.neonGreen,
-									fontWeight: FontWeight.w900,
-									fontSize: 20,
-									letterSpacing: 1.2,
-								),
-							),
-							const SizedBox(height: 8),
-							Text('Order number $_orderNumber has been created.', style: const TextStyle(color: AppColors.textPrimary, fontWeight: FontWeight.w700)),
-							const SizedBox(height: 8),
-							const Text(
-								'Your build has been reserved and is waiting for dispatch. A receipt email has been mocked for this flow.',
-								style: TextStyle(color: AppColors.textSecondary, height: 1.45),
-							),
-						],
-					),
-				),
-				const SizedBox(height: 16),
-				Container(
-					padding: const EdgeInsets.all(16),
-					decoration: BoxDecoration(
-						color: AppColors.surfaceCard,
-						borderRadius: BorderRadius.circular(18),
-					),
-					child: Column(
-						children: [
-								summaryLine(label: 'Items', value: '${widget.items.length}'),
-							const SizedBox(height: 8),
-								summaryLine(label: 'Paid with', value: _paymentMethod),
-							const SizedBox(height: 8),
-								summaryLine(label: 'Total charged', value: moneyFormat.format(_total)),
-							const SizedBox(height: 8),
-								summaryLine(label: 'Delivery estimate', value: '2-4 business days'),
-						],
-					),
-				),
-				const SizedBox(height: 18),
-				SizedBox(
-					width: double.infinity,
-					child: ElevatedButton(
-						style: ElevatedButton.styleFrom(
-							minimumSize: const Size(double.infinity, 52),
-							backgroundColor: AppColors.neonCyan,
-							foregroundColor: Colors.black,
-						),
-						onPressed: () => Navigator.of(context).pop(),
-						child: const Text(
-							'BACK TO CART',
-							style: TextStyle(fontFamily: 'Courier', fontWeight: FontWeight.w900, letterSpacing: 1.1),
-						),
-					),
-				),
-			],
 		);
 	}
 

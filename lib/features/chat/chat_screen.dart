@@ -5,7 +5,8 @@ import '../../theme/app_colors.dart';
 import '../../data/mock_repository.dart';
 
 class ChatScreen extends StatefulWidget {
-  const ChatScreen({super.key});
+  final VoidCallback? onBack;
+  const ChatScreen({super.key, this.onBack});
 
   @override
   State<ChatScreen> createState() => _ChatScreenState();
@@ -44,6 +45,12 @@ class _ChatScreenState extends State<ChatScreen> {
 
     return Scaffold(
       appBar: AppBar(
+        leading: widget.onBack != null
+            ? IconButton(
+                icon: const Icon(Icons.arrow_back),
+                onPressed: widget.onBack,
+              )
+            : null,
         title: const Text('TECH SUPPORT'),
         actions: [
           IconButton(
