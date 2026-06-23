@@ -110,9 +110,12 @@ class CyberDrawer extends StatelessWidget {
                   },
                 ),
                 _buildDrawerItem(
-                  icon: Icons.support_agent_outlined,
+                  icon: Icons.info_outline,
                   title: 'About Us',
-                  onTap: () {},
+                  onTap: () {
+                    Navigator.of(context).pop();
+                    context.read<AppStateNotifier>().setScreen(AppScreen.aboutUs);
+                  },
                 ),
                 _buildDrawerItem(
                   icon: Icons.support_agent_outlined,
