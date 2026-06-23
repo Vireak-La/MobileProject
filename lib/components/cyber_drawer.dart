@@ -5,6 +5,7 @@ import '../features/map/map_screen.dart';
 import '../features/chat/chat_screen.dart';
 import '../features/services/service_screen.dart';
 import '../features/home/home_stub.dart';
+import '../features/home/compare_page.dart';
 
 class CyberDrawer extends StatelessWidget {
   const CyberDrawer({super.key});
@@ -75,9 +76,14 @@ class CyberDrawer extends StatelessWidget {
                   },
                 ),
                 _buildDrawerItem(
-                  icon: Icons.favorite_border,
-                  title: 'Favorites',
-                  onTap: () {},
+                  icon: Icons.compare_arrows,
+                  title: 'Compare Components',
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => const ComparePage()),
+                    );
+                  },
                 ),
                 _buildDrawerItem(
                   icon: Icons.favorite_border,
