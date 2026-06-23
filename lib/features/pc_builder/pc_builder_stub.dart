@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import '../checkout/cart.dart';
 import '../../theme/app_colors.dart';
 import '../../components/cyber_drawer.dart';
+import '../../state/app_state.dart';
 
 class PcBuilderStubScreen extends StatefulWidget {
   const PcBuilderStubScreen({super.key});
@@ -20,6 +22,59 @@ class _PcBuilderStubScreenState extends State<PcBuilderStubScreen> {
   String currentPsu = 'Awaiting selection...';
   String currentCase = 'Awaiting selection...';
   bool isCompatible = false;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final appState = Provider.of<AppStateNotifier>(context, listen: false);
+    if (appState.loadedBuildComponents != null) {
+      final build = appState.loadedBuildComponents!;
+      setState(() {
+        currentCpu = build['CPU'] ?? 'Awaiting selection...';
+        currentMotherboard = build['Motherboard'] ?? 'Awaiting selection...';
+        currentRam = build['RAM'] ?? 'Awaiting selection...';
+        currentGpu = build['GPU'] ?? 'Awaiting selection...';
+        currentStorage = build['Storage'] ?? 'Awaiting selection...';
+        currentPsu = build['PSU'] ?? 'Awaiting selection...';
+        currentCase = build['Case'] ?? 'Awaiting selection...';
+        _computeTotal();
+        _checkCompatibilitySilent();
+      });
+      appState.clearLoadedBuild();
+    }
+  }
+
+  void _checkCompatibilitySilent() {
+    bool socketOk = false;
+    if (currentCpu != 'Awaiting selection...' && currentMotherboard != 'Awaiting selection...') {
+      final cpu = _find(cpus, currentCpu);
+      final mb = _find(motherboards, currentMotherboard);
+      if (cpu != null && mb != null) socketOk = cpu['socket'] == mb['socket'];
+    }
+
+    int cpuTdp = 0;
+    int gpuTdp = 0;
+    if (currentCpu != 'Awaiting selection...') {
+      final cpu = _find(cpus, currentCpu);
+      if (cpu != null) cpuTdp = cpu['tdp'] as int;
+    }
+    if (currentGpu != 'Awaiting selection...') {
+      final gpu = _find(gpus, currentGpu);
+      if (gpu != null) gpuTdp = gpu['tdp'] as int;
+    }
+
+    final estimated = cpuTdp + gpuTdp + 150;
+
+    int psuWatt = 0;
+    if (currentPsu != 'Awaiting selection...') {
+      final p = _find(psus, currentPsu);
+      if (p != null) psuWatt = p['watt'] as int;
+    }
+
+    final psuOk = psuWatt >= estimated && psuWatt > 0;
+
+    isCompatible = socketOk && psuOk;
+  }
 
   // Simple catalogs with minimal attributes for demo purposes
   final List<Map<String, dynamic>> cpus = [
@@ -560,10 +615,25 @@ void _savedBuilds() {
               String enteredName = _buildNameController.text;
               
               if (enteredName.trim().isNotEmpty) {
-                // TODO: Put your actual saving logic here (e.g., save to database)
+                final Map<String, String> components = {
+                  'CPU': currentCpu,
+                  'Motherboard': currentMotherboard,
+                  'RAM': currentRam,
+                  'GPU': currentGpu,
+                  'Storage': currentStorage,
+                  'PSU': currentPsu,
+                  'Case': currentCase,
+                };
+                
+                Provider.of<AppStateNotifier>(context, listen: false).addSavedBuild(
+                  enteredName,
+                  components,
+                  totalCost.toDouble(),
+                );
+
                 ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('Build Added')),
-              );
+                  const SnackBar(content: Text('Build Added to Saved Builds')),
+                );
 
                 _buildNameController.clear(); // Clear input
                 Navigator.of(context).pop();  // Close lightbox
