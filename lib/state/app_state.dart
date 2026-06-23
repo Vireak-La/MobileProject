@@ -1,5 +1,7 @@
 import 'dart:async';
+import 'dart:io';
 import 'dart:math';
+import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import '../data/mock_repository.dart';
 
@@ -13,6 +15,14 @@ class ChatMessage {
     required this.text,
     required this.timestamp,
   });
+}
+
+class User {
+  String name;
+  String email;
+  Uint8List? profileImageBytes;
+
+  User({required this.name, required this.email, this.profileImageBytes});
 }
 
 class AppStateNotifier extends ChangeNotifier {
@@ -143,5 +153,39 @@ class AppStateNotifier extends ChangeNotifier {
       _favoriteProductIds.add(productId);
     }
     notifyListeners();
+  }
+
+// 2. Define the private variables
+  User? _currentUser = User(name: "Im Chheangngim", email: "ngim@gmail.com");
+  bool _notificationsEnabled = true;
+
+  // 3. Define the public getters
+  User? get currentUser => _currentUser;
+  bool get notificationsEnabled => _notificationsEnabled;
+
+  // 4. Define the methods used in your UI
+  void toggleNotifications(bool val) {
+    _notificationsEnabled = val;
+    notifyListeners();
+  }
+
+  void logout() {
+    _currentUser = null;
+    notifyListeners();
+  }
+
+  void updateName(String newName) {
+    if (_currentUser != null) {
+      _currentUser = User(name: newName, email: _currentUser!.email);
+      notifyListeners();
+    }
+  }
+
+  void updateProfile(String newName, Uint8List? newImageBytes) {
+    if (_currentUser != null) { 
+      _currentUser!.name = newName;
+      if (newImageBytes != null) _currentUser!.profileImageBytes = newImageBytes;
+      notifyListeners();
+    }
   }
 }
