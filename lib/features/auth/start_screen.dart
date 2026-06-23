@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-// Import your central routing definitions so this page knows about 'AppRoutes'
-import 'package:mobileproject/main.dart'; 
 
 class CyberRigStartPage extends StatelessWidget {
   const CyberRigStartPage({super.key});
