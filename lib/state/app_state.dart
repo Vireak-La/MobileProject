@@ -28,6 +28,7 @@ enum AppScreen {
   aboutUs,
   helpSupport,
   dealsSales,
+  community,
 }
 
 class AppStateNotifier extends ChangeNotifier {

@@ -23,6 +23,7 @@ import 'features/home/compare_page.dart';
 import 'features/home/about_us_page.dart';
 import 'features/home/help_support_page.dart';
 import 'features/home/deals_sales_page.dart';
+import 'features/home/community_page.dart';
 
 // Global Architectural Resources
 import 'state/app_state.dart';
@@ -108,6 +109,8 @@ class _MainAppShellState extends State<MainAppShell> {
         return const HelpSupportPage();
       case AppScreen.dealsSales:
         return const DealsSalesPage();
+      case AppScreen.community:
+        return const CommunityPage();
     }
   }
 
@@ -116,6 +119,7 @@ class _MainAppShellState extends State<MainAppShell> {
       case AppScreen.home:
       case AppScreen.aboutUs:
       case AppScreen.helpSupport:
+      case AppScreen.community:
         return 0;
       case AppScreen.pcBuilder:
         return 1;
