@@ -91,7 +91,10 @@ class CyberDrawer extends StatelessWidget {
                 _buildDrawerItem(
                   icon: Icons.local_offer_outlined,
                   title: 'Deals & Sales',
-                  onTap: () {},
+                  onTap: () {
+                    Navigator.of(context).pop();
+                    context.read<AppStateNotifier>().setScreen(AppScreen.dealsSales);
+                  },
                 ),
                 _buildDrawerItem(
                   icon: Icons.location_on_outlined,
