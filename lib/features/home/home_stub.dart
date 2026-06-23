@@ -174,7 +174,12 @@ class _HeroPanel extends StatelessWidget {
                   Row(
                     children: [
                       Expanded(
-                        child: _GradientButton(label: 'CONFIGURE NOW'),
+                        child: GestureDetector(
+                          onTap: () {
+                            context.read<AppStateNotifier>().setScreen(AppScreen.pcBuilder);
+                          },
+                          child: _GradientButton(label: 'CONFIGURE NOW'),
+                        ),
                       ),
                       const SizedBox(width: 12),
                       GestureDetector(

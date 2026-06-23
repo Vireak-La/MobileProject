@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import '../../theme/app_colors.dart';
+import '../../state/app_state.dart';
 import 'compare_page.dart';
 
 class ProductDetailScreen extends StatelessWidget {
@@ -191,11 +193,26 @@ class ProductDetailScreen extends StatelessWidget {
             ),
             const SizedBox(width: 12),
             Expanded(
-              child: Container(
-                height: 56,
-                decoration: BoxDecoration(borderRadius: BorderRadius.circular(12), gradient: const LinearGradient(colors: [AppColors.neonCyan, AppColors.neonMagenta])),
-                child: const Center(
-                  child: Text('CONFIGURE NOW', style: TextStyle(fontFamily: 'Courier', fontWeight: FontWeight.w900, color: Colors.black, letterSpacing: 1.8)),
+              child: GestureDetector(
+                onTap: () {
+                  final titanComponents = {
+                    'CPU': 'Intel Core i9-14900K',
+                    'Motherboard': 'MSI PRO Z790-A',
+                    'RAM': 'Corsair Dominator Platinum 32GB DDR5',
+                    'GPU': 'NVIDIA RTX 4090',
+                    'Storage': 'Crucial P3 1TB NVMe',
+                    'PSU': 'Corsair RM1000x 1000W',
+                    'Case': 'Fractal Design Meshify C',
+                  };
+                  context.read<AppStateNotifier>().loadBuildIntoBuilder(titanComponents);
+                  Navigator.of(context).pop(); // Go back from details page
+                },
+                child: Container(
+                  height: 56,
+                  decoration: BoxDecoration(borderRadius: BorderRadius.circular(12), gradient: const LinearGradient(colors: [AppColors.neonCyan, AppColors.neonMagenta])),
+                  child: const Center(
+                    child: Text('CONFIGURE NOW', style: TextStyle(fontFamily: 'Courier', fontWeight: FontWeight.w900, color: Colors.black, letterSpacing: 1.8)),
+                  ),
                 ),
               ),
             ),
