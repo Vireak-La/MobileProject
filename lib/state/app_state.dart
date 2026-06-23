@@ -29,6 +29,7 @@ enum AppScreen {
   helpSupport,
   dealsSales,
   community,
+  savedBuilds,
 }
 
 class AppStateNotifier extends ChangeNotifier {
@@ -184,4 +185,87 @@ class AppStateNotifier extends ChangeNotifier {
     }
     notifyListeners();
   }
+
+  // Saved Builds State
+  final List<SavedBuild> _savedBuilds = [
+    SavedBuild(
+      id: 'build-1',
+      name: 'PROJECT VORTEX // RTX 4090',
+      date: DateTime.now().subtract(const Duration(days: 3)),
+      totalPrice: 2859.00,
+      components: {
+        'CPU': 'AMD Ryzen 9 7950X',
+        'Motherboard': 'ASUS ROG Strix B650E',
+        'RAM': 'G.Skill Trident Z5 32GB DDR5',
+        'GPU': 'NVIDIA RTX 4090',
+        'Storage': 'Samsung 990 Pro 2TB NVMe',
+        'PSU': 'Corsair RM1000x 1000W',
+        'Case': 'Fractal Design Meshify C',
+      },
+    ),
+    SavedBuild(
+      id: 'build-2',
+      name: 'CYBER-PULSE CORES // DDR5',
+      date: DateTime.now().subtract(const Duration(days: 10)),
+      totalPrice: 1534.00,
+      components: {
+        'CPU': 'Intel Core i7-13700K',
+        'Motherboard': 'MSI PRO Z790-A',
+        'RAM': 'Corsair Dominator Platinum 32GB DDR5',
+        'GPU': 'NVIDIA RTX 4070 Ti Super',
+        'Storage': 'Crucial P3 1TB NVMe',
+        'PSU': 'Corsair RM750x 750W',
+        'Case': 'Fractal Design Meshify C',
+      },
+    ),
+  ];
+  List<SavedBuild> get savedBuilds => _savedBuilds;
+
+  Map<String, String>? _loadedBuildComponents;
+  Map<String, String>? get loadedBuildComponents => _loadedBuildComponents;
+
+  void deleteSavedBuild(String id) {
+    _savedBuilds.removeWhere((build) => build.id == id);
+    notifyListeners();
+  }
+
+  void addSavedBuild(String name, Map<String, String> components, double totalPrice) {
+    _savedBuilds.insert(
+      0,
+      SavedBuild(
+        id: 'build-${DateTime.now().millisecondsSinceEpoch}',
+        name: name.toUpperCase(),
+        date: DateTime.now(),
+        components: components,
+        totalPrice: totalPrice,
+      ),
+    );
+    notifyListeners();
+  }
+
+  void loadBuildIntoBuilder(Map<String, String> components) {
+    _loadedBuildComponents = components;
+    _currentScreen = AppScreen.pcBuilder;
+    notifyListeners();
+  }
+
+  void clearLoadedBuild() {
+    _loadedBuildComponents = null;
+  }
+}
+
+class SavedBuild {
+  final String id;
+  final String name;
+  final DateTime date;
+  final Map<String, String> components;
+  final double totalPrice;
+
+  SavedBuild({
+    required this.id,
+    required this.name,
+    required this.date,
+    required this.components,
+    required this.totalPrice,
+  });
 }

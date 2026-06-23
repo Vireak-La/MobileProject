@@ -76,9 +76,12 @@ class CyberDrawer extends StatelessWidget {
                   },
                 ),
                 _buildDrawerItem(
-                  icon: Icons.favorite_border,
+                  icon: Icons.bookmark_border_outlined,
                   title: 'Saved Build',
-                  onTap: () {},
+                  onTap: () {
+                    Navigator.of(context).pop();
+                    context.read<AppStateNotifier>().setScreen(AppScreen.savedBuilds);
+                  },
                 ),
                 _buildDrawerItem(
                   icon: Icons.build_circle_outlined, 

@@ -24,6 +24,7 @@ import 'features/home/about_us_page.dart';
 import 'features/home/help_support_page.dart';
 import 'features/home/deals_sales_page.dart';
 import 'features/home/community_page.dart';
+import 'features/home/saved_builds_page.dart';
 
 // Global Architectural Resources
 import 'state/app_state.dart';
@@ -111,6 +112,8 @@ class _MainAppShellState extends State<MainAppShell> {
         return const DealsSalesPage();
       case AppScreen.community:
         return const CommunityPage();
+      case AppScreen.savedBuilds:
+        return const SavedBuildsPage();
     }
   }
 
@@ -122,6 +125,7 @@ class _MainAppShellState extends State<MainAppShell> {
       case AppScreen.community:
         return 0;
       case AppScreen.pcBuilder:
+      case AppScreen.savedBuilds:
         return 1;
       case AppScreen.shop:
       case AppScreen.compare:
