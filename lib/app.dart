@@ -15,13 +15,11 @@ import 'features/pc_builder/pc_builder_stub.dart';
 import 'features/pc_builder/product_page.dart';
 import 'features/map/map_screen.dart';
 import 'features/gallery/gallery_screen.dart';
-import 'features/home/product_detail.dart';
 
 // Global Architectural Resources
 import 'state/app_state.dart';
 import 'theme/app_theme.dart';
 import 'theme/app_colors.dart';
-import 'components/cyber_drawer.dart';
 
 void main() {
   runApp(const MyApp());
