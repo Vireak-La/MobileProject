@@ -26,6 +26,7 @@ enum AppScreen {
   services,
   chat,
   aboutUs,
+  helpSupport,
 }
 
 class AppStateNotifier extends ChangeNotifier {

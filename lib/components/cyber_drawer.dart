@@ -118,9 +118,12 @@ class CyberDrawer extends StatelessWidget {
                   },
                 ),
                 _buildDrawerItem(
-                  icon: Icons.support_agent_outlined,
+                  icon: Icons.help_outline,
                   title: 'Help and Support',
-                  onTap: () {},
+                  onTap: () {
+                    Navigator.of(context).pop();
+                    context.read<AppStateNotifier>().setScreen(AppScreen.helpSupport);
+                  },
                 ),
               ],
             ),
