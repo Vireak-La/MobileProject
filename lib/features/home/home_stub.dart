@@ -52,59 +52,6 @@ class HomeStubScreen extends StatelessWidget {
   }
 }
 
-class _TopBar extends StatelessWidget {
-  const _TopBar();
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: const [
-        _TopIconButton(icon: Icons.menu),
-        _BrandWordmark(),
-        _TopIconButton(icon: Icons.search),
-      ],
-    );
-  }
-}
-
-class _TopIconButton extends StatelessWidget {
-  const _TopIconButton({required this.icon});
-
-  final IconData icon;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      child: Icon(icon, color: AppColors.neonCyan, size: 26),
-    );
-  }
-}
-
-class _BrandWordmark extends StatelessWidget {
-  const _BrandWordmark();
-
-  @override
-  Widget build(BuildContext context) {
-    return const Row(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        SizedBox(width: 8),
-        Text(
-          'CYBER-RIG PRO',
-          style: TextStyle(
-            fontFamily: 'Courier',
-            fontSize: 22,
-            fontWeight: FontWeight.w900,
-            letterSpacing: 1.1,
-            color: AppColors.neonCyan,
-          ),
-        ),
-      ],
-    );
-  }
-}
-
 class _HeroPanel extends StatelessWidget {
   const _HeroPanel();
 

@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:mobileproject/features/map/map_screen.dart';
+import 'package:mobileproject/features/user/ProfilePage.dart';
 import 'package:provider/provider.dart';
 
 // Authentication Feature Components
@@ -13,24 +15,12 @@ import 'package:mobileproject/features/auth/new_password_screen.dart';
 import 'features/home/home_stub.dart';
 import 'features/pc_builder/pc_builder_stub.dart';
 import 'features/pc_builder/product_page.dart';
-import 'features/map/map_screen.dart';
 import 'features/gallery/gallery_screen.dart';
-import 'features/home/product_detail.dart';
-import 'features/services/service_screen.dart';
-import 'features/chat/chat_screen.dart';
-import 'features/checkout/cart.dart';
-import 'features/home/compare_page.dart';
-import 'features/home/about_us_page.dart';
-import 'features/home/help_support_page.dart';
-import 'features/home/deals_sales_page.dart';
-import 'features/home/community_page.dart';
-import 'features/home/saved_builds_page.dart';
 
 // Global Architectural Resources
 import 'state/app_state.dart';
 import 'theme/app_theme.dart';
 import 'theme/app_colors.dart';
-import 'components/cyber_drawer.dart';
 
 void main() {
   runApp(const MyApp());
@@ -62,6 +52,7 @@ class AppRoutes {
   static const String forgetPassword = '/forget-password';
   static const String newPassword = '/new-password';
   static const String mainDashboard = '/dashboard';
+  static const String profile = '/profile';
 
   static Map<String, WidgetBuilder> define() {
     return {
@@ -72,6 +63,7 @@ class AppRoutes {
       forgetPassword: (context) => const CyberRigForgetPasswordPage(),
       newPassword: (context) => const CyberRigNewPasswordPage(),
       mainDashboard: (context) => const MainAppShell(), 
+      profile: (context) => ProfilePage(),
     };
   }
 }
@@ -84,119 +76,59 @@ class MainAppShell extends StatefulWidget {
 }
 
 class _MainAppShellState extends State<MainAppShell> {
-  Widget _getActiveScreen(AppScreen screen) {
-    switch (screen) {
-      case AppScreen.home:
-        return const HomeStubScreen(); 
-      case AppScreen.pcBuilder:
-        return const PcBuilderStubScreen();
-      case AppScreen.shop:
-        return const ProductPage();
-      case AppScreen.gallery:
-        return const GalleryScreen();
-      case AppScreen.profile:
-        return const MapScreen();
-      case AppScreen.compare:
-        return const ComparePage();
-      case AppScreen.cart:
-        return const CartScreen();
-      case AppScreen.services:
-        return const ServiceScreen();
-      case AppScreen.chat:
-        return const ChatScreen();
-      case AppScreen.aboutUs:
-        return const AboutUsPage();
-      case AppScreen.helpSupport:
-        return const HelpSupportPage();
-      case AppScreen.dealsSales:
-        return const DealsSalesPage();
-      case AppScreen.community:
-        return const CommunityPage();
-      case AppScreen.savedBuilds:
-        return const SavedBuildsPage();
-    }
-  }
+  int _currentIndex = 0;
 
-  int _getBottomNavIndex(AppScreen screen) {
-    switch (screen) {
-      case AppScreen.home:
-      case AppScreen.aboutUs:
-      case AppScreen.helpSupport:
-      case AppScreen.community:
-        return 0;
-      case AppScreen.pcBuilder:
-      case AppScreen.savedBuilds:
-        return 1;
-      case AppScreen.shop:
-      case AppScreen.compare:
-      case AppScreen.cart:
-      case AppScreen.dealsSales:
-        return 2;
-      case AppScreen.gallery:
-        return 3;
-      case AppScreen.profile:
-      case AppScreen.services:
-      case AppScreen.chat:
-        return 4;
+  Widget _getActiveScreen() {
+    switch (_currentIndex) {
+      case 0:
+        return const HomeStubScreen(); 
+      case 1:
+        return const PcBuilderStubScreen();
+      case 2:
+        return const ProductPage();
+      case 3:
+        return const GalleryScreen();
+      case 4:
+        return const ProfilePage();
+      default:
+        return const HomeStubScreen();
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    final appState = Provider.of<AppStateNotifier>(context);
-    return PopScope(
-      canPop: appState.historyLength <= 1,
-      onPopInvokedWithResult: (didPop, result) {
-        if (didPop) return;
-        appState.goBack();
-      },
-      child: Scaffold(
-        body: _getActiveScreen(appState.currentScreen),
-        bottomNavigationBar: Container(
-          decoration: const BoxDecoration(
-            color: Color(0xFF1E1E1E),
-            border: Border(
-              top: BorderSide(color: Color(0xFF1E2B40), width: 1.5),
-            ),
+    return Scaffold(
+      body: _getActiveScreen(),
+      bottomNavigationBar: Container(
+        decoration: BoxDecoration(
+          color: const Color(0xFF1E1E1E),
+          border: const Border(
+            top: BorderSide(color: Color(0xFF1E2B40), width: 1.5),
           ),
-          child: ClipRRect(
-            borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
-            child: BottomNavigationBar(
-              currentIndex: _getBottomNavIndex(appState.currentScreen),
-              onTap: (index) {
-                switch (index) {
-                  case 0:
-                    appState.setScreen(AppScreen.home);
-                    break;
-                  case 1:
-                    appState.setScreen(AppScreen.pcBuilder);
-                    break;
-                  case 2:
-                    appState.setScreen(AppScreen.shop);
-                    break;
-                  case 3:
-                    appState.setScreen(AppScreen.gallery);
-                    break;
-                  case 4:
-                    appState.setScreen(AppScreen.profile);
-                    break;
-                }
-              },
-              type: BottomNavigationBarType.fixed,
-              backgroundColor: const Color(0xFF1E1E1E),
-              elevation: 0,
-              selectedItemColor: AppColors.neonCyan,
-              unselectedItemColor: AppColors.textMuted,
-              selectedLabelStyle: const TextStyle(fontFamily: 'Courier', fontSize: 10, fontWeight: FontWeight.bold),
-              unselectedLabelStyle: const TextStyle(fontFamily: 'Courier', fontSize: 10, fontWeight: FontWeight.bold),
-              items: [
-                _buildNavItem(Icons.home_outlined, Icons.home, 'HOME'),
-                _buildNavItem(Icons.memory_outlined, Icons.memory, 'BUILD'),
-                _buildNavItem(Icons.shopping_cart_outlined, Icons.shopping_cart, 'SHOP'),
-                _buildNavItem(Icons.photo_library_outlined, Icons.photo_library, 'Show Room'),
-                _buildNavItem(Icons.person_outline, Icons.person, 'PROFILE'),
-              ],
-            ),
+        ),
+        child: ClipRRect(
+          borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
+          child: BottomNavigationBar(
+            currentIndex: _currentIndex,
+            onTap: (index) {
+              setState(() {
+                _currentIndex = index;
+              });
+            },
+            type: BottomNavigationBarType.fixed,
+            backgroundColor: const Color(0xFF1E1E1E),
+            elevation: 0,
+            selectedItemColor: AppColors.neonCyan,
+            unselectedItemColor: AppColors.textMuted,
+            selectedLabelStyle: const TextStyle(fontFamily: 'Courier', fontSize: 10, fontWeight: FontWeight.bold),
+            unselectedLabelStyle: const TextStyle(fontFamily: 'Courier', fontSize: 10, fontWeight: FontWeight.bold),
+            items: [
+              _buildNavItem(Icons.home_outlined, Icons.home, 'HOME'),
+              _buildNavItem(Icons.memory_outlined, Icons.memory, 'BUILD'),
+              _buildNavItem(Icons.shopping_cart_outlined, Icons.shopping_cart, 'SHOP'),
+              _buildNavItem(Icons.photo_library_outlined, Icons.photo_library, 'Show Room'),
+              _buildNavItem(Icons.person_outline, Icons.person, 'PROFILE'),
+            ],
           ),
         ),
       ),
