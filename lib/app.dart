@@ -16,7 +16,6 @@ import 'features/home/home_stub.dart';
 import 'features/pc_builder/pc_builder_stub.dart';
 import 'features/pc_builder/product_page.dart';
 import 'features/gallery/gallery_screen.dart';
-import 'features/home/product_detail.dart';
 
 // Global Architectural Resources
 import 'state/app_state.dart';
@@ -90,7 +89,7 @@ class _MainAppShellState extends State<MainAppShell> {
       case 3:
         return const GalleryScreen();
       case 4:
-        return const MapScreen();
+        return const ProfilePage();
       default:
         return const HomeStubScreen();
     }
