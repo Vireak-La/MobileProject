@@ -119,69 +119,130 @@ class _CartScreenState extends State<CartScreen> {
 						),
 					),
 					Expanded(
-						child: ListView.separated(
-							padding: const EdgeInsets.fromLTRB(16, 4, 16, 120),
-							itemCount: _items.length,
-							separatorBuilder: (_, __) => const SizedBox(height: 12),
-							itemBuilder: (context, index) {
-								final item = _items[index];
-								return Container(
-									decoration: BoxDecoration(
-										color: AppColors.surfaceCard,
-										borderRadius: BorderRadius.circular(16),
-										border: Border.all(color: AppColors.surfaceElevated.withOpacity(0.5)),
-									),
-									child: Padding(
-										padding: const EdgeInsets.all(12),
-										child: Row(
-											crossAxisAlignment: CrossAxisAlignment.start,
+						child: _items.isEmpty
+								? Center(
+										child: Column(
+											mainAxisAlignment: MainAxisAlignment.center,
 											children: [
-												ClipRRect(
-													borderRadius: BorderRadius.circular(12),
-													child: Image.asset(
-														item.imageAsset,
-														width: 78,
-														height: 78,
-														fit: BoxFit.cover,
+												Icon(
+													Icons.shopping_cart_outlined,
+													size: 64,
+													color: AppColors.textMuted.withOpacity(0.4),
+												),
+												const SizedBox(height: 16),
+												const Text(
+													'CART_NODE // EMPTY',
+													style: TextStyle(
+														fontFamily: 'Courier',
+														fontWeight: FontWeight.bold,
+														color: AppColors.textMuted,
+														fontSize: 16,
 													),
 												),
-												const SizedBox(width: 12),
-												Expanded(
-													child: Column(
+												const SizedBox(height: 8),
+												const Text(
+													'Add components from the Shop or PC Builder.',
+													style: TextStyle(color: AppColors.textMuted, fontSize: 13),
+												),
+											],
+										),
+									)
+								: ListView.separated(
+										padding: const EdgeInsets.fromLTRB(16, 4, 16, 120),
+										itemCount: _items.length,
+										separatorBuilder: (_, __) => const SizedBox(height: 12),
+										itemBuilder: (context, index) {
+											final item = _items[index];
+											return Container(
+												decoration: BoxDecoration(
+													color: AppColors.surfaceCard,
+													borderRadius: BorderRadius.circular(16),
+													border: Border.all(color: AppColors.surfaceElevated.withOpacity(0.5)),
+												),
+												child: Padding(
+													padding: const EdgeInsets.all(12),
+													child: Row(
 														crossAxisAlignment: CrossAxisAlignment.start,
 														children: [
-															Row(
-																children: [
-																	Container(
-																		padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-																		decoration: BoxDecoration(
-																			color: AppColors.neonCyan.withOpacity(0.14),
-																			borderRadius: BorderRadius.circular(999),
-																		),
-																		child: Text(
-																			item.category.toUpperCase(),
-																			style: const TextStyle(
-																				fontSize: 10,
-																				fontFamily: 'Courier',
-																				color: AppColors.neonCyan,
-																				fontWeight: FontWeight.bold,
-																			),
-																		),
-																	),
-																	const SizedBox(width: 8),
-																	Flexible(
-																		child: Text(
-																			item.compatibilityTag,
-																			overflow: TextOverflow.ellipsis,
-																			style: const TextStyle(
-																				fontSize: 10,
-																				fontFamily: 'Courier',
-																				color: AppColors.textMuted,
-																			),
-																		),
-																	),
-																],
+															ClipRRect(
+																borderRadius: BorderRadius.circular(12),
+																child: Image.asset(
+																	item.imageAsset,
+																	width: 78,
+																	height: 78,
+																	fit: BoxFit.cover,
+																),
 															),
+															const SizedBox(width: 12),
+															Expanded(
+																child: Column(
+																	crossAxisAlignment: CrossAxisAlignment.start,
+																	children: [
+																		Row(
+																			mainAxisAlignment: MainAxisAlignment.spaceBetween,
+																			children: [
+																				Expanded(
+																					child: Row(
+																						children: [
+																							Container(
+																								padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+																								decoration: BoxDecoration(
+																									color: AppColors.neonCyan.withOpacity(0.14),
+																									borderRadius: BorderRadius.circular(999),
+																								),
+																								child: Text(
+																									item.category.toUpperCase(),
+																									style: const TextStyle(
+																										fontSize: 10,
+																										fontFamily: 'Courier',
+																										color: AppColors.neonCyan,
+																										fontWeight: FontWeight.bold,
+																									),
+																								),
+																							),
+																							const SizedBox(width: 8),
+																							Flexible(
+																								child: Text(
+																									item.compatibilityTag,
+																									overflow: TextOverflow.ellipsis,
+																									style: const TextStyle(
+																										fontSize: 10,
+																										fontFamily: 'Courier',
+																										color: AppColors.textMuted,
+																									),
+																								),
+																							),
+																						],
+																					),
+																				),
+																				GestureDetector(
+																					onTap: () {
+																						setState(() {
+																							_items.removeAt(index);
+																						});
+																						ScaffoldMessenger.of(context).showSnackBar(
+																							SnackBar(
+																								content: Text(
+																									'REMOVED ${item.name} FROM NODE',
+																									style: const TextStyle(
+																										fontFamily: 'Courier',
+																										fontWeight: FontWeight.bold,
+																										color: Colors.white,
+																									),
+																								),
+																								backgroundColor: AppColors.neonMagenta,
+																								duration: const Duration(seconds: 2),
+																							),
+																						);
+																					},
+																					child: Icon(
+																						Icons.delete_outline,
+																						color: AppColors.neonMagenta.withOpacity(0.85),
+																						size: 20,
+																					),
+																				),
+																			],
+																		),
 															const SizedBox(height: 8),
 															Text(
 																item.name,
