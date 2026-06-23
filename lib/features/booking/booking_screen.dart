@@ -6,7 +6,8 @@ import '../../theme/app_colors.dart';
 
 class BookingScreen extends StatefulWidget {
   final Function(String ticketNumber)? onBookingComplete;
-  const BookingScreen({super.key, this.onBookingComplete});
+  final VoidCallback? onBack;
+  const BookingScreen({super.key, this.onBookingComplete, this.onBack});
 
   @override
   State<BookingScreen> createState() => _BookingScreenState();
@@ -107,6 +108,12 @@ class _BookingScreenState extends State<BookingScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        leading: widget.onBack != null
+            ? IconButton(
+                icon: const Icon(Icons.arrow_back),
+                onPressed: widget.onBack,
+              )
+            : null,
         title: const Text('REPAIR INTAKE'),
       ),
       body: Stepper(
@@ -143,31 +150,31 @@ class _BookingScreenState extends State<BookingScreen> {
           Step(
             isActive: _currentStep >= 0,
             state: _currentStep > 0 ? StepState.complete : StepState.indexed,
-            title: const Text('Service', style: TextStyle(fontSize: 10, fontFamily: 'Courier')),
+            title: const Text(''),
             content: _buildServiceSelection(),
           ),
           Step(
             isActive: _currentStep >= 1,
             state: _currentStep > 1 ? StepState.complete : StepState.indexed,
-            title: const Text('Device', style: TextStyle(fontSize: 10, fontFamily: 'Courier')),
+            title: const Text(''),
             content: _buildDeviceDetails(),
           ),
           Step(
             isActive: _currentStep >= 2,
             state: _currentStep > 2 ? StepState.complete : StepState.indexed,
-            title: const Text('Schedule', style: TextStyle(fontSize: 10, fontFamily: 'Courier')),
+            title: const Text(''),
             content: _buildScheduler(),
           ),
           Step(
             isActive: _currentStep >= 3,
             state: _currentStep > 3 ? StepState.complete : StepState.indexed,
-            title: const Text('Contact', style: TextStyle(fontSize: 10, fontFamily: 'Courier')),
+            title: const Text(''),
             content: _buildContactForm(),
           ),
           Step(
             isActive: _currentStep >= 4,
             state: StepState.complete,
-            title: const Text('Done', style: TextStyle(fontSize: 10, fontFamily: 'Courier')),
+            title: const Text(''),
             content: _buildConfirmation(),
           ),
         ],

@@ -36,23 +36,15 @@ class _ServiceScreenState extends State<ServiceScreen> {
             _showingBooking = false;
           });
         },
-        child: Scaffold(
-          appBar: AppBar(
-            leading: IconButton(
-              icon: const Icon(Icons.arrow_back),
-              onPressed: () {
-                setState(() {
-                  _showingBooking = false;
-                });
-              },
-            ),
-            title: const Text('INTAKE WIZARD'),
-          ),
-          body: BookingScreen(
-            onBookingComplete: (ticketNumber) {
-              _navigateToTracker(ticketNumber);
-            },
-          ),
+        child: BookingScreen(
+          onBack: () {
+            setState(() {
+              _showingBooking = false;
+            });
+          },
+          onBookingComplete: (ticketNumber) {
+            _navigateToTracker(ticketNumber);
+          },
         ),
       );
     }
@@ -66,19 +58,12 @@ class _ServiceScreenState extends State<ServiceScreen> {
             _showingChat = false;
           });
         },
-        child: Scaffold(
-          appBar: AppBar(
-            leading: IconButton(
-              icon: const Icon(Icons.arrow_back),
-              onPressed: () {
-                setState(() {
-                  _showingChat = false;
-                });
-              },
-            ),
-            title: const Text('SUPPORT CHAT'),
-          ),
-          body: const ChatScreen(),
+        child: ChatScreen(
+          onBack: () {
+            setState(() {
+              _showingChat = false;
+            });
+          },
         ),
       );
     }
