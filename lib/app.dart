@@ -16,6 +16,10 @@ import 'features/pc_builder/product_page.dart';
 import 'features/map/map_screen.dart';
 import 'features/gallery/gallery_screen.dart';
 import 'features/home/product_detail.dart';
+import 'features/services/service_screen.dart';
+import 'features/chat/chat_screen.dart';
+import 'features/checkout/cart.dart';
+import 'features/home/compare_page.dart';
 
 // Global Architectural Resources
 import 'state/app_state.dart';
@@ -75,59 +79,104 @@ class MainAppShell extends StatefulWidget {
 }
 
 class _MainAppShellState extends State<MainAppShell> {
-  int _currentIndex = 0;
-
-  Widget _getActiveScreen() {
-    switch (_currentIndex) {
-      case 0:
+  Widget _getActiveScreen(AppScreen screen) {
+    switch (screen) {
+      case AppScreen.home:
         return const HomeStubScreen(); 
-      case 1:
+      case AppScreen.pcBuilder:
         return const PcBuilderStubScreen();
-      case 2:
+      case AppScreen.shop:
         return const ProductPage();
-      case 3:
+      case AppScreen.gallery:
         return const GalleryScreen();
-      case 4:
+      case AppScreen.profile:
         return const MapScreen();
-      default:
-        return const HomeStubScreen();
+      case AppScreen.compare:
+        return const ComparePage();
+      case AppScreen.cart:
+        return const CartScreen();
+      case AppScreen.services:
+        return const ServiceScreen();
+      case AppScreen.chat:
+        return const ChatScreen();
+    }
+  }
+
+  int _getBottomNavIndex(AppScreen screen) {
+    switch (screen) {
+      case AppScreen.home:
+        return 0;
+      case AppScreen.pcBuilder:
+        return 1;
+      case AppScreen.shop:
+      case AppScreen.compare:
+      case AppScreen.cart:
+        return 2;
+      case AppScreen.gallery:
+        return 3;
+      case AppScreen.profile:
+      case AppScreen.services:
+      case AppScreen.chat:
+        return 4;
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: _getActiveScreen(),
-      bottomNavigationBar: Container(
-        decoration: BoxDecoration(
-          color: const Color(0xFF1E1E1E),
-          border: const Border(
-            top: BorderSide(color: Color(0xFF1E2B40), width: 1.5),
+    final appState = Provider.of<AppStateNotifier>(context);
+    return PopScope(
+      canPop: appState.historyLength <= 1,
+      onPopInvokedWithResult: (didPop, result) {
+        if (didPop) return;
+        appState.goBack();
+      },
+      child: Scaffold(
+        body: _getActiveScreen(appState.currentScreen),
+        bottomNavigationBar: Container(
+          decoration: const BoxDecoration(
+            color: Color(0xFF1E1E1E),
+            border: Border(
+              top: BorderSide(color: Color(0xFF1E2B40), width: 1.5),
+            ),
           ),
-        ),
-        child: ClipRRect(
-          borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
-          child: BottomNavigationBar(
-            currentIndex: _currentIndex,
-            onTap: (index) {
-              setState(() {
-                _currentIndex = index;
-              });
-            },
-            type: BottomNavigationBarType.fixed,
-            backgroundColor: const Color(0xFF1E1E1E),
-            elevation: 0,
-            selectedItemColor: AppColors.neonCyan,
-            unselectedItemColor: AppColors.textMuted,
-            selectedLabelStyle: const TextStyle(fontFamily: 'Courier', fontSize: 10, fontWeight: FontWeight.bold),
-            unselectedLabelStyle: const TextStyle(fontFamily: 'Courier', fontSize: 10, fontWeight: FontWeight.bold),
-            items: [
-              _buildNavItem(Icons.home_outlined, Icons.home, 'HOME'),
-              _buildNavItem(Icons.memory_outlined, Icons.memory, 'BUILD'),
-              _buildNavItem(Icons.shopping_cart_outlined, Icons.shopping_cart, 'SHOP'),
-              _buildNavItem(Icons.photo_library_outlined, Icons.photo_library, 'Show Room'),
-              _buildNavItem(Icons.person_outline, Icons.person, 'PROFILE'),
-            ],
+          child: ClipRRect(
+            borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
+            child: BottomNavigationBar(
+              currentIndex: _getBottomNavIndex(appState.currentScreen),
+              onTap: (index) {
+                switch (index) {
+                  case 0:
+                    appState.setScreen(AppScreen.home);
+                    break;
+                  case 1:
+                    appState.setScreen(AppScreen.pcBuilder);
+                    break;
+                  case 2:
+                    appState.setScreen(AppScreen.shop);
+                    break;
+                  case 3:
+                    appState.setScreen(AppScreen.gallery);
+                    break;
+                  case 4:
+                    appState.setScreen(AppScreen.profile);
+                    break;
+                }
+              },
+              type: BottomNavigationBarType.fixed,
+              backgroundColor: const Color(0xFF1E1E1E),
+              elevation: 0,
+              selectedItemColor: AppColors.neonCyan,
+              unselectedItemColor: AppColors.textMuted,
+              selectedLabelStyle: const TextStyle(fontFamily: 'Courier', fontSize: 10, fontWeight: FontWeight.bold),
+              unselectedLabelStyle: const TextStyle(fontFamily: 'Courier', fontSize: 10, fontWeight: FontWeight.bold),
+              items: [
+                _buildNavItem(Icons.home_outlined, Icons.home, 'HOME'),
+                _buildNavItem(Icons.memory_outlined, Icons.memory, 'BUILD'),
+                _buildNavItem(Icons.shopping_cart_outlined, Icons.shopping_cart, 'SHOP'),
+                _buildNavItem(Icons.photo_library_outlined, Icons.photo_library, 'Show Room'),
+                _buildNavItem(Icons.person_outline, Icons.person, 'PROFILE'),
+              ],
+            ),
           ),
         ),
       ),

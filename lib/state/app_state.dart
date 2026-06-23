@@ -15,7 +15,43 @@ class ChatMessage {
   });
 }
 
+enum AppScreen {
+  home,
+  pcBuilder,
+  shop,
+  gallery,
+  profile,
+  compare,
+  cart,
+  services,
+  chat,
+}
+
 class AppStateNotifier extends ChangeNotifier {
+  // Navigation State
+  AppScreen _currentScreen = AppScreen.home;
+  AppScreen get currentScreen => _currentScreen;
+
+  final List<AppScreen> _navigationHistory = [AppScreen.home];
+  int get historyLength => _navigationHistory.length;
+
+  void setScreen(AppScreen screen) {
+    if (_currentScreen == screen) return;
+    _currentScreen = screen;
+    _navigationHistory.add(screen);
+    notifyListeners();
+  }
+
+  bool goBack() {
+    if (_navigationHistory.length > 1) {
+      _navigationHistory.removeLast();
+      _currentScreen = _navigationHistory.last;
+      notifyListeners();
+      return true;
+    }
+    return false;
+  }
+
   // Repair tickets
   final List<RepairTicket> _tickets = MockRepository.getDefaultTickets();
   List<RepairTicket> get tickets => _tickets;
