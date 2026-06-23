@@ -20,6 +20,7 @@ import 'features/services/service_screen.dart';
 import 'features/chat/chat_screen.dart';
 import 'features/checkout/cart.dart';
 import 'features/home/compare_page.dart';
+import 'features/home/about_us_page.dart';
 
 // Global Architectural Resources
 import 'state/app_state.dart';
@@ -99,12 +100,15 @@ class _MainAppShellState extends State<MainAppShell> {
         return const ServiceScreen();
       case AppScreen.chat:
         return const ChatScreen();
+      case AppScreen.aboutUs:
+        return const AboutUsPage();
     }
   }
 
   int _getBottomNavIndex(AppScreen screen) {
     switch (screen) {
       case AppScreen.home:
+      case AppScreen.aboutUs:
         return 0;
       case AppScreen.pcBuilder:
         return 1;
