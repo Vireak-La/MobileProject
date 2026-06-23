@@ -21,6 +21,7 @@ import 'features/chat/chat_screen.dart';
 import 'features/checkout/cart.dart';
 import 'features/home/compare_page.dart';
 import 'features/home/about_us_page.dart';
+import 'features/home/help_support_page.dart';
 
 // Global Architectural Resources
 import 'state/app_state.dart';
@@ -102,6 +103,8 @@ class _MainAppShellState extends State<MainAppShell> {
         return const ChatScreen();
       case AppScreen.aboutUs:
         return const AboutUsPage();
+      case AppScreen.helpSupport:
+        return const HelpSupportPage();
     }
   }
 
@@ -109,6 +112,7 @@ class _MainAppShellState extends State<MainAppShell> {
     switch (screen) {
       case AppScreen.home:
       case AppScreen.aboutUs:
+      case AppScreen.helpSupport:
         return 0;
       case AppScreen.pcBuilder:
         return 1;
