@@ -245,66 +245,28 @@ class ProductRepository {
   }
 
   static String _getCpuImage(String name) {
-    final images = [
-      'https://images.unsplash.com/photo-1591405351990-4726e331f141?w=500&q=80',
-      'https://images.unsplash.com/photo-1607604276583-eef5d076aa5f?w=500&q=80',
-      'https://images.unsplash.com/photo-1581092160607-ee22621dd758?w=500&q=80',
-      'https://images.unsplash.com/photo-1563770660941-20978e870e26?w=500&q=80',
-    ];
-    return images[name.hashCode.abs() % images.length];
+    if (name.toLowerCase().contains('ryzen') || name.toLowerCase().contains('amd')) {
+      return 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRHMNZjbSIorUX9H14KO8GRrbvsI4797sKllmSfPI_hevDgcPISpVuZ5BM&s=10';
+    } else {
+      return 'https://preview.redd.it/does-anybody-else-miss-the-design-of-the-cpu-boxes-we-got-v0-bo1qrpa271i81.jpg?width=800&format=pjpg&auto=webp&s=b12e05b3ee668d9dba44d1e6fda0f5aed76bcada';
+    }
   }
 
-  static String _getMoboImage(String name) {
-    final images = [
-      'https://images.unsplash.com/photo-1518770660439-4636190af475?w=500&q=80',
-      'https://images.unsplash.com/photo-1555680202-c86f0e12f086?w=500&q=80',
-      'https://images.unsplash.com/photo-1614850523459-c2f4c699c52e?w=500&q=80',
-      'https://images.unsplash.com/photo-1562408590-e32931084e23?w=500&q=80',
-    ];
-    return images[name.hashCode.abs() % images.length];
-  }
+  static String _getMoboImage(String name) =>
+      'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRg5f9eaLD6-RiZUuOFTsXoIE1hdM2Tb04UOkdNPX6VgVBf1Z7Hzxw41o16&s=10';
 
-  static String _getRamImage(String name) {
-    final images = [
-      'https://images.unsplash.com/photo-1562976540-1502c2145186?w=500&q=80',
-      'https://images.unsplash.com/photo-1542751371-adc38448a05e?w=500&q=80',
-      'https://images.unsplash.com/photo-1551645121-d1034da75057?w=500&q=80',
-    ];
-    return images[name.hashCode.abs() % images.length];
-  }
+  static String _getRamImage(String name) =>
+      'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSEF9Dit6kQkhucb8R-eQ2qWmZ_aOItm2LR6yBYRVpTsx77yRCHFB540k1N&s=10';
 
-  static String _getGpuImage(String name) {
-    final images = [
-      'https://images.unsplash.com/photo-1591488320449-011701bb6704?w=500&q=80',
-      'https://images.unsplash.com/photo-1607604276583-eef5d076aa5f?w=500&q=80',
-      'https://images.unsplash.com/photo-1587202372775-e229f172b9d7?w=500&q=80',
-    ];
-    return images[name.hashCode.abs() % images.length];
-  }
+  static String _getGpuImage(String name) =>
+      'https://i.ebayimg.com/images/g/VmsAAOSwfrlnx8pF/s-l400.jpg';
 
-  static String _getStorageImage(String name) {
-    final images = [
-      'https://images.unsplash.com/photo-1544244015-0df4b3ffc6b0?w=500&q=80',
-      'https://images.unsplash.com/photo-1601524909162-be87252be298?w=500&q=80',
-      'https://images.unsplash.com/photo-1531403009284-440f080d1e12?w=500&q=80',
-    ];
-    return images[name.hashCode.abs() % images.length];
-  }
+  static String _getStorageImage(String name) =>
+      'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQU274yVum1QqcAortlmLHIO6EWcELFa3vx9iayO3f8uQ&s=10';
 
-  static String _getPsuImage(String name) {
-    final images = [
-      'https://images.unsplash.com/photo-1601524909162-be87252be298?w=500&q=80',
-      'https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=500&q=80',
-    ];
-    return images[name.hashCode.abs() % images.length];
-  }
+  static String _getPsuImage(String name) =>
+      'https://c8.alamy.com/comp/G29229/pc-power-supply-isolated-G29229.jpg';
 
-  static String _getCaseImage(String name) {
-    final images = [
-      'https://images.unsplash.com/photo-1624705002806-5d72df19c3ad?w=500&q=80',
-      'https://images.unsplash.com/photo-1587202372775-e229f172b9d7?w=500&q=80',
-      'https://images.unsplash.com/photo-1618424181497-157f25b6ddd5?w=500&q=80',
-    ];
-    return images[name.hashCode.abs() % images.length];
-  }
+  static String _getCaseImage(String name) =>
+      'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR1658EwibLcEZYgNBeY5OoVW1-hyDyDifVz4r3IMCTNlqaTumyqazJbe43&s=10';
 }
