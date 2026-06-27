@@ -74,34 +74,33 @@ class ProductDetailScreen extends StatelessWidget {
         child: ListView(
           padding: const EdgeInsets.fromLTRB(18, 12, 18, 96),
           children: [
-            // Image / Icon display
             ClipRRect(
               borderRadius: BorderRadius.circular(20),
               child: Container(
                 height: 300,
                 color: AppColors.surfaceCard,
-                child: isCustom
-                    ? Center(
-                        child: Icon(
-                          getProductIcon(),
-                          size: 120,
-                          color: AppColors.neonCyan,
-                        ),
-                      )
-                    : Hero(
-                        tag: 'product-image-$title',
-                        child: Image.network(
-                          product?['imageUrl'] ?? '',
+                child: Hero(
+                  tag: 'product-image-$title',
+                  child: (product?['imageUrl'] != null && (product!['imageUrl'] as String).isNotEmpty)
+                      ? Image.network(
+                          product!['imageUrl'],
                           fit: BoxFit.cover,
-                          errorBuilder: (_, _, _) => Image.asset(
-                            'assets/images/gaming-computer-case-isolated-png.webp',
-                            fit: BoxFit.contain,
-                            errorBuilder: (_, _, _) => const Center(
-                              child: Icon(Icons.computer, size: 120, color: AppColors.neonMagenta),
+                          errorBuilder: (_, _, _) => Center(
+                            child: Icon(
+                              getProductIcon(),
+                              size: 120,
+                              color: AppColors.neonCyan,
                             ),
                           ),
+                        )
+                      : Center(
+                          child: Icon(
+                            getProductIcon(),
+                            size: 120,
+                            color: AppColors.neonCyan,
+                          ),
                         ),
-                      ),
+                ),
               ),
             ),
             const SizedBox(height: 18),

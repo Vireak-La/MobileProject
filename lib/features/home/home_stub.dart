@@ -116,6 +116,7 @@ class _HeroPanelState extends State<_HeroPanel> {
       'title2': 'BUILD',
       'desc': 'Experience uncompromised dominance.\nEngineered for elite gamers and professional workstation workloads.',
       'btn': 'CONFIGURE NOW',
+      'imageUrl': 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRCSJ8aExy_JnllbOoVFnTVh-HvQ4YHV2qJsjzgXGgFmVjUn1ggN3VU08Dp&s=10',
       'detailItem': {
         'name': 'NVIDIA RTX 4090',
         'price': 1599,
@@ -132,6 +133,7 @@ class _HeroPanelState extends State<_HeroPanel> {
       'title2': 'RIG',
       'desc': 'Sub-zero custom liquid hardline loops.\nMaximum cooling performance with silent operation under heavy rendering.',
       'btn': 'CUSTOMIZE NOW',
+      'imageUrl': 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRUaVnu95GJr8aUmakWhvTjckzr8pInwdVjP9Of3oAEe4J90X1FMdvwhKne&s=10',
       'detailItem': {
         'name': 'APEX LIQUID Loop',
         'price': 249,
@@ -148,6 +150,7 @@ class _HeroPanelState extends State<_HeroPanel> {
       'title2': 'NODE',
       'desc': 'Desktop grade performance on the move.\nOLED 240Hz screen paired with RTX 4080 Mobile graphics core.',
       'btn': 'EXPLORE MODEL',
+      'imageUrl': 'https://empoweredpc.com/cdn/shop/files/PanoramaXL_AIO_DawnPro_Aqua.jpg?v=1757340533',
       'detailItem': {
         'name': 'CYBER-PRO Laptop',
         'price': 2199,
@@ -218,11 +221,11 @@ class _HeroPanelState extends State<_HeroPanel> {
                     final slide = _slides[index];
                     return Stack(
                       children: [
-                        const Positioned(
+                        Positioned(
                           top: 42,
                           left: 0,
                           right: 0,
-                          child: _HeroImagePanel(),
+                          child: _HeroImagePanel(imageUrl: slide['imageUrl']),
                         ),
                         
                         Padding(
@@ -350,7 +353,8 @@ class _HeroPanelState extends State<_HeroPanel> {
 // _GlowOrb widget removed
 
 class _HeroImagePanel extends StatelessWidget {
-  const _HeroImagePanel();
+  final String imageUrl;
+  const _HeroImagePanel({required this.imageUrl});
 
   @override
   Widget build(BuildContext context) {
@@ -359,8 +363,6 @@ class _HeroImagePanel extends StatelessWidget {
       child: Stack(
         alignment: Alignment.center,
         children: [
-          
-          
           Positioned(
             top: 28,
             left: 12,
@@ -378,13 +380,17 @@ class _HeroImagePanel extends StatelessWidget {
             left: 0,
             right: 0,
             bottom: 14,
-            child: Image.asset(
-              'assets/images/gaming-computer-case-isolated-png.webp',
+            child: Image.network(
+              imageUrl,
               fit: BoxFit.contain,
               alignment: Alignment.center,
+              errorBuilder: (context, error, stackTrace) => Image.asset(
+                'assets/images/gaming-computer-case-isolated-png.webp',
+                fit: BoxFit.contain,
+                alignment: Alignment.center,
+              ),
             ),
           ),
-          
         ],
       ),
     );
