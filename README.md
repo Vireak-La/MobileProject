@@ -67,9 +67,9 @@ lib/
 
 ### Steps to Run
 
-1. Clone the repository and checkout the `vireak` branch:
+1. Clone the repository and checkout the `main` branch:
    ```bash
-   git checkout vireak
+   git checkout main
    ```
 2. Get project dependencies:
    ```bash
