@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import '../../theme/app_colors.dart';
+import '../../data/product_repository.dart';
 
 class SearchScreen extends StatefulWidget {
   const SearchScreen({super.key});
@@ -26,36 +27,7 @@ class _SearchScreenState extends State<SearchScreen> {
     'Case'
   ];
 
-  // Static product list sourced from the app catalog
-  final List<Map<String, dynamic>> _catalog = [
-    // CPUs
-    {'name': 'AMD Ryzen 9 7950X', 'price': 699, 'category': 'CPU', 'rating': 5},
-    {'name': 'AMD Ryzen 7 7800X3D', 'price': 380, 'category': 'CPU', 'rating': 5},
-    {'name': 'AMD Ryzen 5 7600X', 'price': 229, 'category': 'CPU', 'rating': 4},
-    {'name': 'Intel Core i9-13900K', 'price': 589, 'category': 'CPU', 'rating': 5},
-    {'name': 'Intel Core i7-13700K', 'price': 420, 'category': 'CPU', 'rating': 4},
-    // GPUs
-    {'name': 'NVIDIA RTX 4090', 'price': 1599, 'category': 'GPU', 'rating': 5},
-    {'name': 'NVIDIA RTX 4080', 'price': 1199, 'category': 'GPU', 'rating': 5},
-    {'name': 'NVIDIA RTX 4070 Ti Super', 'price': 790, 'category': 'GPU', 'rating': 4},
-    {'name': 'AMD Radeon RX 7900 XTX', 'price': 999, 'category': 'GPU', 'rating': 5},
-    // Motherboards
-    {'name': 'MSI MAG B650 Tomahawk', 'price': 190, 'category': 'Motherboard', 'rating': 4},
-    {'name': 'ASUS ROG Strix B650E', 'price': 320, 'category': 'Motherboard', 'rating': 5},
-    {'name': 'ASUS PRIME Z790-P', 'price': 210, 'category': 'Motherboard', 'rating': 4},
-    // RAMs
-    {'name': 'G.Skill Trident Z5 32GB DDR5', 'price': 90, 'category': 'RAM', 'rating': 5},
-    {'name': 'Corsair Vengeance 32GB DDR4', 'price': 75, 'category': 'RAM', 'rating': 4},
-    // Storages
-    {'name': 'Samsung 990 Pro 2TB NVMe', 'price': 140, 'category': 'Storage', 'rating': 5},
-    {'name': 'Crucial P3 1TB NVMe', 'price': 55, 'category': 'Storage', 'rating': 4},
-    // PSUs
-    {'name': 'Corsair RM1000x 1000W', 'price': 200, 'category': 'PSU', 'rating': 5},
-    {'name': 'Seasonic PRIME 1000W', 'price': 220, 'category': 'PSU', 'rating': 5},
-    // Cases
-    {'name': 'NZXT H510', 'price': 70, 'category': 'Case', 'rating': 4},
-    {'name': 'Fractal Design Meshify C', 'price': 100, 'category': 'Case', 'rating': 5},
-  ];
+  List<Map<String, dynamic>> get _catalog => ProductRepository.allProducts;
 
   List<Map<String, dynamic>> get _searchResults {
     return _catalog.where((item) {
@@ -201,15 +173,20 @@ class _SearchScreenState extends State<SearchScreen> {
                         ),
                         child: ListTile(
                           contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                          leading: Container(
-                            padding: const EdgeInsets.all(8),
-                            decoration: BoxDecoration(
+                          leading: ClipRRect(
+                            borderRadius: BorderRadius.circular(8),
+                            child: Container(
+                              width: 48,
+                              height: 48,
                               color: AppColors.surfaceElevated,
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                            child: const Icon(
-                              Icons.computer,
-                              color: AppColors.neonCyan,
+                              child: Image.network(
+                                item['imageUrl'] ?? '',
+                                fit: BoxFit.cover,
+                                errorBuilder: (_, __, ___) => const Icon(
+                                  Icons.computer,
+                                  color: AppColors.neonCyan,
+                                ),
+                              ),
                             ),
                           ),
                           title: Text(
