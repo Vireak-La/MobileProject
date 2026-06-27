@@ -3,7 +3,6 @@ import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import '../../theme/app_colors.dart';
 import '../../components/cyber_drawer.dart';
-import '../checkout/checkout_models.dart';
 import '../../state/app_state.dart';
 import '../../data/product_repository.dart';
 
@@ -212,149 +211,190 @@ class ProductCard extends StatelessWidget {
     final String name = item['name'] ?? '';
     final isFavorited = appState.favoriteProductIds.contains(name);
 
-    return Card(
-      color: AppColors.surfaceCard,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(12),
-        side: const BorderSide(color: AppColors.surfaceElevated),
-      ),
-      child: InkWell(
-        borderRadius: BorderRadius.circular(12),
-        onTap: () {
-          context.push('/product-detail', extra: item);
-        },
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Expanded(
-              child: ClipRRect(
-                borderRadius: const BorderRadius.vertical(top: Radius.circular(12)),
-                child: Container(
-                  width: double.infinity,
-                  color: const Color(0xFF1E2B40),
-                  child: Hero(
-                    tag: 'product-image-${item['name']}',
-                    child: Image.network(
-                      item['imageUrl'] ?? '',
-                      fit: BoxFit.cover,
-                      errorBuilder: (_, _, _) => Icon(
-                        Icons.computer,
-                        size: 48,
-                        color: AppColors.neonCyan.withOpacity(0.5),
+    return Semantics(
+      label: 'Product card for $name',
+      button: true,
+      child: Card(
+        color: AppColors.surfaceCard,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12),
+          side: const BorderSide(color: AppColors.surfaceElevated),
+        ),
+        child: InkWell(
+          borderRadius: BorderRadius.circular(12),
+          onTap: () {
+            context.push('/product-detail', extra: item);
+          },
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Expanded(
+                child: ClipRRect(
+                  borderRadius: const BorderRadius.vertical(top: Radius.circular(12)),
+                  child: Container(
+                    width: double.infinity,
+                    color: const Color(0xFF1E2B40),
+                    child: Hero(
+                      tag: 'product-image-${item['name']}',
+                      child: Image.network(
+                        item['imageUrl'] ?? '',
+                        fit: BoxFit.cover,
+                        loadingBuilder: (context, child, loadingProgress) {
+                          if (loadingProgress == null) return child;
+                          return const ShimmerSkeleton(width: double.infinity, height: double.infinity);
+                        },
+                        errorBuilder: (_, _, _) => Icon(
+                          Icons.computer,
+                          size: 48,
+                          color: AppColors.neonCyan.withOpacity(0.5),
+                        ),
                       ),
                     ),
                   ),
                 ),
               ),
-            ),
-            
-            // Details
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  // Name
-                  Text(
-                    name,
-                    style: const TextStyle(
-                      fontSize: 12,
-                      fontWeight: FontWeight.bold,
+              
+              // Details
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    // Name
+                    Text(
+                      name,
+                      style: const TextStyle(
+                        fontFamily: 'Courier',
+                        fontSize: 11,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                      ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
                     ),
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                  const SizedBox(height: 4),
-                  
-                  // Star Rating
-                  Row(
-                    children: List.generate(5, (index) {
-                      int rating = item['rating'] ?? 5;
-                      return Icon(
-                        index < rating ? Icons.star : Icons.star_border,
-                        size: 14,
-                        color: Colors.amber,
-                      );
-                    }),
-                  ),
-                  const SizedBox(height: 8),
-                  
-                  // Price
-                  Text(
-                    '\$${item['price']}',
-                    style: const TextStyle(
-                      fontFamily: 'Courier',
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                      color: AppColors.neonGreen,
+                    const SizedBox(height: 4),
+                    
+                    // Category & Price
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          item['category']?.toString().toUpperCase() ?? '',
+                          style: const TextStyle(
+                            fontFamily: 'Courier',
+                            fontSize: 9,
+                            color: AppColors.textMuted,
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                        Text(
+                          '\$${item['price'] ?? 0}',
+                          style: const TextStyle(
+                            fontFamily: 'Courier',
+                            fontSize: 12,
+                            fontWeight: FontWeight.bold,
+                            color: AppColors.neonGreen,
+                          ),
+                        ),
+                      ],
                     ),
-                  ),
-                  const SizedBox(height: 8),
-                  
-                  // Buttons
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      // Add to cart
-                      Expanded(
-                        child: ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            padding: const EdgeInsets.symmetric(vertical: 0),
-                            backgroundColor: AppColors.neonCyan,
-                            foregroundColor: Colors.black,
-                            minimumSize: const Size(0, 32),
+                    const SizedBox(height: 6),
+                    
+                    // Rating & Favorites
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        // Star rating
+                        Row(
+                          children: List.generate(5, (starIndex) {
+                            final rating = item['rating'] ?? 5;
+                            return Icon(
+                              starIndex < rating ? Icons.star : Icons.star_border,
+                              color: Colors.orangeAccent,
+                              size: 10,
+                            );
+                          }),
+                        ),
+                        
+                        // Favorite
+                        IconButton(
+                          padding: EdgeInsets.zero,
+                          constraints: const BoxConstraints(),
+                          tooltip: isFavorited ? 'Remove from favorites' : 'Add to favorites',
+                          icon: Icon(
+                            isFavorited ? Icons.favorite : Icons.favorite_border,
+                            color: AppColors.neonMagenta,
+                            size: 20,
                           ),
                           onPressed: () {
-                            appState.addToCart(CheckoutCartItem(
-                              name: name,
-                              category: item['category'] ?? 'Component',
-                              price: (item['price'] as num).toDouble(),
-                              quantity: 1,
-                              imageAsset: '',
-                              compatibilityTag: item['category'] == 'CPU' ? 'AM5' : 'PCIe',
-                            ));
+                            appState.toggleFavorite(name);
                             ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(content: Text('$name added to cart')),
+                              SnackBar(
+                                content: Text(isFavorited 
+                                    ? 'REMOVED $name FROM FAVORITES' 
+                                    : 'ADDED $name TO FAVORITES'),
+                              ),
                             );
                           },
-                          child: const Text(
-                            'ADD',
-                            style: TextStyle(
-                              fontSize: 12,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
                         ),
-                      ),
-                      const SizedBox(width: 4),
-                      // Favorite
-                      IconButton(
-                        padding: EdgeInsets.zero,
-                        constraints: const BoxConstraints(),
-                        icon: Icon(
-                          isFavorited ? Icons.favorite : Icons.favorite_border,
-                          color: AppColors.neonMagenta,
-                          size: 20,
-                        ),
-                        onPressed: () {
-                          appState.toggleFavorite(name);
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                              content: Text(isFavorited 
-                                  ? 'REMOVED $name FROM FAVORITES' 
-                                  : 'ADDED $name TO FAVORITES'),
-                            ),
-                          );
-                        },
-                      ),
-                    ],
-                  ),
-                ],
+                      ],
+                    ),
+                  ],
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
+    );
+  }
+}
+
+class ShimmerSkeleton extends StatefulWidget {
+  const ShimmerSkeleton({super.key, required this.width, required this.height});
+
+  final double width;
+  final double height;
+
+  @override
+  State<ShimmerSkeleton> createState() => _ShimmerSkeletonState();
+}
+
+class _ShimmerSkeletonState extends State<ShimmerSkeleton> with SingleTickerProviderStateMixin {
+  late AnimationController _controller;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 1000),
+    )..repeat(reverse: true);
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedBuilder(
+      animation: _controller,
+      builder: (context, child) {
+        return Opacity(
+          opacity: 0.3 + 0.4 * _controller.value,
+          child: Container(
+            width: widget.width,
+            height: widget.height,
+            decoration: BoxDecoration(
+              color: const Color(0xFF1E2B40),
+              borderRadius: BorderRadius.circular(12),
+            ),
+          ),
+        );
+      },
     );
   }
 }
