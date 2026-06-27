@@ -218,7 +218,7 @@ class _CyberRigRegisterPageState extends State<CyberRigRegisterPage> {
                                   print("Registration data processed.");
                                   
                                   // Routes user forward to your Email Verification or Dashboard
-                                  context.push('/verify-email');
+                                  context.push('/verify-email', extra: true);
                                 },
                                 style: ElevatedButton.styleFrom(
                                   backgroundColor: Colors.transparent,
