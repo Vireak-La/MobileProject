@@ -37,10 +37,13 @@ class _RepairTrackerScreenState extends State<RepairTrackerScreen> {
     final query = _searchController.text.trim().toUpperCase();
     setState(() {
       _hasSearched = true;
-      _matchedTicket = state.tickets.firstWhere(
-        (t) => t.ticketNumber == query,
-        orElse: () => null as dynamic, // Will fail try-catch, handled below
-      );
+      try {
+        _matchedTicket = state.tickets.firstWhere(
+          (t) => t.ticketNumber == query,
+        );
+      } catch (_) {
+        _matchedTicket = null;
+      }
     });
   }
 

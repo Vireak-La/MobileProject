@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class CyberRigForgetPasswordPage extends StatefulWidget {
@@ -200,6 +201,7 @@ class _CyberRigForgetPasswordPageState extends State<CyberRigForgetPasswordPage>
                               child: ElevatedButton(
                                 onPressed: () {
                                   print("Reset request dispatch: ${_emailController.text}");
+                                  context.push('/verify-email');
                                 },
                                 style: ElevatedButton.styleFrom(
                                   backgroundColor: Colors.transparent,
@@ -241,7 +243,7 @@ class _CyberRigForgetPasswordPageState extends State<CyberRigForgetPasswordPage>
                             // Back Navigation Step Text Return link
                             GestureDetector(
                               onTap: () {
-                                Navigator.pop(context);
+                                context.pop();
                               },
                               child: Padding(
                                 padding: const EdgeInsets.symmetric(vertical: 8.0),

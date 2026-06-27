@@ -1,0 +1,156 @@
+import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
+import '../../state/app_state.dart';
+import '../../theme/app_colors.dart';
+
+class ProfilePage extends StatefulWidget {
+  const ProfilePage({super.key});
+
+  @override
+  State<ProfilePage> createState() => _ProfilePageState();
+}
+
+class _ProfilePageState extends State<ProfilePage> {
+  @override
+  Widget build(BuildContext context) {
+    // Listen to state changes
+    final appState = Provider.of<AppStateNotifier>(context);
+    final user = appState.currentUser;
+
+    return Scaffold(
+      backgroundColor: AppColors.background,
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        title: const Text(
+          "OPERATOR PROFILE",
+          style: TextStyle(
+            fontFamily: 'Courier',
+            color: AppColors.neonCyan,
+            fontSize: 18,
+            fontWeight: FontWeight.bold,
+            letterSpacing: 2.0,
+          ),
+        ),
+        centerTitle: true,
+      ),
+      body: ListView(
+        padding: const EdgeInsets.all(16),
+        children: [
+          _buildHeader(user),
+          const SizedBox(height: 30),
+          _buildSection("ACCOUNT MATRIX", [
+            _buildListTile(Icons.person_outline, "Edit Profile", () {
+              context.push('/edit-profile');
+            }),
+            _buildListTile(Icons.lock_outline, "Security/Password", () {}),
+          ]),
+          _buildSection("PURCHASE HISTORY", [
+            _buildListTile(Icons.history, "Order History", () {
+              context.push('/order-history');
+            }),
+          ]),
+          _buildSection("SYSTEM PREFERENCES", [
+            _buildToggleTile(Icons.notifications_none, "Notifications", appState.notificationsEnabled, (val) {
+              appState.toggleNotifications(val);
+            }),
+          ]),
+          _buildSection("SYSTEM CONTROL", [
+            _buildListTile(Icons.logout, "Log Out", () {
+              appState.logout();
+              context.go('/login');
+            }, isLogout: true),
+          ]),
+        ],
+      ),
+    );
+  }
+
+  // --- Helper Methods ---
+  Widget _buildHeader(User? user) {
+    return Column(children: [
+      CircleAvatar(
+        radius: 50,
+        backgroundColor: AppColors.surfaceElevated,
+        backgroundImage: user?.profileImageBytes != null 
+            ? MemoryImage(user!.profileImageBytes!) 
+            : const AssetImage('assets/images/profile.png') as ImageProvider,
+      ),
+      const SizedBox(height: 15),
+      Text(
+        user?.name ?? "Guest", 
+        style: const TextStyle(
+          fontFamily: 'Courier',
+          color: Colors.white,
+          fontSize: 22,
+          fontWeight: FontWeight.bold,
+        ),
+      ),
+      if (user?.email != null) ...[
+        const SizedBox(height: 6),
+        Text(
+          user!.email.toLowerCase(), 
+          style: const TextStyle(
+            fontFamily: 'Courier',
+            color: AppColors.textSecondary,
+            fontSize: 14,
+          ),
+        ),
+      ],
+    ]);
+  }
+
+  Widget _buildSection(String title, List<Widget> children) => Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+      Text(
+        title,
+        style: const TextStyle(
+          fontFamily: 'Courier',
+          color: AppColors.neonCyan,
+          letterSpacing: 1.5,
+          fontSize: 12,
+          fontWeight: FontWeight.bold,
+        ),
+      ),
+      const SizedBox(height: 10),
+      Material(
+        color: AppColors.surfaceCard,
+        borderRadius: BorderRadius.circular(12),
+        child: Column(children: children),
+      ),
+      const SizedBox(height: 24),
+    ],
+  );
+
+  Widget _buildListTile(IconData icon, String title, VoidCallback onTap, {bool isLogout = false}) => ListTile(
+    leading: Icon(icon, color: isLogout ? Colors.redAccent : Colors.white70),
+    title: Text(
+      title,
+      style: TextStyle(
+        fontFamily: 'Courier',
+        color: isLogout ? Colors.redAccent : Colors.white,
+      ),
+    ),
+    trailing: isLogout ? null : const Icon(Icons.chevron_right, color: Colors.white70),
+    onTap: onTap,
+  );
+
+  Widget _buildToggleTile(IconData icon, String title, bool value, Function(bool) onChanged) => ListTile(
+    leading: Icon(icon, color: Colors.white70),
+    title: Text(
+      title,
+      style: const TextStyle(
+        fontFamily: 'Courier',
+        color: Colors.white,
+      ),
+    ),
+    trailing: Switch(
+      value: value, 
+      onChanged: onChanged, 
+      activeTrackColor: AppColors.neonCyan.withOpacity(0.5), 
+      activeThumbColor: AppColors.neonCyan,
+    ),
+  );
+}

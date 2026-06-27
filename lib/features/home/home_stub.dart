@@ -1,12 +1,55 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import '../../theme/app_colors.dart';
-import 'product_detail.dart';
 import '../../components/cyber_drawer.dart';
 import 'package:provider/provider.dart';
 import '../../state/app_state.dart';
 
-class HomeStubScreen extends StatelessWidget {
+class HomeStubScreen extends StatefulWidget {
   const HomeStubScreen({super.key});
+
+  @override
+  State<HomeStubScreen> createState() => _HomeStubScreenState();
+}
+
+class _HomeStubScreenState extends State<HomeStubScreen> {
+  late Timer _timer;
+  Duration _timeLeft = const Duration(hours: 4, minutes: 22, seconds: 15);
+
+  @override
+  void initState() {
+    super.initState();
+    _startTimer();
+  }
+
+  void _startTimer() {
+    _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
+      if (mounted) {
+        setState(() {
+          if (_timeLeft.inSeconds > 0) {
+            _timeLeft = _timeLeft - const Duration(seconds: 1);
+          } else {
+            _timeLeft = const Duration(hours: 4, minutes: 22, seconds: 15);
+          }
+        });
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _timer.cancel();
+    super.dispose();
+  }
+
+  String _formatDuration(Duration d) {
+    String twoDigits(int n) => n.toString().padLeft(2, '0');
+    final hours = twoDigits(d.inHours);
+    final minutes = twoDigits(d.inMinutes.remainder(60));
+    final seconds = twoDigits(d.inSeconds.remainder(60));
+    return "$hours:$minutes:$seconds";
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -17,7 +60,9 @@ class HomeStubScreen extends StatelessWidget {
         actions: [
           IconButton(
             icon: const Icon(Icons.search, color: AppColors.neonCyan),
-            onPressed: () {},
+            onPressed: () {
+              context.push('/search');
+            },
           )
         ],
       ),
@@ -26,24 +71,24 @@ class HomeStubScreen extends StatelessWidget {
           color: AppColors.background,
           child: ListView(
             padding: const EdgeInsets.fromLTRB(18, 12, 18, 24),
-            children: const [
-              _HeroPanel(),
-              SizedBox(height: 20),
-              _SectionHeader(title: 'HARDWARE MATRIX', accentColor: AppColors.neonCyan, showPagerDots: true),
-              SizedBox(height: 14),
-              _HardwareStrip(),
-              SizedBox(height: 18),
-              _BrandStrip(),
-              SizedBox(height: 22),
-              _SectionHeader(title: 'BUILD OF THE MONTH', accentColor: AppColors.neonMagenta),
-              SizedBox(height: 14),
-              _BuildOfMonthCard(),
-              SizedBox(height: 20),
-              _SectionHeader(title: 'HOT DEALS', accentColor: Colors.redAccent, trailing: '04:22:15'),
-              SizedBox(height: 14),
-              _DealsRow(),
-              SizedBox(height: 18),
-              _ActionRow(),
+            children: [
+              const _HeroPanel(),
+              const SizedBox(height: 20),
+              const _SectionHeader(title: 'HARDWARE MATRIX', accentColor: AppColors.neonCyan, showPagerDots: true),
+              const SizedBox(height: 14),
+              const _HardwareStrip(),
+              const SizedBox(height: 18),
+              const _BrandStrip(),
+              const SizedBox(height: 22),
+              const _SectionHeader(title: 'BUILD OF THE MONTH', accentColor: AppColors.neonMagenta),
+              const SizedBox(height: 14),
+              const _BuildOfMonthCard(),
+              const SizedBox(height: 20),
+              _SectionHeader(title: 'HOT DEALS', accentColor: Colors.redAccent, trailing: _formatDuration(_timeLeft)),
+              const SizedBox(height: 14),
+              const _DealsRow(),
+              const SizedBox(height: 18),
+              const _ActionRow(),
             ],
           ),
         ),
@@ -57,101 +102,124 @@ class _HeroPanel extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      clipBehavior: Clip.antiAlias,
-      decoration: BoxDecoration(
-
-      ),
-      child: SizedBox(
-        height: 540,
-        child: Stack(
-          children: [
-            Positioned(
-              top: 42,
-              left: 0,
-              right: 0,
-              child: _HeroImagePanel(),
-            ),
-            
-            Padding(
-              padding: const EdgeInsets.fromLTRB(18, 18, 18, 20),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Spacer(),
-                  Center(
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
-                      decoration: BoxDecoration(
-                        border: Border.all(color: AppColors.neonCyan, width: 2),
-                        color: Colors.transparent,
-                        borderRadius: BorderRadius.circular(8),
-                        boxShadow: [
-                          BoxShadow(color: AppColors.neonCyan.withOpacity(0.12), blurRadius: 8, spreadRadius: 1),
-                        ],
+    return TweenAnimationBuilder<double>(
+      tween: Tween<double>(begin: 0.0, end: 1.0),
+      duration: const Duration(milliseconds: 800),
+      curve: Curves.easeOutCubic,
+      builder: (context, value, child) {
+        return Transform.translate(
+          offset: Offset(0, 30 * (1.0 - value)),
+          child: Opacity(
+            opacity: value,
+            child: child,
+          ),
+        );
+      },
+      child: Container(
+        clipBehavior: Clip.antiAlias,
+        decoration: const BoxDecoration(),
+        child: SizedBox(
+          height: 540,
+          child: Stack(
+            children: [
+              Positioned(
+                top: 42,
+                left: 0,
+                right: 0,
+                child: _HeroImagePanel(),
+              ),
+              
+              Padding(
+                padding: const EdgeInsets.fromLTRB(18, 18, 18, 20),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Spacer(),
+                    Center(
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
+                        decoration: BoxDecoration(
+                          border: Border.all(color: AppColors.neonCyan, width: 2),
+                          color: Colors.transparent,
+                          borderRadius: BorderRadius.circular(8),
+                          boxShadow: [
+                            BoxShadow(color: AppColors.neonCyan.withOpacity(0.12), blurRadius: 8, spreadRadius: 1),
+                          ],
+                        ),
+                        child: const Text(
+                          'FLAGSHIP RELEASE',
+                          style: TextStyle(
+                            fontFamily: 'Courier',
+                            fontSize: 11,
+                            fontWeight: FontWeight.w900,
+                            color: AppColors.neonCyan,
+                            letterSpacing: 2,
+                          ),
+                        ),
                       ),
-                      child: const Text(
-                        'FLAGSHIP RELEASE',
+                    ),
+                    const SizedBox(height: 8),
+                    const Center(child: _HeroTitle()),
+                    const SizedBox(height: 8),
+                    const Center(
+                      child: Text(
+                        'Experience uncompromised dominance.\nEngineered for elite gamers and professional workstation workloads.',
+                        textAlign: TextAlign.center,
                         style: TextStyle(
                           fontFamily: 'Courier',
-                          fontSize: 11,
-                          fontWeight: FontWeight.w900,
-                          color: AppColors.neonCyan,
-                          letterSpacing: 2,
+                          fontSize: 13,
+                          height: 1.45,
+                          color: AppColors.textSecondary,
                         ),
                       ),
                     ),
-                  ),
-                  const SizedBox(height: 8),
-                  const Center(child: _HeroTitle()),
-                  const SizedBox(height: 8),
-                  const Center(
-                    child: Text(
-                      'Experience uncompromised dominance.\nEngineered for elite gamers and professional workstation workloads.',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontFamily: 'Courier',
-                        fontSize: 13,
-                        height: 1.45,
-                        color: AppColors.textSecondary,
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 18),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: GestureDetector(
-                          onTap: () {
-                            context.read<AppStateNotifier>().setScreen(AppScreen.pcBuilder);
-                          },
-                          child: _GradientButton(label: 'CONFIGURE NOW'),
-                        ),
-                      ),
-                      const SizedBox(width: 12),
-                      GestureDetector(
-                        onTap: () {
-                          Navigator.of(context).push(MaterialPageRoute(builder: (_) => const ProductDetailScreen()));
-                        },
-                        child: const _GhostButton(label: 'SEE DETAILS'),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 18),
-                  const Center(
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
+                    const SizedBox(height: 18),
+                    Row(
                       children: [
-                        _SliderDot(active: true),
-                        _SliderDot(active: false),
-                        _SliderDot(active: false),
+                        Expanded(
+                          child: GestureDetector(
+                            onTap: () {
+                              context.read<AppStateNotifier>().setScreen(AppScreen.pcBuilder);
+                            },
+                            child: _GradientButton(label: 'CONFIGURE NOW'),
+                          ),
+                        ),
+                        const SizedBox(width: 12),
+                        GestureDetector(
+                          onTap: () {
+                            context.push(
+                              '/product-detail',
+                              extra: {
+                                'name': 'NVIDIA RTX 4090',
+                                'price': 1599,
+                                'category': 'GPU',
+                                'imageUrl': 'https://i.ebayimg.com/images/g/VmsAAOSwfrlnx8pF/s-l400.jpg',
+                                'rating': 5,
+                                'tdp': 450,
+                                'description': 'The ultimate GeForce GPU. It brings an enormous leap in performance, efficiency, and AI-powered graphics.',
+                              },
+                            );
+                          },
+                          child: const _GhostButton(label: 'SEE DETAILS'),
+                        ),
                       ],
                     ),
-                  ),
-                ],
+                    const SizedBox(height: 18),
+                    const Center(
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          _SliderDot(active: true),
+                          _SliderDot(active: false),
+                          _SliderDot(active: false),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
@@ -384,10 +452,27 @@ class _HardwareStrip extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final appState = Provider.of<AppStateNotifier>(context, listen: false);
     final cards = [
-      const _MatrixCard(title: 'LAPTOPS', subtitle: 'Portable power rigs', icon: Icons.laptop_mac, active: true),
-      const _MatrixCard(title: 'DESKTOPS', subtitle: 'Custom tower builds', icon: Icons.desktop_windows),
-      const _MatrixCard(title: 'PARTS', subtitle: 'GPU, CPU, cooling', icon: Icons.memory),
+      _MatrixCard(
+        title: 'LAPTOPS',
+        subtitle: 'Portable power rigs',
+        icon: Icons.laptop_mac,
+        active: true,
+        onTap: () => appState.setScreen(AppScreen.shop),
+      ),
+      _MatrixCard(
+        title: 'DESKTOPS',
+        subtitle: 'Custom tower builds',
+        icon: Icons.desktop_windows,
+        onTap: () => appState.setScreen(AppScreen.shop),
+      ),
+      _MatrixCard(
+        title: 'PARTS',
+        subtitle: 'GPU, CPU, cooling',
+        icon: Icons.memory,
+        onTap: () => appState.setScreen(AppScreen.shop),
+      ),
     ];
 
     return SizedBox(
@@ -396,7 +481,7 @@ class _HardwareStrip extends StatelessWidget {
         scrollDirection: Axis.horizontal,
         physics: const BouncingScrollPhysics(),
         itemBuilder: (context, index) => cards[index],
-        separatorBuilder: (_, __) => const SizedBox(width: 14),
+        separatorBuilder: (_, _) => const SizedBox(width: 14),
         itemCount: cards.length,
       ),
     );
@@ -404,48 +489,58 @@ class _HardwareStrip extends StatelessWidget {
 }
 
 class _MatrixCard extends StatelessWidget {
-  const _MatrixCard({required this.title, required this.subtitle, required this.icon, this.active = false});
+  const _MatrixCard({
+    required this.title,
+    required this.subtitle,
+    required this.icon,
+    this.active = false,
+    this.onTap,
+  });
 
   final String title;
   final String subtitle;
   final IconData icon;
   final bool active;
+  final VoidCallback? onTap;
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: 128,
-      padding: const EdgeInsets.all(14),
-      decoration: BoxDecoration(
-        color: active ? const Color(0xFF172234) : AppColors.surfaceCard,
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: active ? AppColors.neonCyan : const Color(0xFF233346)),
-      ),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Icon(icon, size: 36, color: active ? AppColors.neonCyan : AppColors.textMuted),
-          Column(
-            children: [
-              Text(
-                title,
-                style: const TextStyle(
-                  fontFamily: 'Courier',
-                  fontSize: 12,
-                  fontWeight: FontWeight.w900,
-                  color: AppColors.textPrimary,
-                  letterSpacing: 1.2,
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        width: 128,
+        padding: const EdgeInsets.all(14),
+        decoration: BoxDecoration(
+          color: active ? const Color(0xFF172234) : AppColors.surfaceCard,
+          borderRadius: BorderRadius.circular(16),
+          border: Border.all(color: active ? AppColors.neonCyan : const Color(0xFF233346)),
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Icon(icon, size: 36, color: active ? AppColors.neonCyan : AppColors.textMuted),
+            Column(
+              children: [
+                Text(
+                  title,
+                  style: const TextStyle(
+                    fontFamily: 'Courier',
+                    fontSize: 12,
+                    fontWeight: FontWeight.w900,
+                    color: AppColors.textPrimary,
+                    letterSpacing: 1.2,
+                  ),
                 ),
-              ),
-              const SizedBox(height: 4),
-              Text(
-                subtitle,
-                textAlign: TextAlign.center,
-                style: const TextStyle(fontSize: 10, color: AppColors.textMuted),
-              ),
-            ],
-          ),
-        ],
+                const SizedBox(height: 4),
+                Text(
+                  subtitle,
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(fontSize: 10, color: AppColors.textMuted),
+                ),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -464,7 +559,7 @@ class _BrandStrip extends StatelessWidget {
         scrollDirection: Axis.horizontal,
         physics: const BouncingScrollPhysics(),
         itemCount: brands.length,
-        separatorBuilder: (_, __) => const SizedBox(width: 18),
+        separatorBuilder: (_, _) => const SizedBox(width: 18),
         itemBuilder: (context, index) {
           return Center(
             child: Text(
@@ -582,20 +677,42 @@ class _BuildOfMonthCard extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 14),
-          Container(
-            height: 46,
-            decoration: BoxDecoration(
-              border: Border.all(color: AppColors.neonMagenta),
-            ),
-            child: const Center(
-              child: Text(
-                'OPEN IN BUILDER  →',
-                style: TextStyle(
-                  fontFamily: 'Courier',
-                  fontSize: 13,
-                  color: AppColors.neonMagenta,
-                  fontWeight: FontWeight.w900,
-                  letterSpacing: 1.8,
+          GestureDetector(
+            onTap: () {
+              final Map<String, String> components = {
+                'CPU': 'Intel Core i9-14900K',
+                'Motherboard': 'ASUS ROG Maximus Z790 Hero',
+                'RAM': 'Corsair Vengeance RGB 64GB DDR5',
+                'GPU': 'NVIDIA RTX 4090',
+                'Storage': 'Sabrent Rocket 4 Plus 4TB',
+                'PSU': 'EVGA SuperNOVA 1000 G7',
+                'Case': 'Lian Li O11 Dynamic EVO',
+              };
+              
+              Provider.of<AppStateNotifier>(context, listen: false).loadBuildIntoBuilder(components);
+              
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                  content: Text('Vortex X custom components loaded into Builder!'),
+                  duration: Duration(seconds: 2),
+                ),
+              );
+            },
+            child: Container(
+              height: 46,
+              decoration: BoxDecoration(
+                border: Border.all(color: AppColors.neonMagenta),
+              ),
+              child: const Center(
+                child: Text(
+                  'OPEN IN BUILDER  →',
+                  style: TextStyle(
+                    fontFamily: 'Courier',
+                    fontSize: 13,
+                    color: AppColors.neonMagenta,
+                    fontWeight: FontWeight.w900,
+                    letterSpacing: 1.8,
+                  ),
                 ),
               ),
             ),
@@ -801,7 +918,7 @@ class _ActionRow extends StatelessWidget {
             title: 'BOOK REPAIR',
             color: AppColors.neonCyan,
             onTap: () {
-              context.read<AppStateNotifier>().setScreen(AppScreen.services);
+              context.push('/services');
             },
           ),
         ),
@@ -812,7 +929,7 @@ class _ActionRow extends StatelessWidget {
             title: 'COMMUNITY',
             color: AppColors.neonMagenta,
             onTap: () {
-              context.read<AppStateNotifier>().setScreen(AppScreen.community);
+              context.push('/community');
             },
           ),
         ),

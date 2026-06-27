@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class CyberRigRegisterPage extends StatefulWidget {
@@ -217,7 +218,7 @@ class _CyberRigRegisterPageState extends State<CyberRigRegisterPage> {
                                   print("Registration data processed.");
                                   
                                   // Routes user forward to your Email Verification or Dashboard
-                                  Navigator.pushNamed(context, '/verify-email');
+                                  context.push('/verify-email');
                                 },
                                 style: ElevatedButton.styleFrom(
                                   backgroundColor: Colors.transparent,

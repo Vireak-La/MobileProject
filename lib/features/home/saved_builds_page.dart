@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import '../../theme/app_colors.dart';
 import '../../components/cyber_drawer.dart';
@@ -50,6 +51,7 @@ class SavedBuildsPage extends StatelessWidget {
 
   void _loadInBuilder(BuildContext context, SavedBuild build) {
     Provider.of<AppStateNotifier>(context, listen: false).loadBuildIntoBuilder(build.components);
+    context.go('/dashboard');
     ScaffoldMessenger.of(context).clearSnackBars();
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
@@ -347,6 +349,7 @@ class SavedBuildsPage extends StatelessWidget {
               ),
               onPressed: () {
                 appState.setScreen(AppScreen.pcBuilder);
+                context.go('/dashboard');
               },
               child: const Text(
                 'LAUNCH PC BUILDER',

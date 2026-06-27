@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
-import '../checkout/cart.dart';
+import '../checkout/checkout_models.dart';
 import '../../theme/app_colors.dart';
 import '../../components/cyber_drawer.dart';
 import '../../state/app_state.dart';
+import '../../data/product_repository.dart';
 
 class PcBuilderStubScreen extends StatefulWidget {
   const PcBuilderStubScreen({super.key});
@@ -76,97 +78,13 @@ class _PcBuilderStubScreenState extends State<PcBuilderStubScreen> {
     isCompatible = socketOk && psuOk;
   }
 
-  // Simple catalogs with minimal attributes for demo purposes
-  final List<Map<String, dynamic>> cpus = [
-    {'name': 'AMD Ryzen 9 7950X', 'price': 699, 'socket': 'AM5', 'tdp': 170},
-    {'name': 'AMD Ryzen 7 7800X3D', 'price': 380, 'socket': 'AM5', 'tdp': 120},
-    {'name': 'AMD Ryzen 5 7600X', 'price': 229, 'socket': 'AM5', 'tdp': 105},
-    {'name': 'AMD Ryzen 5 7600', 'price': 220, 'socket': 'AM5', 'tdp': 65},
-    {'name': 'Intel Core i9-13900K', 'price': 589, 'socket': 'LGA1700', 'tdp': 125},
-    {'name': 'Intel Core i7-13700K', 'price': 420, 'socket': 'LGA1700', 'tdp': 125},
-    {'name': 'Intel Core i5-13600K', 'price': 319, 'socket': 'LGA1700', 'tdp': 125},
-    {'name': 'Intel Core i5-12400F', 'price': 179, 'socket': 'LGA1700', 'tdp': 65},
-    {'name': 'AMD Ryzen 7 7700X', 'price': 349, 'socket': 'AM5', 'tdp': 105},
-    {'name': 'Intel Core i3-13100', 'price': 119, 'socket': 'LGA1700', 'tdp': 60},
-  ];
-
-  final List<Map<String, dynamic>> motherboards = [
-    {'name': 'MSI MAG B650 Tomahawk', 'price': 190, 'socket': 'AM5'},
-    {'name': 'ASUS ROG Strix B650E', 'price': 320, 'socket': 'AM5'},
-    {'name': 'ASUS PRIME X670-P', 'price': 240, 'socket': 'AM5'},
-    {'name': 'Gigabyte X670 AORUS Elite', 'price': 260, 'socket': 'AM5'},
-    {'name': 'ASRock B650M Steel Legend', 'price': 150, 'socket': 'AM5'},
-    {'name': 'ASUS PRIME Z790-P', 'price': 210, 'socket': 'LGA1700'},
-    {'name': 'MSI PRO Z790-A', 'price': 200, 'socket': 'LGA1700'},
-    {'name': 'Gigabyte Z790 UD AX', 'price': 190, 'socket': 'LGA1700'},
-    {'name': 'ASRock Z790 Phantom Gaming', 'price': 280, 'socket': 'LGA1700'},
-    {'name': 'MSI MAG B660 Tomahawk', 'price': 160, 'socket': 'LGA1700'},
-  ];
-
-  final List<Map<String, dynamic>> rams = [
-    {'name': 'G.Skill Trident Z5 32GB DDR5', 'price': 90, 'type': 'DDR5'},
-    {'name': 'Corsair Vengeance 32GB DDR4', 'price': 75, 'type': 'DDR4'},
-    {'name': 'Kingston Fury Beast 32GB DDR5', 'price': 95, 'type': 'DDR5'},
-    {'name': 'Crucial Ballistix 16GB DDR4', 'price': 45, 'type': 'DDR4'},
-    {'name': 'Corsair Dominator Platinum 32GB DDR5', 'price': 150, 'type': 'DDR5'},
-    {'name': 'Team T-Force Delta 32GB DDR5', 'price': 85, 'type': 'DDR5'},
-    {'name': 'Patriot Viper 32GB DDR4', 'price': 70, 'type': 'DDR4'},
-    {'name': 'Samsung 32GB DDR5 RDIMM', 'price': 130, 'type': 'DDR5'},
-    {'name': 'ADATA XPG Lancer 16GB DDR5', 'price': 50, 'type': 'DDR5'},
-    {'name': 'Thermaltake TOUGHRAM 32GB DDR4', 'price': 80, 'type': 'DDR4'},
-  ];
-
-  final List<Map<String, dynamic>> gpus = [
-    {'name': 'NVIDIA RTX 4090', 'price': 1599, 'tdp': 450},
-    {'name': 'NVIDIA RTX 4080', 'price': 1199, 'tdp': 320},
-    {'name': 'NVIDIA RTX 4070 Ti Super', 'price': 790, 'tdp': 285},
-    {'name': 'NVIDIA RTX 4070', 'price': 599, 'tdp': 200},
-    {'name': 'NVIDIA RTX 4060 Ti', 'price': 399, 'tdp': 160},
-    {'name': 'NVIDIA RTX 3060', 'price': 330, 'tdp': 170},
-    {'name': 'AMD Radeon RX 7900 XTX', 'price': 999, 'tdp': 355},
-    {'name': 'AMD Radeon RX 7800 XT', 'price': 499, 'tdp': 300},
-    {'name': 'AMD Radeon RX 7600', 'price': 249, 'tdp': 165},
-    {'name': 'NVIDIA GTX 1660 Super', 'price': 219, 'tdp': 125},
-  ];
-
-  final List<Map<String, dynamic>> storages = [
-    {'name': 'Samsung 990 Pro 2TB NVMe', 'price': 140},
-    {'name': 'Crucial P3 1TB NVMe', 'price': 55},
-    {'name': 'Western Digital Black SN850 1TB', 'price': 120},
-    {'name': 'Sabrent Rocket 4 Plus 2TB', 'price': 230},
-    {'name': 'Kingston KC3000 1TB', 'price': 110},
-    {'name': 'Samsung 870 EVO 1TB SATA', 'price': 80},
-    {'name': 'Crucial MX500 2TB SATA', 'price': 150},
-    {'name': 'Seagate Barracuda 2TB HDD', 'price': 60},
-    {'name': 'WD Blue SN570 1TB', 'price': 65},
-    {'name': 'ADATA XPG SX8200 1TB', 'price': 70},
-  ];
-
-  final List<Map<String, dynamic>> psus = [
-    {'name': 'Corsair RM1000x 1000W', 'price': 200, 'watt': 1000},
-    {'name': 'Seasonic PRIME 1000W', 'price': 220, 'watt': 1000},
-    {'name': 'Corsair RM850x 850W', 'price': 150, 'watt': 850},
-    {'name': 'Corsair RM750x 750W', 'price': 120, 'watt': 750},
-    {'name': 'EVGA 750W Gold', 'price': 110, 'watt': 750},
-    {'name': 'EVGA 650W Gold', 'price': 90, 'watt': 650},
-    {'name': 'Cooler Master 850W Gold', 'price': 130, 'watt': 850},
-    {'name': 'Thermaltake 750W', 'price': 95, 'watt': 750},
-    {'name': 'BeQuiet! 650W', 'price': 105, 'watt': 650},
-    {'name': 'Antec NE750 750W', 'price': 85, 'watt': 750},
-  ];
-
-  final List<Map<String, dynamic>> cases = [
-    {'name': 'NZXT H510', 'price': 70},
-    {'name': 'Fractal Design Meshify C', 'price': 100},
-    {'name': 'Corsair 4000D', 'price': 95},
-    {'name': 'Lian Li Lancool II', 'price': 120},
-    {'name': 'Cooler Master NR600', 'price': 60},
-    {'name': 'Phanteks Eclipse P400A', 'price': 80},
-    {'name': 'BeQuiet! Pure Base 500DX', 'price': 110},
-    {'name': 'Thermaltake Divider 300', 'price': 85},
-    {'name': 'SilverStone RL06', 'price': 65},
-    {'name': 'DeepCool Matrexx 55', 'price': 55},
-  ];
+  List<Map<String, dynamic>> get cpus => ProductRepository.cpus;
+  List<Map<String, dynamic>> get motherboards => ProductRepository.motherboards;
+  List<Map<String, dynamic>> get rams => ProductRepository.rams;
+  List<Map<String, dynamic>> get gpus => ProductRepository.gpus;
+  List<Map<String, dynamic>> get storages => ProductRepository.storages;
+  List<Map<String, dynamic>> get psus => ProductRepository.psus;
+  List<Map<String, dynamic>> get cases => ProductRepository.cases;
 
   @override
   Widget build(BuildContext context) {
@@ -178,11 +96,7 @@ class _PcBuilderStubScreenState extends State<PcBuilderStubScreen> {
           IconButton(
             tooltip: 'Open cart',
             onPressed: () {
-              Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (_) => const CartScreen(),
-                ),
-              );
+              context.push('/cart');
             },
             icon: const Icon(Icons.shopping_cart_outlined),
           ),
@@ -216,14 +130,21 @@ class _PcBuilderStubScreenState extends State<PcBuilderStubScreen> {
                         ),
                       ),
                       const SizedBox(height: 4),
-                      Text(
-                        '\$$totalCost.00',
-                        style: const TextStyle(
-                          fontFamily: 'Courier',
-                          fontSize: 24,
-                          fontWeight: FontWeight.bold,
-                          color: AppColors.neonCyan,
-                        ),
+                      TweenAnimationBuilder<double>(
+                        tween: Tween<double>(begin: 0.0, end: totalCost.toDouble()),
+                        duration: const Duration(milliseconds: 400),
+                        curve: Curves.easeOutCubic,
+                        builder: (context, value, child) {
+                          return Text(
+                            '\$${value.toStringAsFixed(0)}.00',
+                            style: const TextStyle(
+                              fontFamily: 'Courier',
+                              fontSize: 24,
+                              fontWeight: FontWeight.bold,
+                              color: AppColors.neonCyan,
+                            ),
+                          );
+                        },
                       ),
                     ],
                   ),
@@ -258,13 +179,17 @@ class _PcBuilderStubScreenState extends State<PcBuilderStubScreen> {
               ),
             ),
             const SizedBox(height: 10),
-            ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                minimumSize: const Size(double.infinity, 35),
-                backgroundColor: AppColors.surfaceElevated,
+            Semantics(
+              label: 'Add currently selected components to shopping cart',
+              button: true,
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  minimumSize: const Size(double.infinity, 35),
+                  backgroundColor: AppColors.surfaceElevated,
+                ),
+                onPressed: _atc,
+                child: const Text('ADD TO CART'),
               ),
-              onPressed: _atc,
-              child: const Text('ADD TO CART'),
             ),
             const SizedBox(height: 24),
 
@@ -288,27 +213,63 @@ class _PcBuilderStubScreenState extends State<PcBuilderStubScreen> {
             _buildSelectableRow('PC Chassis (Case)', currentCase, _priceOf(currentCase), () => _selectCase()),
 
             const SizedBox(height: 10),
-            ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                minimumSize: const Size(double.infinity, 35),
-                backgroundColor: AppColors.surfaceElevated,
+            Semantics(
+              label: 'Verify CPU socket and PSU wattage compatibility rules',
+              button: true,
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  minimumSize: const Size(double.infinity, 35),
+                  backgroundColor: AppColors.surfaceElevated,
+                ),
+                onPressed: _checkCompatibility,
+                child: const Text('CHECK COMPATIBILITY RULES'),
               ),
-              onPressed: _checkCompatibility,
-              child: const Text('CHECK COMPATIBILITY RULES'),
             ),
 
             const SizedBox(height: 10),
-            ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                minimumSize: const Size(double.infinity, 35),
-                backgroundColor: AppColors.surfaceElevated,
+            Semantics(
+              label: 'Open saved build configurations manager',
+              button: true,
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  minimumSize: const Size(double.infinity, 35),
+                  backgroundColor: AppColors.surfaceElevated,
+                ),
+                onPressed: _savedBuilds,
+                child: const Text('SAVE BUILDS'),
               ),
-              onPressed: _savedBuilds,
-              child: const Text('SAVE BUILDS'),
             ),
             
             const SizedBox(height: 12),
-            Text('Live Total: \$$totalCost.00', style: const TextStyle(fontFamily: 'Courier', fontSize: 16, fontWeight: FontWeight.bold, color: AppColors.neonGreen)),
+            Row(
+              children: [
+                const Text(
+                  'Live Total: ', 
+                  style: TextStyle(
+                    fontFamily: 'Courier', 
+                    fontSize: 16, 
+                    fontWeight: FontWeight.bold, 
+                    color: AppColors.textPrimary,
+                  ),
+                ),
+                TweenAnimationBuilder<double>(
+                  tween: Tween<double>(begin: 0.0, end: totalCost.toDouble()),
+                  duration: const Duration(milliseconds: 400),
+                  curve: Curves.easeOutCubic,
+                  builder: (context, value, child) {
+                    return Text(
+                      '\$${value.toStringAsFixed(0)}.00', 
+                      style: const TextStyle(
+                        fontFamily: 'Courier', 
+                        fontSize: 16, 
+                        fontWeight: FontWeight.bold, 
+                        color: AppColors.neonGreen,
+                      ),
+                    );
+                  },
+                ),
+              ],
+            ),
           ],
         ),
       ),
@@ -343,7 +304,7 @@ class _PcBuilderStubScreenState extends State<PcBuilderStubScreen> {
           ),
         ),
         trailing: Text(
-          '\$${price}',
+          '\$$price',
           style: const TextStyle(
             fontFamily: 'Courier',
             fontSize: 12,
@@ -357,13 +318,27 @@ class _PcBuilderStubScreenState extends State<PcBuilderStubScreen> {
 
   int _priceOf(String name) {
     if (name == 'Awaiting selection...' || name.isEmpty) return 0;
-    for (var c in cpus) if (c['name'] == name) return c['price'] as int;
-    for (var m in motherboards) if (m['name'] == name) return m['price'] as int;
-    for (var r in rams) if (r['name'] == name) return r['price'] as int;
-    for (var g in gpus) if (g['name'] == name) return g['price'] as int;
-    for (var s in storages) if (s['name'] == name) return s['price'] as int;
-    for (var p in psus) if (p['name'] == name) return p['price'] as int;
-    for (var c in cases) if (c['name'] == name) return c['price'] as int;
+    for (var c in cpus) {
+      if (c['name'] == name) return c['price'] as int;
+    }
+    for (var m in motherboards) {
+      if (m['name'] == name) return m['price'] as int;
+    }
+    for (var r in rams) {
+      if (r['name'] == name) return r['price'] as int;
+    }
+    for (var g in gpus) {
+      if (g['name'] == name) return g['price'] as int;
+    }
+    for (var s in storages) {
+      if (s['name'] == name) return s['price'] as int;
+    }
+    for (var p in psus) {
+      if (p['name'] == name) return p['price'] as int;
+    }
+    for (var c in cases) {
+      if (c['name'] == name) return c['price'] as int;
+    }
     return 0;
   }
 
@@ -655,8 +630,49 @@ void dispose() {
 }
 
   void _atc() {
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Build added to Cart')),
-    );
+    final appState = Provider.of<AppStateNotifier>(context, listen: false);
+    int addedCount = 0;
+
+    void addIfSelected(String category, String name) {
+      if (name != 'Awaiting selection...') {
+        final price = _priceOf(name).toDouble();
+        appState.addToCart(CheckoutCartItem(
+          name: name,
+          category: category,
+          price: price,
+          quantity: 1,
+          imageAsset: '',
+          compatibilityTag: category == 'CPU' ? 'AM5' : 'PCIe',
+        ));
+        addedCount++;
+      }
+    }
+
+    addIfSelected('CPU', currentCpu);
+    addIfSelected('Motherboard', currentMotherboard);
+    addIfSelected('RAM', currentRam);
+    addIfSelected('GPU', currentGpu);
+    addIfSelected('Storage', currentStorage);
+    addIfSelected('PSU', currentPsu);
+    addIfSelected('Case', currentCase);
+
+    if (addedCount > 0) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Added $addedCount components to cart!'),
+          action: SnackBarAction(
+            label: 'VIEW CART',
+            textColor: AppColors.neonCyan,
+            onPressed: () {
+              context.push('/cart');
+            },
+          ),
+        ),
+      );
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Please select at least one component first.')),
+      );
+    }
   }
 }

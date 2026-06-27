@@ -168,43 +168,55 @@ class _ComparePageState extends State<ComparePage> with SingleTickerProviderStat
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    // Dropdown Dropdown selectors side-by-side
-                    Row(
-                      children: [
-                        // Left Selection (Component A)
-                        Expanded(
-                          child: _buildSelectorCard(
-                            title: 'COMPONENT A',
-                            accentColor: AppColors.neonCyan,
-                            items: items,
-                            selectedIndex: indexA,
-                            onChanged: (newVal) {
-                              if (newVal != null) {
-                                setState(() {
-                                  _selectedIndicesA[currentCategory] = newVal;
-                                });
-                              }
-                            },
-                          ),
-                        ),
-                        const SizedBox(width: 12),
-                        // Right Selection (Component B)
-                        Expanded(
-                          child: _buildSelectorCard(
-                            title: 'COMPONENT B',
-                            accentColor: AppColors.neonMagenta,
-                            items: items,
-                            selectedIndex: indexB,
-                            onChanged: (newVal) {
-                              if (newVal != null) {
-                                setState(() {
-                                  _selectedIndicesB[currentCategory] = newVal;
-                                });
-                              }
-                            },
-                          ),
-                        ),
-                      ],
+                    // Dropdown Dropdown selectors side-by-side or stacked responsively
+                    LayoutBuilder(
+                      builder: (context, constraints) {
+                        final bool isNarrow = constraints.maxWidth < 500;
+                        final selectorA = _buildSelectorCard(
+                          title: 'COMPONENT A',
+                          accentColor: AppColors.neonCyan,
+                          items: items,
+                          selectedIndex: indexA,
+                          onChanged: (newVal) {
+                            if (newVal != null) {
+                              setState(() {
+                                _selectedIndicesA[currentCategory] = newVal;
+                              });
+                            }
+                          },
+                        );
+                        final selectorB = _buildSelectorCard(
+                          title: 'COMPONENT B',
+                          accentColor: AppColors.neonMagenta,
+                          items: items,
+                          selectedIndex: indexB,
+                          onChanged: (newVal) {
+                            if (newVal != null) {
+                              setState(() {
+                                _selectedIndicesB[currentCategory] = newVal;
+                              });
+                            }
+                          },
+                        );
+
+                        if (isNarrow) {
+                          return Column(
+                            children: [
+                              selectorA,
+                              const SizedBox(height: 12),
+                              selectorB,
+                            ],
+                          );
+                        } else {
+                          return Row(
+                            children: [
+                              Expanded(child: selectorA),
+                              const SizedBox(width: 12),
+                              Expanded(child: selectorB),
+                            ],
+                          );
+                        }
+                      },
                     ),
                     const SizedBox(height: 20),
 

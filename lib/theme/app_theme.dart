@@ -12,12 +12,10 @@ class AppTheme {
         primary: AppColors.primary,
         secondary: AppColors.secondary,
         tertiary: AppColors.neonGreen,
-        background: AppColors.background,
         surface: AppColors.surface,
         error: Colors.redAccent,
         onPrimary: Colors.black,
         onSecondary: Colors.black,
-        onBackground: AppColors.textPrimary,
         onSurface: AppColors.textPrimary,
       ),
       appBarTheme: const AppBarTheme(

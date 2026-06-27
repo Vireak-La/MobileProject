@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-
+import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
 import '../../theme/app_colors.dart';
-import 'checkout.dart';
+import '../../state/app_state.dart';
 import 'checkout_models.dart';
 
 class CartScreen extends StatefulWidget {
@@ -14,34 +15,30 @@ class CartScreen extends StatefulWidget {
 }
 
 class _CartScreenState extends State<CartScreen> {
-	late List<CheckoutCartItem> _items;
-
-	@override
-	void initState() {
-		super.initState();
-		_items = List<CheckoutCartItem>.from(widget.initialItems ?? samplePcBuildItems());
-	}
-
-	double get _subtotal => CheckoutPricing.subtotal(_items);
-	double get _tax => CheckoutPricing.tax(_subtotal);
-	double get _shipping => CheckoutPricing.shipping(_subtotal);
-	double get _total => CheckoutPricing.total(_items);
-
 	@override
 	Widget build(BuildContext context) {
+		final appState = Provider.of<AppStateNotifier>(context);
+		final items = appState.cartItems;
+		
+		final double subtotal = CheckoutPricing.subtotal(items);
+		final double tax = CheckoutPricing.tax(subtotal);
+		final double shipping = CheckoutPricing.shipping(subtotal);
+		final double total = CheckoutPricing.total(items);
+
 		return Scaffold(
 			backgroundColor: AppColors.background,
 			appBar: AppBar(
 				title: const Text('CART // READY TO CHECKOUT'),
 				actions: [
 					IconButton(
-						tooltip: 'Refresh sample order',
+						tooltip: 'Clear Cart',
 						onPressed: () {
-							setState(() {
-								_items = List<CheckoutCartItem>.from(samplePcBuildItems());
-							});
+							appState.clearCart();
+							ScaffoldMessenger.of(context).showSnackBar(
+								const SnackBar(content: Text('CART CLEARED')),
+							);
 						},
-						icon: const Icon(Icons.restart_alt),
+						icon: const Icon(Icons.delete_sweep),
 					),
 				],
 			),
@@ -69,6 +66,7 @@ class _CartScreenState extends State<CartScreen> {
 												child: Image.asset(
 													'assets/images/buildofthemonth.webp',
 													fit: BoxFit.cover,
+													errorBuilder: (_, _, _) => const SizedBox(),
 												),
 											),
 										),
@@ -83,6 +81,7 @@ class _CartScreenState extends State<CartScreen> {
 															width: 96,
 															height: 96,
 															fit: BoxFit.contain,
+															errorBuilder: (_, _, _) => const Icon(Icons.computer, size: 64, color: AppColors.neonCyan),
 														),
 													),
 													const SizedBox(width: 16),
@@ -101,10 +100,11 @@ class _CartScreenState extends State<CartScreen> {
 																),
 																SizedBox(height: 6),
 																Text(
-																	'Mock cart built from the PC Builder catalogue. Adjust quantities and continue to checkout with live totals.',
+																	'Verify your rig selections prior to initiating payment sequence.',
 																	style: TextStyle(
+																		fontSize: 12,
 																		color: AppColors.textSecondary,
-																		height: 1.45,
+																		height: 1.3,
 																	),
 																),
 															],
@@ -119,7 +119,7 @@ class _CartScreenState extends State<CartScreen> {
 						),
 					),
 					Expanded(
-						child: _items.isEmpty
+						child: items.isEmpty
 								? Center(
 										child: Column(
 											mainAxisAlignment: MainAxisAlignment.center,
@@ -127,53 +127,51 @@ class _CartScreenState extends State<CartScreen> {
 												Icon(
 													Icons.shopping_cart_outlined,
 													size: 64,
-													color: AppColors.textMuted.withOpacity(0.4),
+													color: AppColors.neonMagenta.withOpacity(0.85),
 												),
 												const SizedBox(height: 16),
 												const Text(
 													'CART_NODE // EMPTY',
 													style: TextStyle(
 														fontFamily: 'Courier',
-														fontWeight: FontWeight.bold,
-														color: AppColors.textMuted,
 														fontSize: 16,
+														fontWeight: FontWeight.bold,
+														color: Colors.white,
+														letterSpacing: 1.5,
 													),
 												),
 												const SizedBox(height: 8),
 												const Text(
-													'Add components from the Shop or PC Builder.',
-													style: TextStyle(color: AppColors.textMuted, fontSize: 13),
+													'Add components from Shop or custom rigs.',
+													style: TextStyle(
+														fontSize: 12,
+														color: AppColors.textSecondary,
+													),
 												),
 											],
 										),
 									)
 								: ListView.separated(
 										padding: const EdgeInsets.fromLTRB(16, 4, 16, 120),
-										itemCount: _items.length,
-										separatorBuilder: (_, __) => const SizedBox(height: 12),
+										itemCount: items.length,
+										separatorBuilder: (_, _) => const SizedBox(height: 12),
 										itemBuilder: (context, index) {
-											final item = _items[index];
-											return Container(
-												decoration: BoxDecoration(
-													color: AppColors.surfaceCard,
+											final item = items[index];
+											return Card(
+												margin: EdgeInsets.zero,
+												color: AppColors.surfaceCard,
+												shape: RoundedRectangleBorder(
 													borderRadius: BorderRadius.circular(16),
-													border: Border.all(color: AppColors.surfaceElevated.withOpacity(0.5)),
+													side: BorderSide(
+														color: AppColors.neonCyan.withOpacity(0.15),
+														width: 1,
+													),
 												),
 												child: Padding(
-													padding: const EdgeInsets.all(12),
+													padding: const EdgeInsets.all(14),
 													child: Row(
 														crossAxisAlignment: CrossAxisAlignment.start,
 														children: [
-															ClipRRect(
-																borderRadius: BorderRadius.circular(12),
-																child: Image.asset(
-																	item.imageAsset,
-																	width: 78,
-																	height: 78,
-																	fit: BoxFit.cover,
-																),
-															),
-															const SizedBox(width: 12),
 															Expanded(
 																child: Column(
 																	crossAxisAlignment: CrossAxisAlignment.start,
@@ -181,22 +179,34 @@ class _CartScreenState extends State<CartScreen> {
 																		Row(
 																			mainAxisAlignment: MainAxisAlignment.spaceBetween,
 																			children: [
-																				Expanded(
+																				Container(
+																					padding: const EdgeInsets.symmetric(
+																						horizontal: 8,
+																						vertical: 3,
+																					),
+																					decoration: BoxDecoration(
+																						color: AppColors.neonCyan.withOpacity(0.12),
+																						borderRadius: BorderRadius.circular(4),
+																					),
 																					child: Row(
+																						mainAxisSize: MainAxisSize.min,
 																						children: [
-																							Container(
-																								padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-																								decoration: BoxDecoration(
-																									color: AppColors.neonCyan.withOpacity(0.14),
-																									borderRadius: BorderRadius.circular(999),
-																								),
+																							const Icon(
+																								Icons.terminal,
+																								color: AppColors.neonCyan,
+																								size: 10,
+																							),
+																							const SizedBox(width: 4),
+																							Flexible(
 																								child: Text(
 																									item.category.toUpperCase(),
+																									overflow: TextOverflow.ellipsis,
 																									style: const TextStyle(
-																										fontSize: 10,
+																										fontSize: 9,
 																										fontFamily: 'Courier',
+																										fontWeight: FontWeight.w900,
 																										color: AppColors.neonCyan,
-																										fontWeight: FontWeight.bold,
+																										letterSpacing: 1.1,
 																									),
 																								),
 																							),
@@ -206,7 +216,7 @@ class _CartScreenState extends State<CartScreen> {
 																									item.compatibilityTag,
 																									overflow: TextOverflow.ellipsis,
 																									style: const TextStyle(
-																										fontSize: 10,
+																										fontSize: 9,
 																										fontFamily: 'Courier',
 																										color: AppColors.textMuted,
 																									),
@@ -217,9 +227,7 @@ class _CartScreenState extends State<CartScreen> {
 																				),
 																				GestureDetector(
 																					onTap: () {
-																						setState(() {
-																							_items.removeAt(index);
-																						});
+																						appState.removeFromCart(item.name);
 																						ScaffoldMessenger.of(context).showSnackBar(
 																							SnackBar(
 																								content: Text(
@@ -243,66 +251,62 @@ class _CartScreenState extends State<CartScreen> {
 																				),
 																			],
 																		),
-															const SizedBox(height: 8),
-															Text(
-																item.name,
-																style: const TextStyle(
-																	fontSize: 14,
-																	color: AppColors.textPrimary,
-																	fontWeight: FontWeight.w800,
-																),
-															),
-															const SizedBox(height: 8),
-															Row(
-																children: [
-																	_QuantityButton(
-																		icon: Icons.remove,
-																		onTap: item.quantity > 1
-																				? () {
-																						setState(() {
-																							_items[index] = item.copyWith(quantity: item.quantity - 1);
-																						});
-																					}
-																				: null,
-																	),
-																	Padding(
-																		padding: const EdgeInsets.symmetric(horizontal: 12),
-																		child: Text(
-																			'x${item.quantity}',
+																		const SizedBox(height: 8),
+																		Text(
+																			item.name,
 																			style: const TextStyle(
+																				fontSize: 14,
 																				color: AppColors.textPrimary,
 																				fontWeight: FontWeight.w800,
 																			),
 																		),
-																	),
-																	_QuantityButton(
-																		icon: Icons.add,
-																		onTap: () {
-																			setState(() {
-																				_items[index] = item.copyWith(quantity: item.quantity + 1);
-																			});
-																		},
-																	),
-																	const Spacer(),
-																	Text(
-																		moneyFormat.format(item.lineTotal),
-																		style: const TextStyle(
-																			color: AppColors.neonGreen,
-																			fontSize: 15,
-																			fontWeight: FontWeight.w900,
+																		const SizedBox(height: 8),
+																		Row(
+																			children: [
+																				_QuantityButton(
+																					icon: Icons.remove,
+																					onTap: item.quantity > 1
+																							? () {
+																									appState.updateCartItemQuantity(item.name, item.quantity - 1);
+																								}
+																							: null,
+																				),
+																				Padding(
+																					padding: const EdgeInsets.symmetric(horizontal: 12),
+																					child: Text(
+																						'x${item.quantity}',
+																						style: const TextStyle(
+																							color: AppColors.textPrimary,
+																							fontWeight: FontWeight.w800,
+																						),
+																					),
+																				),
+																				_QuantityButton(
+																					icon: Icons.add,
+																					onTap: () {
+																						appState.updateCartItemQuantity(item.name, item.quantity + 1);
+																					},
+																				),
+																				const Spacer(),
+																				Text(
+																					moneyFormat.format(item.lineTotal),
+																					style: const TextStyle(
+																						color: AppColors.neonGreen,
+																						fontSize: 15,
+																						fontWeight: FontWeight.w900,
+																					),
+																				),
+																			],
 																		),
-																	),
-																],
+																	],
+																),
 															),
 														],
 													),
 												),
-											],
-										),
+											);
+										},
 									),
-								);
-							},
-						),
 					),
 				],
 			),
@@ -317,11 +321,11 @@ class _CartScreenState extends State<CartScreen> {
 					child: Column(
 						mainAxisSize: MainAxisSize.min,
 						children: [
-							_SummaryLine(label: 'Subtotal', value: moneyFormat.format(_subtotal)),
+							_SummaryLine(label: 'Subtotal', value: moneyFormat.format(subtotal)),
 							const SizedBox(height: 6),
-							_SummaryLine(label: 'Tax (8%)', value: moneyFormat.format(_tax)),
+							_SummaryLine(label: 'Tax (8%)', value: moneyFormat.format(tax)),
 							const SizedBox(height: 6),
-							_SummaryLine(label: 'Shipping', value: _shipping == 0 ? 'FREE' : moneyFormat.format(_shipping)),
+							_SummaryLine(label: 'Shipping', value: shipping == 0 ? 'FREE' : moneyFormat.format(shipping)),
 							const SizedBox(height: 10),
 							const Divider(color: Color(0xFF213146)),
 							const SizedBox(height: 10),
@@ -338,7 +342,7 @@ class _CartScreenState extends State<CartScreen> {
 										),
 									),
 									Text(
-										moneyFormat.format(_total),
+										moneyFormat.format(total),
 										style: const TextStyle(
 											fontSize: 20,
 											color: AppColors.neonCyan,
@@ -356,14 +360,10 @@ class _CartScreenState extends State<CartScreen> {
 										backgroundColor: AppColors.neonCyan,
 										foregroundColor: Colors.black,
 									),
-									onPressed: _items.isEmpty
+									onPressed: items.isEmpty
 											? null
 											: () {
-													Navigator.of(context).push(
-														MaterialPageRoute(
-															builder: (_) => CheckoutScreen(items: List<CheckoutCartItem>.from(_items)),
-														),
-													);
+													context.push('/checkout', extra: List<CheckoutCartItem>.from(items));
 												},
 									child: const Text(
 										'PROCEED TO CHECKOUT',

@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
-
-// 1. IMPORT YOUR NEXT TARGET PAGE HERE:
-import 'package:mobileproject/features/auth/login_screen.dart';
 
 class CyberRigNewPasswordPage extends StatefulWidget {
   const CyberRigNewPasswordPage({super.key});
@@ -71,11 +69,7 @@ class _CyberRigNewPasswordPageState extends State<CyberRigNewPasswordPage> {
                       icon: const Icon(Icons.close, color: Colors.white70, size: 22),
                       onPressed: () {
                         // Routing close button to LoginScreen instead of a basic pop
-                        Navigator.pushAndRemoveUntil(
-                          context,
-                          MaterialPageRoute(builder: (context) => const CyberRigLoginPage()),
-                          (Route<dynamic> route) => false,
-                        );
+                        context.go('/login');
                       },
                     ),
                   ],
@@ -203,18 +197,33 @@ class _CyberRigNewPasswordPageState extends State<CyberRigNewPasswordPage> {
                                     String pass = _passwordController.text;
                                     String confirmPass = _confirmPasswordController.text;
                                     
-                                    // Match validation verify logic
-                                    if (pass.isNotEmpty && pass == confirmPass) {
-                                      print("Bypassing validation check. Navigating to LoginScreen...");
-                                      
-                                      Navigator.pushAndRemoveUntil(
-                                        context,
-                                        MaterialPageRoute(builder: (context) => CyberRigLoginPage()), // Use your actual login class name here
-                                        (Route<dynamic> route) => false,
+                                    if (pass.isEmpty || confirmPass.isEmpty) {
+                                      ScaffoldMessenger.of(context).showSnackBar(
+                                        const SnackBar(
+                                          content: Text('Error: Password fields cannot be empty.'),
+                                          backgroundColor: Colors.redAccent,
+                                        ),
                                       );
-                                    } else {
-                                      print("Validation failure: Vectors mismatch or fields empty.");
+                                      return;
                                     }
+                                    
+                                    if (pass != confirmPass) {
+                                      ScaffoldMessenger.of(context).showSnackBar(
+                                        const SnackBar(
+                                          content: Text('Error: Passwords do not match.'),
+                                          backgroundColor: Colors.redAccent,
+                                        ),
+                                      );
+                                      return;
+                                    }
+
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      const SnackBar(
+                                        content: Text('Access Key updated successfully!'),
+                                        backgroundColor: Colors.green,
+                                      ),
+                                    );
+                                    context.go('/login');
                                   },
                                   style: ElevatedButton.styleFrom(
                                     backgroundColor: Colors.transparent,
@@ -243,11 +252,7 @@ class _CyberRigNewPasswordPageState extends State<CyberRigNewPasswordPage> {
                               GestureDetector(
                                 onTap: () {
                                   // ACTION 2: Direct routing back to LoginScreen resetting the backstack
-                                  Navigator.pushAndRemoveUntil(
-                                    context,
-                                    MaterialPageRoute(builder: (context) => const CyberRigLoginPage()),
-                                    (Route<dynamic> route) => false,
-                                  );
+                                   context.go('/login');
                                 },
                                 child: Padding(
                                   padding: const EdgeInsets.symmetric(vertical: 4.0),

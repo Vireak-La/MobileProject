@@ -155,6 +155,41 @@ class _DealsSalesPageState extends State<DealsSalesPage> {
     );
   }
 
+  Widget _getDealImage(Map<String, dynamic> deal) {
+    final name = deal['name'] as String? ?? '';
+    final category = deal['category'] as String? ?? '';
+
+    String imgUrl = '';
+    if (category == 'CPU') {
+      if (name.toLowerCase().contains('ryzen') || name.toLowerCase().contains('amd')) {
+        imgUrl = 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRHMNZjbSIorUX9H14KO8GRrbvsI4797sKllmSfPI_hevDgcPISpVuZ5BM&s=10';
+      } else {
+        imgUrl = 'https://preview.redd.it/does-anybody-else-miss-the-design-of-the-cpu-boxes-we-got-v0-bo1qrpa271i81.jpg?width=800&format=pjpg&auto=webp&s=b12e05b3ee668d9dba44d1e6fda0f5aed76bcada';
+      }
+    } else if (category == 'STORAGE') {
+      imgUrl = 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQU274yVum1QqcAortlmLHIO6EWcELFa3vx9iayO3f8uQ&s=10';
+    } else if (category == 'RAM') {
+      imgUrl = 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSEF9Dit6kQkhucb8R-eQ2qWmZ_aOItm2LR6yBYRVpTsx77yRCHFB540k1N&s=10';
+    } else if (category == 'GPU') {
+      imgUrl = 'https://i.ebayimg.com/images/g/VmsAAOSwfrlnx8pF/s-l400.jpg';
+    } else if (category == 'MOTHERBOARD') {
+      imgUrl = 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRg5f9eaLD6-RiZUuOFTsXoIE1hdM2Tb04UOkdNPX6VgVBf1Z7Hzxw41o16&s=10';
+    } else if (category == 'PSU') {
+      imgUrl = 'https://c8.alamy.com/comp/G29229/pc-power-supply-isolated-G29229.jpg';
+    } else if (category == 'CASE') {
+      imgUrl = 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR1658EwibLcEZYgNBeY5OoVW1-hyDyDifVz4r3IMCTNlqaTumyqazJbe43&s=10';
+    } else {
+      final fallback = deal['image'] as String? ?? 'assets/images/buildofthemonth.webp';
+      return Image.asset(fallback, fit: BoxFit.cover);
+    }
+
+    return Image.network(
+      imgUrl,
+      fit: BoxFit.cover,
+      errorBuilder: (_, _, _) => Image.asset('assets/images/buildofthemonth.webp', fit: BoxFit.cover),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final categories = ['ALL', 'GPU', 'CPU', 'STORAGE', 'RAM', 'PERIPHERALS', 'MONITORS'];
@@ -429,11 +464,17 @@ class _DealsSalesPageState extends State<DealsSalesPage> {
                                 ),
                                 ClipRRect(
                                   borderRadius: BorderRadius.circular(8),
-                                  child: Image.asset(
-                                    'assets/images/buildofthemonth.webp',
+                                  child: Image.network(
+                                    'https://i.ebayimg.com/images/g/VmsAAOSwfrlnx8pF/s-l400.jpg',
                                     width: 80,
                                     height: 80,
                                     fit: BoxFit.cover,
+                                    errorBuilder: (_, _, _) => Image.asset(
+                                      'assets/images/buildofthemonth.webp',
+                                      width: 80,
+                                      height: 80,
+                                      fit: BoxFit.cover,
+                                    ),
                                   ),
                                 ),
                               ],
@@ -607,10 +648,7 @@ class _DealsSalesPageState extends State<DealsSalesPage> {
                                   color: const Color(0xFF101722),
                                 ),
                                 Positioned.fill(
-                                  child: Image.asset(
-                                    deal['image'],
-                                    fit: BoxFit.cover,
-                                  ),
+                                  child: _getDealImage(deal),
                                 ),
                               ],
                             ),

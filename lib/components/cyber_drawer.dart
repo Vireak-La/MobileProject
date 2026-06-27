@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
-import '../theme/app_colors.dart';
 import '../state/app_state.dart';
+import '../theme/app_colors.dart';
 
 class CyberDrawer extends StatelessWidget {
   const CyberDrawer({super.key});
@@ -15,10 +16,10 @@ class CyberDrawer extends StatelessWidget {
           // Header
           Container(
             padding: EdgeInsets.only(
-              top: MediaQuery.of(context).padding.top + 16,
+              top: MediaQuery.of(context).padding.top + 20,
+              bottom: 20,
               left: 24,
               right: 16,
-              bottom: 16,
             ),
             decoration: const BoxDecoration(
               border: Border(
@@ -56,6 +57,7 @@ class CyberDrawer extends StatelessWidget {
                   title: 'Home',
                   onTap: () {
                     Navigator.of(context).pop();
+                    context.go('/dashboard');
                     context.read<AppStateNotifier>().setScreen(AppScreen.home);
                   },
                 ),
@@ -64,7 +66,7 @@ class CyberDrawer extends StatelessWidget {
                   title: 'Cart',
                   onTap: () {
                     Navigator.of(context).pop();
-                    context.read<AppStateNotifier>().setScreen(AppScreen.cart);
+                    context.push('/cart');
                   },
                 ),
                 _buildDrawerItem(
@@ -72,23 +74,23 @@ class CyberDrawer extends StatelessWidget {
                   title: 'Compare Components',
                   onTap: () {
                     Navigator.of(context).pop();
-                    context.read<AppStateNotifier>().setScreen(AppScreen.compare);
+                    context.push('/compare');
                   },
                 ),
                 _buildDrawerItem(
                   icon: Icons.bookmark_border_outlined,
-                  title: 'Saved Build',
+                  title: 'Saved Builds',
                   onTap: () {
                     Navigator.of(context).pop();
-                    context.read<AppStateNotifier>().setScreen(AppScreen.savedBuilds);
+                    context.push('/saved-builds');
                   },
                 ),
                 _buildDrawerItem(
-                  icon: Icons.build_circle_outlined, 
-                  title: 'Book/Track Repair',
+                  icon: Icons.build_circle_outlined,
+                  title: 'Book / Track Repair',
                   onTap: () {
                     Navigator.of(context).pop();
-                    context.read<AppStateNotifier>().setScreen(AppScreen.services);
+                    context.push('/services');
                   },
                 ),
                 _buildDrawerItem(
@@ -96,23 +98,31 @@ class CyberDrawer extends StatelessWidget {
                   title: 'Deals & Sales',
                   onTap: () {
                     Navigator.of(context).pop();
-                    context.read<AppStateNotifier>().setScreen(AppScreen.dealsSales);
+                    context.push('/deals-sales');
+                  },
+                ),
+                _buildDrawerItem(
+                  icon: Icons.people_outline,
+                  title: 'Community',
+                  onTap: () {
+                    Navigator.of(context).pop();
+                    context.push('/community');
                   },
                 ),
                 _buildDrawerItem(
                   icon: Icons.location_on_outlined,
                   title: 'Locations',
-                  onTap: () { 
+                  onTap: () {
                     Navigator.of(context).pop();
-                    context.read<AppStateNotifier>().setScreen(AppScreen.profile);
+                    context.push('/map');
                   },
                 ),
                 _buildDrawerItem(
-                  icon: Icons.support_agent_outlined, // Headset icon
+                  icon: Icons.support_agent_outlined,
                   title: 'Chat',
                   onTap: () {
                     Navigator.of(context).pop();
-                    context.read<AppStateNotifier>().setScreen(AppScreen.chat);
+                    context.push('/chat');
                   },
                 ),
                 _buildDrawerItem(
@@ -120,15 +130,15 @@ class CyberDrawer extends StatelessWidget {
                   title: 'About Us',
                   onTap: () {
                     Navigator.of(context).pop();
-                    context.read<AppStateNotifier>().setScreen(AppScreen.aboutUs);
+                    context.push('/about-us');
                   },
                 ),
                 _buildDrawerItem(
                   icon: Icons.help_outline,
-                  title: 'Help and Support',
+                  title: 'Help & Support',
                   onTap: () {
                     Navigator.of(context).pop();
-                    context.read<AppStateNotifier>().setScreen(AppScreen.helpSupport);
+                    context.push('/help-support');
                   },
                 ),
               ],
