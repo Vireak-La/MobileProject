@@ -40,6 +40,54 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
 		super.dispose();
 	}
 
+	Widget _getCheckoutItemImage(CheckoutCartItem item) {
+		final name = item.name;
+		final category = item.category.toUpperCase();
+
+		String imgUrl = '';
+		if (category == 'CPU') {
+			if (name.toLowerCase().contains('ryzen') || name.toLowerCase().contains('amd')) {
+				imgUrl = 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRHMNZjbSIorUX9H14KO8GRrbvsI4797sKllmSfPI_hevDgcPISpVuZ5BM&s=10';
+			} else {
+				imgUrl = 'https://preview.redd.it/does-anybody-else-miss-the-design-of-the-cpu-boxes-we-got-v0-bo1qrpa271i81.jpg?width=800&format=pjpg&auto=webp&s=b12e05b3ee668d9dba44d1e6fda0f5aed76bcada';
+			}
+		} else if (category == 'STORAGE') {
+			imgUrl = 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQU274yVum1QqcAortlmLHIO6EWcELFa3vx9iayO3f8uQ&s=10';
+		} else if (category == 'RAM') {
+			imgUrl = 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSEF9Dit6kQkhucb8R-eQ2qWmZ_aOItm2LR6yBYRVpTsx77yRCHFB540k1N&s=10';
+		} else if (category == 'GPU') {
+			imgUrl = 'https://i.ebayimg.com/images/g/VmsAAOSwfrlnx8pF/s-l400.jpg';
+		} else if (category == 'MOTHERBOARD') {
+			imgUrl = 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRg5f9eaLD6-RiZUuOFTsXoIE1hdM2Tb04UOkdNPX6VgVBf1Z7Hzxw41o16&s=10';
+		} else if (category == 'PSU') {
+			imgUrl = 'https://c8.alamy.com/comp/G29229/pc-power-supply-isolated-G29229.jpg';
+		} else if (category == 'CASE') {
+			imgUrl = 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR1658EwibLcEZYgNBeY5OoVW1-hyDyDifVz4r3IMCTNlqaTumyqazJbe43&s=10';
+		} else {
+			return Image.asset(
+				'assets/images/buildofthemonth.webp',
+				width: 56,
+				height: 56,
+				fit: BoxFit.cover,
+				errorBuilder: (_, _, _) => const Icon(Icons.computer, size: 28, color: AppColors.neonCyan),
+			);
+		}
+
+		return Image.network(
+			imgUrl,
+			width: 56,
+			height: 56,
+			fit: BoxFit.cover,
+			errorBuilder: (_, _, _) => Image.asset(
+				'assets/images/buildofthemonth.webp',
+				width: 56,
+				height: 56,
+				fit: BoxFit.cover,
+				errorBuilder: (_, _, _) => const Icon(Icons.computer, size: 28, color: AppColors.neonCyan),
+			),
+		);
+	}
+
 	String _nextOrderNumber() {
 		final now = DateTime.now();
 		return 'RGB-${now.year}${now.month.toString().padLeft(2, '0')}${now.day.toString().padLeft(2, '0')}-${now.hour.toString().padLeft(2, '0')}${now.minute.toString().padLeft(2, '0')}';
@@ -151,7 +199,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
 										contentPadding: const EdgeInsets.all(12),
 										leading: ClipRRect(
 											borderRadius: BorderRadius.circular(10),
-											child: Image.asset(item.imageAsset, width: 56, height: 56, fit: BoxFit.cover),
+											child: _getCheckoutItemImage(item),
 										),
 										title: Text(item.name, style: const TextStyle(color: AppColors.textPrimary, fontWeight: FontWeight.w800)),
 										subtitle: Text(
