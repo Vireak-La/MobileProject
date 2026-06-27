@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import '../../theme/app_colors.dart';
-import 'product_detail.dart';
 
 class SearchScreen extends StatefulWidget {
   const SearchScreen({super.key});
@@ -240,11 +240,7 @@ class _SearchScreenState extends State<SearchScreen> {
                             ),
                           ),
                           onTap: () {
-                            Navigator.of(context).push(
-                              MaterialPageRoute(
-                                builder: (_) => ProductDetailScreen(product: item),
-                              ),
-                            );
+                            context.push('/product-detail', extra: item);
                           },
                         ),
                       );

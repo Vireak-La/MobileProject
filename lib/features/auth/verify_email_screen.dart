@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:mobileproject/features/auth/new_password_screen.dart';
 
 class CyberRigVerifyEmailPage extends StatefulWidget {
   const CyberRigVerifyEmailPage({super.key});
@@ -274,10 +274,7 @@ class _CyberRigVerifyEmailPageState extends State<CyberRigVerifyEmailPage> {
                                   print("Bypassing validation check. Navigating to Access Key generation step. Raw context: $finalCleanPin");
                                   
                                   // Navigates directly to your password page setup
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(builder: (context) => const CyberRigNewPasswordPage()),
-                                  );
+                                  context.push('/new-password');
                                 },
                                 style: ElevatedButton.styleFrom(
                                   backgroundColor: Colors.transparent,

@@ -363,11 +363,7 @@ class _CartScreenState extends State<CartScreen> {
 									onPressed: _items.isEmpty
 											? null
 											: () {
-													Navigator.of(context).push(
-														MaterialPageRoute(
-															builder: (_) => CheckoutScreen(items: List<CheckoutCartItem>.from(_items)),
-														),
-													);
+													context.push('/checkout', extra: List<CheckoutCartItem>.from(_items));
 												},
 									child: const Text(
 										'PROCEED TO CHECKOUT',

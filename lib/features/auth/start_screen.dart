@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class CyberRigStartPage extends StatelessWidget {
@@ -188,7 +189,7 @@ class CyberRigStartPage extends StatelessWidget {
                       child: ElevatedButton(
                         onPressed: () {
                           // Cleanly route over to the login/auth section using your architecture
-                          Navigator.pushNamed(context, '/login');
+                          context.push('/login');
                         },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.transparent,

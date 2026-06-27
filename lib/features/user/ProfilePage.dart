@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:mobileproject/features/user/EditProfilePage.dart';
 import 'package:mobileproject/features/user/order_history_page.dart';
 import 'package:provider/provider.dart';
@@ -51,7 +52,7 @@ class _ProfilePageState extends State<ProfilePage> {
           _buildSection("SUPPORT", [
             _buildListTile(Icons.logout, "Log Out", () {
               appState.logout();
-              Navigator.pushReplacementNamed(context, '/login');
+              context.go('/login');
             }, isLogout: true),
           ]),
         ],

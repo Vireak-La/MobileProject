@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
-import '../checkout/cart.dart';
 import '../checkout/checkout_models.dart';
 import '../../theme/app_colors.dart';
 import '../../components/cyber_drawer.dart';
@@ -179,11 +179,7 @@ class _PcBuilderStubScreenState extends State<PcBuilderStubScreen> {
           IconButton(
             tooltip: 'Open cart',
             onPressed: () {
-              Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (_) => const CartScreen(),
-                ),
-              );
+              context.push('/cart');
             },
             icon: const Icon(Icons.shopping_cart_outlined),
           ),
@@ -690,9 +686,7 @@ void dispose() {
             label: 'VIEW CART',
             textColor: AppColors.neonCyan,
             onPressed: () {
-              Navigator.of(context).push(
-                MaterialPageRoute(builder: (_) => const CartScreen()),
-              );
+              context.push('/cart');
             },
           ),
         ),

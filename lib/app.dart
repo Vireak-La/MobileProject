@@ -1,16 +1,20 @@
 import 'package:flutter/material.dart';
-import 'package:mobileproject/features/map/map_screen.dart';
-import 'package:mobileproject/features/user/ProfilePage.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
+
+// Global Architectural Resources
+import 'state/app_state.dart';
+import 'theme/app_theme.dart';
+import 'theme/app_colors.dart';
 import 'components/cyber_drawer.dart';
 
 // Authentication Feature Components
-import 'package:mobileproject/features/auth/start_screen.dart';
-import 'package:mobileproject/features/auth/login_screen.dart';
-import 'package:mobileproject/features/auth/register_screen.dart';
-import 'package:mobileproject/features/auth/verify_email_screen.dart';
-import 'package:mobileproject/features/auth/forget_password_screen.dart';
-import 'package:mobileproject/features/auth/new_password_screen.dart';
+import 'features/auth/start_screen.dart';
+import 'features/auth/login_screen.dart';
+import 'features/auth/register_screen.dart';
+import 'features/auth/verify_email_screen.dart';
+import 'features/auth/forget_password_screen.dart';
+import 'features/auth/new_password_screen.dart';
 
 // Dashboard / Core Business Modules
 import 'features/home/home_stub.dart';
@@ -18,14 +22,163 @@ import 'features/pc_builder/pc_builder_stub.dart';
 import 'features/pc_builder/product_page.dart';
 import 'features/gallery/gallery_screen.dart';
 
-// Global Architectural Resources
-import 'state/app_state.dart';
-import 'theme/app_theme.dart';
-import 'theme/app_colors.dart';
+// Sub pages & flows
+import 'features/home/product_detail.dart';
+import 'features/home/search_screen.dart';
+import 'features/home/compare_page.dart';
+import 'features/home/about_us_page.dart';
+import 'features/home/help_support_page.dart';
+import 'features/home/deals_sales_page.dart';
+import 'features/home/community_page.dart';
+import 'features/home/saved_builds_page.dart';
+
+import 'features/checkout/cart.dart';
+import 'features/checkout/checkout.dart';
+import 'features/checkout/order_success_page.dart';
+import 'features/checkout/checkout_models.dart';
+
+import 'features/services/service_screen.dart';
+import 'features/booking/booking_screen.dart';
+import 'features/booking/repair_tracker_screen.dart';
+import 'features/chat/chat_screen.dart';
+import 'features/map/map_screen.dart';
+
+import 'features/user/ProfilePage.dart';
+import 'features/user/EditProfilePage.dart';
+import 'features/user/order_history_page.dart';
 
 void main() {
   runApp(const MyApp());
 }
+
+final GoRouter _router = GoRouter(
+  initialLocation: '/',
+  routes: [
+    GoRoute(
+      path: '/',
+      builder: (context, state) => const CyberRigStartPage(),
+    ),
+    GoRoute(
+      path: '/login',
+      builder: (context, state) => const CyberRigLoginPage(),
+    ),
+    GoRoute(
+      path: '/register',
+      builder: (context, state) => const CyberRigRegisterPage(),
+    ),
+    GoRoute(
+      path: '/verify-email',
+      builder: (context, state) => const CyberRigVerifyEmailPage(),
+    ),
+    GoRoute(
+      path: '/forget-password',
+      builder: (context, state) => const CyberRigForgetPasswordPage(),
+    ),
+    GoRoute(
+      path: '/new-password',
+      builder: (context, state) => const CyberRigNewPasswordPage(),
+    ),
+    GoRoute(
+      path: '/dashboard',
+      builder: (context, state) => const MainAppShell(),
+    ),
+    GoRoute(
+      path: '/profile',
+      builder: (context, state) => const ProfilePage(),
+    ),
+    GoRoute(
+      path: '/cart',
+      builder: (context, state) => const CartScreen(),
+    ),
+    GoRoute(
+      path: '/checkout',
+      builder: (context, state) {
+        final items = state.extra as List<CheckoutCartItem>;
+        return CheckoutScreen(items: items);
+      },
+    ),
+    GoRoute(
+      path: '/order-success',
+      builder: (context, state) {
+        final extra = state.extra as Map<String, dynamic>;
+        return OrderSuccessScreen(
+          orderNumber: extra['orderNumber'] as String,
+          items: extra['items'] as List<CheckoutCartItem>,
+          total: extra['total'] as double,
+          paymentMethod: extra['paymentMethod'] as String,
+          name: extra['name'] as String,
+          address: extra['address'] as String,
+        );
+      },
+    ),
+    GoRoute(
+      path: '/product-detail',
+      builder: (context, state) {
+        final product = state.extra as Map<String, dynamic>?;
+        return ProductDetailScreen(product: product);
+      },
+    ),
+    GoRoute(
+      path: '/search',
+      builder: (context, state) => const SearchScreen(),
+    ),
+    GoRoute(
+      path: '/compare',
+      builder: (context, state) => const ComparePage(),
+    ),
+    GoRoute(
+      path: '/saved-builds',
+      builder: (context, state) => const SavedBuildsPage(),
+    ),
+    GoRoute(
+      path: '/services',
+      builder: (context, state) => const ServiceScreen(),
+    ),
+    GoRoute(
+      path: '/booking',
+      builder: (context, state) => const BookingScreen(),
+    ),
+    GoRoute(
+      path: '/repair-tracker',
+      builder: (context, state) {
+        final ticket = state.extra as String?;
+        return RepairTrackerScreen(initialTicketNumber: ticket);
+      },
+    ),
+    GoRoute(
+      path: '/chat',
+      builder: (context, state) => const ChatScreen(),
+    ),
+    GoRoute(
+      path: '/deals-sales',
+      builder: (context, state) => const DealsSalesPage(),
+    ),
+    GoRoute(
+      path: '/community',
+      builder: (context, state) => const CommunityPage(),
+    ),
+    GoRoute(
+      path: '/map',
+      builder: (context, state) => const MapScreen(),
+    ),
+    GoRoute(
+      path: '/about-us',
+      builder: (context, state) => const AboutUsPage(),
+    ),
+    GoRoute(
+      path: '/help-support',
+      builder: (context, state) => const HelpSupportPage(),
+    ),
+    GoRoute(
+      path: '/edit-profile',
+      builder: (context, state) => const EditProfilePage(),
+    ),
+    GoRoute(
+      path: '/order-history',
+      builder: (context, state) => const OrderHistoryScreen(),
+    ),
+  ],
+);
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -34,38 +187,13 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
       create: (_) => AppStateNotifier(),
-      child: MaterialApp(
+      child: MaterialApp.router(
         title: 'RGB Nexus - Computer Shop',
         theme: AppTheme.darkTheme,
         debugShowCheckedModeBanner: false,
-        initialRoute: AppRoutes.start,
-        routes: AppRoutes.define(),
+        routerConfig: _router,
       ),
     );
-  }
-}
-
-class AppRoutes {
-  static const String start = '/';
-  static const String login = '/login';
-  static const String register = '/register';
-  static const String verifyEmail = '/verify-email';
-  static const String forgetPassword = '/forget-password';
-  static const String newPassword = '/new-password';
-  static const String mainDashboard = '/dashboard';
-  static const String profile = '/profile';
-
-  static Map<String, WidgetBuilder> define() {
-    return {
-      start: (context) => const CyberRigStartPage(),
-      login: (context) => const CyberRigLoginPage(),
-      register: (context) => const CyberRigRegisterPage(),
-      verifyEmail: (context) => const CyberRigVerifyEmailPage(),
-      forgetPassword: (context) => const CyberRigForgetPasswordPage(),
-      newPassword: (context) => const CyberRigNewPasswordPage(),
-      mainDashboard: (context) => const MainAppShell(), 
-      profile: (context) => ProfilePage(),
-    };
   }
 }
 
@@ -102,9 +230,9 @@ class _MainAppShellState extends State<MainAppShell> {
       drawer: const CyberDrawer(),
       body: _getActiveScreen(),
       bottomNavigationBar: Container(
-        decoration: BoxDecoration(
-          color: const Color(0xFF1E1E1E),
-          border: const Border(
+        decoration: const BoxDecoration(
+          color: Color(0xFF1E1E1E),
+          border: Border(
             top: BorderSide(color: Color(0xFF1E2B40), width: 1.5),
           ),
         ),

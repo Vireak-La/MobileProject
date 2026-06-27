@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class CyberRigLoginPage extends StatefulWidget {
@@ -138,7 +139,7 @@ class _CyberRigLoginPageState extends State<CyberRigLoginPage> {
                                 GestureDetector(
                                   onTap: () {
                                     // Route over to the forgot password recovery workspace
-                                    Navigator.pushNamed(context, '/forgot-password');
+                                     context.push('/forget-password');
                                   },
                                   child: Text(
                                     'Forgot Password?',
@@ -191,7 +192,7 @@ class _CyberRigLoginPageState extends State<CyberRigLoginPage> {
                               child: ElevatedButton(
                                 onPressed: () {
                                   // Clear backstack stack history and launch directly into main engine dashboard
-                                  Navigator.pushNamedAndRemoveUntil(context, '/dashboard', (route) => false);
+                                   context.go('/dashboard');
                                 },
                                 style: ElevatedButton.styleFrom(
                                   backgroundColor: Colors.transparent,
@@ -268,7 +269,7 @@ class _CyberRigLoginPageState extends State<CyberRigLoginPage> {
                           GestureDetector(
                             onTap: () {
                               // Pivot directly onto the account configuration pipeline
-                              Navigator.pushNamed(context, '/register');
+                               context.push('/register');
                             },
                             child: Text(
                               'Create Account',

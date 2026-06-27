@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import '../../theme/app_colors.dart';
-import 'product_detail.dart';
-import 'search_screen.dart';
 import '../../components/cyber_drawer.dart';
 import 'package:provider/provider.dart';
 import '../../state/app_state.dart';
@@ -19,9 +18,7 @@ class HomeStubScreen extends StatelessWidget {
           IconButton(
             icon: const Icon(Icons.search, color: AppColors.neonCyan),
             onPressed: () {
-              Navigator.of(context).push(
-                MaterialPageRoute(builder: (_) => const SearchScreen()),
-              );
+              context.push('/search');
             },
           )
         ],
@@ -136,7 +133,7 @@ class _HeroPanel extends StatelessWidget {
                       const SizedBox(width: 12),
                       GestureDetector(
                         onTap: () {
-                          Navigator.of(context).push(MaterialPageRoute(builder: (_) => const ProductDetailScreen()));
+                          context.push('/product-detail');
                         },
                         child: const _GhostButton(label: 'SEE DETAILS'),
                       ),

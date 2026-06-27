@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import '../../theme/app_colors.dart';
 import '../../state/app_state.dart';
-import '../checkout/cart.dart';
-import 'compare_page.dart';
 
 class ProductDetailScreen extends StatelessWidget {
   final Map<String, dynamic>? product;
@@ -63,11 +62,11 @@ class ProductDetailScreen extends StatelessWidget {
         actions: [
           IconButton(
             icon: const Icon(Icons.compare_arrows),
-            onPressed: () => Navigator.of(context).push(MaterialPageRoute(builder: (_) => const ComparePage())),
+            onPressed: () => context.push('/compare'),
           ),
           IconButton(
             icon: const Icon(Icons.shopping_cart_outlined),
-            onPressed: () => Navigator.of(context).push(MaterialPageRoute(builder: (_) => const CartScreen())),
+            onPressed: () => context.push('/cart'),
           ),
         ],
       ),

@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'dart:math';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import '../../theme/app_colors.dart';
 import '../../components/cyber_drawer.dart';
-import '../checkout/cart.dart';
 import '../checkout/checkout_models.dart';
-import '../home/product_detail.dart';
 import '../../state/app_state.dart';
 
 class ProductPage extends StatefulWidget {
@@ -173,11 +172,7 @@ class _ProductPageState extends State<ProductPage> {
           IconButton(
             tooltip: 'Open cart',
             onPressed: () {
-              Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (_) => const CartScreen(),
-                ),
-              );
+              context.push('/cart');
             },
             icon: const Icon(Icons.shopping_cart_outlined),
           ),
@@ -299,11 +294,7 @@ class ProductCard extends StatelessWidget {
       child: InkWell(
         borderRadius: BorderRadius.circular(12),
         onTap: () {
-          Navigator.of(context).push(
-            MaterialPageRoute(
-              builder: (_) => ProductDetailScreen(product: item),
-            ),
-          );
+          context.push('/product-detail', extra: item);
         },
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,

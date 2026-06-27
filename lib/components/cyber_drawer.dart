@@ -1,15 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import '../theme/app_colors.dart';
-import '../features/checkout/cart.dart';
-import '../features/chat/chat_screen.dart';
-import '../features/home/compare_page.dart';
-import '../features/home/saved_builds_page.dart';
-import '../features/home/deals_sales_page.dart';
-import '../features/home/community_page.dart';
-import '../features/home/about_us_page.dart';
-import '../features/home/help_support_page.dart';
-import '../features/map/map_screen.dart';
-import '../features/services/service_screen.dart';
 
 class CyberDrawer extends StatelessWidget {
   const CyberDrawer({super.key});
@@ -23,10 +14,10 @@ class CyberDrawer extends StatelessWidget {
           // Header
           Container(
             padding: EdgeInsets.only(
-              top: MediaQuery.of(context).padding.top + 16,
+              top: MediaQuery.of(context).padding.top + 20,
+              bottom: 20,
               left: 24,
               right: 16,
-              bottom: 16,
             ),
             decoration: const BoxDecoration(
               border: Border(
@@ -69,9 +60,7 @@ class CyberDrawer extends StatelessWidget {
                   title: 'Cart',
                   onTap: () {
                     Navigator.of(context).pop();
-                    Navigator.of(context).push(MaterialPageRoute(
-                      builder: (_) => const CartScreen(),
-                    ));
+                    context.push('/cart');
                   },
                 ),
                 _buildDrawerItem(
@@ -79,9 +68,7 @@ class CyberDrawer extends StatelessWidget {
                   title: 'Compare Components',
                   onTap: () {
                     Navigator.of(context).pop();
-                    Navigator.of(context).push(MaterialPageRoute(
-                      builder: (_) => const ComparePage(),
-                    ));
+                    context.push('/compare');
                   },
                 ),
                 _buildDrawerItem(
@@ -89,9 +76,7 @@ class CyberDrawer extends StatelessWidget {
                   title: 'Saved Builds',
                   onTap: () {
                     Navigator.of(context).pop();
-                    Navigator.of(context).push(MaterialPageRoute(
-                      builder: (_) => const SavedBuildsPage(),
-                    ));
+                    context.push('/saved-builds');
                   },
                 ),
                 _buildDrawerItem(
@@ -99,9 +84,7 @@ class CyberDrawer extends StatelessWidget {
                   title: 'Book / Track Repair',
                   onTap: () {
                     Navigator.of(context).pop();
-                    Navigator.of(context).push(MaterialPageRoute(
-                      builder: (_) => const ServiceScreen(),
-                    ));
+                    context.push('/services');
                   },
                 ),
                 _buildDrawerItem(
@@ -109,9 +92,7 @@ class CyberDrawer extends StatelessWidget {
                   title: 'Deals & Sales',
                   onTap: () {
                     Navigator.of(context).pop();
-                    Navigator.of(context).push(MaterialPageRoute(
-                      builder: (_) => const DealsSalesPage(),
-                    ));
+                    context.push('/deals-sales');
                   },
                 ),
                 _buildDrawerItem(
@@ -119,9 +100,7 @@ class CyberDrawer extends StatelessWidget {
                   title: 'Community',
                   onTap: () {
                     Navigator.of(context).pop();
-                    Navigator.of(context).push(MaterialPageRoute(
-                      builder: (_) => const CommunityPage(),
-                    ));
+                    context.push('/community');
                   },
                 ),
                 _buildDrawerItem(
@@ -129,9 +108,7 @@ class CyberDrawer extends StatelessWidget {
                   title: 'Locations',
                   onTap: () {
                     Navigator.of(context).pop();
-                    Navigator.of(context).push(MaterialPageRoute(
-                      builder: (_) => const MapScreen(),
-                    ));
+                    context.push('/map');
                   },
                 ),
                 _buildDrawerItem(
@@ -139,9 +116,7 @@ class CyberDrawer extends StatelessWidget {
                   title: 'Chat',
                   onTap: () {
                     Navigator.of(context).pop();
-                    Navigator.of(context).push(MaterialPageRoute(
-                      builder: (_) => const ChatScreen(),
-                    ));
+                    context.push('/chat');
                   },
                 ),
                 _buildDrawerItem(
@@ -149,9 +124,7 @@ class CyberDrawer extends StatelessWidget {
                   title: 'About Us',
                   onTap: () {
                     Navigator.of(context).pop();
-                    Navigator.of(context).push(MaterialPageRoute(
-                      builder: (_) => const AboutUsPage(),
-                    ));
+                    context.push('/about-us');
                   },
                 ),
                 _buildDrawerItem(
@@ -159,9 +132,7 @@ class CyberDrawer extends StatelessWidget {
                   title: 'Help & Support',
                   onTap: () {
                     Navigator.of(context).pop();
-                    Navigator.of(context).push(MaterialPageRoute(
-                      builder: (_) => const HelpSupportPage(),
-                    ));
+                    context.push('/help-support');
                   },
                 ),
               ],

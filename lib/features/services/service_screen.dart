@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import '../../components/cyber_drawer.dart';
 import '../../theme/app_colors.dart';
 import '../booking/booking_screen.dart';
-import '../booking/repair_tracker_screen.dart';
 import '../chat/chat_screen.dart';
 
 class ServiceScreen extends StatefulWidget {
@@ -108,14 +108,7 @@ class _ServiceScreenState extends State<ServiceScreen> {
               color: AppColors.neonMagenta,
               actionText: 'OPEN TRACKER PAGE',
               onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => RepairTrackerScreen(
-                      initialTicketNumber: _trackerTicketCode,
-                    ),
-                  ),
-                );
+                context.push('/repair-tracker', extra: _trackerTicketCode);
               },
             ),
             const SizedBox(height: 16),

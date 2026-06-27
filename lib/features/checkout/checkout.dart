@@ -62,18 +62,14 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
 
 		final orderNo = Provider.of<AppStateNotifier>(context, listen: false).placeOrder();
 
-		Navigator.of(context).pushReplacement(
-			MaterialPageRoute(
-				builder: (_) => OrderSuccessScreen(
-					orderNumber: orderNo.isNotEmpty ? orderNo : 'NEXUS-MOCK',
-					items: widget.items,
-					total: _total,
-					paymentMethod: _paymentMethod,
-					name: _nameController.text,
-					address: _addressController.text,
-				),
-			),
-		);
+		context.go('/order-success', extra: {
+			'orderNumber': orderNo.isNotEmpty ? orderNo : 'NEXUS-MOCK',
+			'items': widget.items,
+			'total': _total,
+			'paymentMethod': _paymentMethod,
+			'name': _nameController.text,
+			'address': _addressController.text,
+		});
 	}
 
 	@override
