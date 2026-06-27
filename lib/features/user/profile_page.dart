@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:mobileproject/features/user/edit_profile_page.dart';
-import 'package:mobileproject/features/user/order_history_page.dart';
 import 'package:provider/provider.dart';
 import '../../state/app_state.dart'; // Adjust path to your app_state.dart
 
@@ -34,14 +32,13 @@ class _ProfilePageState extends State<ProfilePage> {
           const SizedBox(height: 30),
           _buildSection("ACCOUNT", [
             _buildListTile(Icons.person_outline, "Edit Profile", () {
-              // Navigate to Edit Profile
-              Navigator.push(context, MaterialPageRoute(builder: (_) => const EditProfilePage()));
+              context.push('/edit-profile');
             }),
             _buildListTile(Icons.lock_outline, "Security/Password", () {}),
           ]),
           _buildSection("PURCHASES", [
             _buildListTile(Icons.history, "Order History", () {
-              Navigator.push(context, MaterialPageRoute(builder: (_) => const OrderHistoryScreen()));
+              context.push('/order-history');
             }),
           ]),
           _buildSection("SYSTEM", [

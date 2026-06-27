@@ -53,7 +53,11 @@ class CyberDrawer extends StatelessWidget {
                 _buildDrawerItem(
                   icon: Icons.home_outlined,
                   title: 'Home',
-                  onTap: () => Navigator.of(context).pop(),
+                  onTap: () {
+                    Navigator.of(context).pop();
+                    context.go('/dashboard');
+                    context.read<AppStateNotifier>().setScreen(AppScreen.home);
+                  },
                 ),
                 _buildDrawerItem(
                   icon: Icons.shopping_cart_outlined,

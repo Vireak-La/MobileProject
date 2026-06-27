@@ -803,7 +803,7 @@ class _ActionRow extends StatelessWidget {
             title: 'BOOK REPAIR',
             color: AppColors.neonCyan,
             onTap: () {
-              context.read<AppStateNotifier>().setScreen(AppScreen.services);
+              context.push('/services');
             },
           ),
         ),
@@ -814,7 +814,7 @@ class _ActionRow extends StatelessWidget {
             title: 'COMMUNITY',
             color: AppColors.neonMagenta,
             onTap: () {
-              context.read<AppStateNotifier>().setScreen(AppScreen.community);
+              context.push('/community');
             },
           ),
         ),

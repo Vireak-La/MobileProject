@@ -205,10 +205,25 @@ class MainAppShell extends StatefulWidget {
 }
 
 class _MainAppShellState extends State<MainAppShell> {
-  int _currentIndex = 0;
+  int _getSelectedIndex(AppScreen screen) {
+    switch (screen) {
+      case AppScreen.home:
+        return 0;
+      case AppScreen.pcBuilder:
+        return 1;
+      case AppScreen.shop:
+        return 2;
+      case AppScreen.gallery:
+        return 3;
+      case AppScreen.profile:
+        return 4;
+      default:
+        return 0;
+    }
+  }
 
-  Widget _getActiveScreen() {
-    switch (_currentIndex) {
+  Widget _getActiveScreen(int index) {
+    switch (index) {
       case 0:
         return const HomeStubScreen(); 
       case 1:
@@ -226,9 +241,12 @@ class _MainAppShellState extends State<MainAppShell> {
 
   @override
   Widget build(BuildContext context) {
+    final appState = Provider.of<AppStateNotifier>(context);
+    final selectedIndex = _getSelectedIndex(appState.currentScreen);
+
     return Scaffold(
       drawer: const CyberDrawer(),
-      body: _getActiveScreen(),
+      body: _getActiveScreen(selectedIndex),
       bottomNavigationBar: Container(
         decoration: const BoxDecoration(
           color: Color(0xFF1E1E1E),
@@ -239,11 +257,25 @@ class _MainAppShellState extends State<MainAppShell> {
         child: ClipRRect(
           borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
           child: BottomNavigationBar(
-            currentIndex: _currentIndex,
+            currentIndex: selectedIndex,
             onTap: (index) {
-              setState(() {
-                _currentIndex = index;
-              });
+              switch (index) {
+                case 0:
+                  appState.setScreen(AppScreen.home);
+                  break;
+                case 1:
+                  appState.setScreen(AppScreen.pcBuilder);
+                  break;
+                case 2:
+                  appState.setScreen(AppScreen.shop);
+                  break;
+                case 3:
+                  appState.setScreen(AppScreen.gallery);
+                  break;
+                case 4:
+                  appState.setScreen(AppScreen.profile);
+                  break;
+              }
             },
             type: BottomNavigationBarType.fixed,
             backgroundColor: const Color(0xFF1E1E1E),

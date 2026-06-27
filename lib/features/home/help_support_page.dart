@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:go_router/go_router.dart';
 import '../../theme/app_colors.dart';
 import '../../components/cyber_drawer.dart';
 import '../../data/mock_repository.dart';
-import '../../state/app_state.dart';
 
 class HelpSupportPage extends StatelessWidget {
   const HelpSupportPage({super.key});
@@ -11,7 +10,6 @@ class HelpSupportPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final faqs = MockRepository.getFaqs();
-    final appState = Provider.of<AppStateNotifier>(context, listen: false);
 
     return Scaffold(
       backgroundColor: const Color(0xFF05080D),
@@ -130,7 +128,7 @@ class HelpSupportPage extends StatelessWidget {
                   Expanded(
                     child: GestureDetector(
                       onTap: () {
-                        appState.setScreen(AppScreen.chat);
+                        context.push('/chat');
                       },
                       child: Container(
                         padding: const EdgeInsets.all(16),
@@ -168,7 +166,7 @@ class HelpSupportPage extends StatelessWidget {
                   Expanded(
                     child: GestureDetector(
                       onTap: () {
-                        appState.setScreen(AppScreen.services);
+                        context.push('/services');
                       },
                       child: Container(
                         padding: const EdgeInsets.all(16),
