@@ -130,14 +130,21 @@ class _PcBuilderStubScreenState extends State<PcBuilderStubScreen> {
                         ),
                       ),
                       const SizedBox(height: 4),
-                      Text(
-                        '\$$totalCost.00',
-                        style: const TextStyle(
-                          fontFamily: 'Courier',
-                          fontSize: 24,
-                          fontWeight: FontWeight.bold,
-                          color: AppColors.neonCyan,
-                        ),
+                      TweenAnimationBuilder<double>(
+                        tween: Tween<double>(begin: 0.0, end: totalCost.toDouble()),
+                        duration: const Duration(milliseconds: 400),
+                        curve: Curves.easeOutCubic,
+                        builder: (context, value, child) {
+                          return Text(
+                            '\$${value.toStringAsFixed(0)}.00',
+                            style: const TextStyle(
+                              fontFamily: 'Courier',
+                              fontSize: 24,
+                              fontWeight: FontWeight.bold,
+                              color: AppColors.neonCyan,
+                            ),
+                          );
+                        },
                       ),
                     ],
                   ),
@@ -172,13 +179,17 @@ class _PcBuilderStubScreenState extends State<PcBuilderStubScreen> {
               ),
             ),
             const SizedBox(height: 10),
-            ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                minimumSize: const Size(double.infinity, 35),
-                backgroundColor: AppColors.surfaceElevated,
+            Semantics(
+              label: 'Add currently selected components to shopping cart',
+              button: true,
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  minimumSize: const Size(double.infinity, 35),
+                  backgroundColor: AppColors.surfaceElevated,
+                ),
+                onPressed: _atc,
+                child: const Text('ADD TO CART'),
               ),
-              onPressed: _atc,
-              child: const Text('ADD TO CART'),
             ),
             const SizedBox(height: 24),
 
@@ -202,27 +213,63 @@ class _PcBuilderStubScreenState extends State<PcBuilderStubScreen> {
             _buildSelectableRow('PC Chassis (Case)', currentCase, _priceOf(currentCase), () => _selectCase()),
 
             const SizedBox(height: 10),
-            ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                minimumSize: const Size(double.infinity, 35),
-                backgroundColor: AppColors.surfaceElevated,
+            Semantics(
+              label: 'Verify CPU socket and PSU wattage compatibility rules',
+              button: true,
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  minimumSize: const Size(double.infinity, 35),
+                  backgroundColor: AppColors.surfaceElevated,
+                ),
+                onPressed: _checkCompatibility,
+                child: const Text('CHECK COMPATIBILITY RULES'),
               ),
-              onPressed: _checkCompatibility,
-              child: const Text('CHECK COMPATIBILITY RULES'),
             ),
 
             const SizedBox(height: 10),
-            ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                minimumSize: const Size(double.infinity, 35),
-                backgroundColor: AppColors.surfaceElevated,
+            Semantics(
+              label: 'Open saved build configurations manager',
+              button: true,
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  minimumSize: const Size(double.infinity, 35),
+                  backgroundColor: AppColors.surfaceElevated,
+                ),
+                onPressed: _savedBuilds,
+                child: const Text('SAVE BUILDS'),
               ),
-              onPressed: _savedBuilds,
-              child: const Text('SAVE BUILDS'),
             ),
             
             const SizedBox(height: 12),
-            Text('Live Total: \$$totalCost.00', style: const TextStyle(fontFamily: 'Courier', fontSize: 16, fontWeight: FontWeight.bold, color: AppColors.neonGreen)),
+            Row(
+              children: [
+                const Text(
+                  'Live Total: ', 
+                  style: TextStyle(
+                    fontFamily: 'Courier', 
+                    fontSize: 16, 
+                    fontWeight: FontWeight.bold, 
+                    color: AppColors.textPrimary,
+                  ),
+                ),
+                TweenAnimationBuilder<double>(
+                  tween: Tween<double>(begin: 0.0, end: totalCost.toDouble()),
+                  duration: const Duration(milliseconds: 400),
+                  curve: Curves.easeOutCubic,
+                  builder: (context, value, child) {
+                    return Text(
+                      '\$${value.toStringAsFixed(0)}.00', 
+                      style: const TextStyle(
+                        fontFamily: 'Courier', 
+                        fontSize: 16, 
+                        fontWeight: FontWeight.bold, 
+                        color: AppColors.neonGreen,
+                      ),
+                    );
+                  },
+                ),
+              ],
+            ),
           ],
         ),
       ),

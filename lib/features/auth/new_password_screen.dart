@@ -197,14 +197,33 @@ class _CyberRigNewPasswordPageState extends State<CyberRigNewPasswordPage> {
                                     String pass = _passwordController.text;
                                     String confirmPass = _confirmPasswordController.text;
                                     
-                                    // Match validation verify logic
-                                    if (pass.isNotEmpty && pass == confirmPass) {
-                                      print("Bypassing validation check. Navigating to LoginScreen...");
-                                      
-                                       context.go('/login');
-                                    } else {
-                                      print("Validation failure: Vectors mismatch or fields empty.");
+                                    if (pass.isEmpty || confirmPass.isEmpty) {
+                                      ScaffoldMessenger.of(context).showSnackBar(
+                                        const SnackBar(
+                                          content: Text('Error: Password fields cannot be empty.'),
+                                          backgroundColor: Colors.redAccent,
+                                        ),
+                                      );
+                                      return;
                                     }
+                                    
+                                    if (pass != confirmPass) {
+                                      ScaffoldMessenger.of(context).showSnackBar(
+                                        const SnackBar(
+                                          content: Text('Error: Passwords do not match.'),
+                                          backgroundColor: Colors.redAccent,
+                                        ),
+                                      );
+                                      return;
+                                    }
+
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      const SnackBar(
+                                        content: Text('Access Key updated successfully!'),
+                                        backgroundColor: Colors.green,
+                                      ),
+                                    );
+                                    context.go('/login');
                                   },
                                   style: ElevatedButton.styleFrom(
                                     backgroundColor: Colors.transparent,

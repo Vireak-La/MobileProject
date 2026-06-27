@@ -1,4 +1,4 @@
-# RGB Nexus // Custom PC Builder & Shop
+# RGB Nexus // Custom PC Builder & Premium Shop
 
 RGB Nexus is a premium, high-fidelity Flutter mobile application designed for custom PC building enthusiasts and hardware shoppers. Built with a futuristic cyber-aesthetic, it features custom neon visuals, fluid animations, responsive layouts, and robust reactive state management.
 
@@ -6,33 +6,52 @@ RGB Nexus is a premium, high-fidelity Flutter mobile application designed for cu
 
 ## 🚀 Key Features
 
-1. **Intelligent PC Customizer**: Choose compatible components (CPU, Motherboard, RAM, GPU, Storage, PSU, Chassis) with real-time price accumulation and integrated compatibility rules checks.
-2. **Dynamic Product Catalog**: Browse over 140+ premium tech products mapped to real category-specific images, sorted by rating, category, or search filters.
-3. **Reactive Shopping Cart & Checkout**: Add, edit, remove items, review totals including tax, shipping, promo code codes, and place orders in a smooth mock flow.
-4. **Order History**: Track past ordered builds and list specific component lines directly from the user profile.
-5. **Interactive Support Chat**: Instantly connect with Cyber-Assistant V3 with typing indicators and automated context-aware support replies.
-6. **Repair Scheduler & Timeline Tracker**: Book physical PC repaste and repair diagnostic slots, generating a custom ticket code to monitor statuses.
-7. **Store Location Map**: Explore branch locations, opening hours, and real-time stocks overlayed on an interactive custom map layout.
-8. **Saved Build Configurations**: Name and save multiple PC builds, load them directly back into the Customizer, or delete outdated rigs.
+1. **Intelligent PC Customizer (Configuration Wizard)**:
+   - Choose compatible components across 7 categories (CPU, Motherboard, RAM, GPU, Storage, PSU, Chassis).
+   - Real-time estimated price accumulation.
+   - Built-in compatibility rule validations (CPU Socket matching, minimum PSU guidelines based on CPU+GPU estimated TDP).
+   - Save custom rig build profiles directly to local memory or load them back into the builder dynamically.
+
+2. **Vast Static Product Catalog**:
+   - Mapped with real-looking category-specific network images.
+   - 7 categories × 20 premium components = 140 products in database.
+   - Live rating metrics, product specs, and detailed descriptions.
+
+3. **Reactive Shopping Cart & Checkout**:
+   - Full cart management (add, edit quantities, remove items, clear cart).
+   - Subtotal, 8% tax, free shipping above $1,200 threshold, or $24.99 standard shipping.
+   - Fully static simulated Checkout flow and custom order success receipts showing mock order details.
+
+4. **Timeline Repair & Service Tracker**:
+   - Book cleanings, repaste services, and custom diagnostics.
+   - Auto-generated 6-digit RGB/PRO tickets to monitor repair progression (Timeline states: Received, Diagnostics, Parts Sourcing, Repairing, Testing, Ready for Pickup).
+
+5. **Store Locations Interactive Map**:
+   - High-fidelity interactive local branches map featuring coordinates overlay, distance estimations, hours, and available stock levels.
+
+6. **Interactive Support Chat**:
+   - Automated replies detecting key terms (hours, compatible, repair, prices) with custom typing delay and dynamic response bubbles.
+
+7. **Community Setup Showcases**:
+   - Interactive comment feeds and likes toggle on custom PC builds and gaming spaces shared by local user setups.
 
 ---
 
 ## 🛠️ Tech Stack & Architecture
 
-- **Core**: Flutter & Dart (100% Client-Side Static Flow)
-- **Routing**: `go_router` (Structured URL paths, deep arguments mapping, and parameter safety)
-- **State Management**: `Provider` + `ChangeNotifier` (App-wide unified state reactivity)
-- **Styling**: Cyberpunk Theme System (`AppTheme` + `AppColors` for neon cyan/magenta/green palettes)
-- **Indentation & Formatting**: Consistent spaces with zero analyze errors/warnings.
+- **Core Framework**: Flutter & Dart (Static client-side data workflow, 100% offline-ready).
+- **Navigation & Routing**: `go_router` (parameter-safe structured URLs, parameter passing via state.extra, page transitions configuration).
+- **State Management**: `Provider` + `ChangeNotifier` (`AppStateNotifier` handles app states including Cart, Tickets, Saved Builds, User Profile, Chat, and Navigation history).
+- **Theme design system**: Custom Cyberpunk UI (`AppTheme` and `AppColors` targeting electric cyan, neon magenta, neon green, and deep slate/graphite card surfaces).
 
 ### Project Directory Structure
 
 ```text
 lib/
 ├── components/          # Reusable shell widgets (CyberDrawer)
-├── data/                # Data layers (MockRepository, ProductRepository)
+├── data/                # MockRepository, ProductRepository (140 static products)
 ├── theme/               # Theme colors, fonts, and dark mode configs
-├── state/               # AppStateNotifier (State lifecycle, Favorites, Cart)
+├── state/               # AppStateNotifier (Reactivity lifecycle, Cart state)
 └── features/            # Feature-based modular structure
     ├── auth/            # Start screen, Login, Register, Forgot Password flows
     ├── booking/         # Repair Scheduling & diagnostic bookings
@@ -50,10 +69,10 @@ lib/
 
 ## 🎬 Animations & Accessibility
 
-- **Immersive Page Transitions**: Custom slide-in (right-to-left) and fade animations implemented directly in the GoRouter setup for a native look.
-- **Micro-interactions**: Pulse image loading placeholders (`ShimmerSkeleton`) in the shop grid, countdown clocks on the Deals screen, and slide-up card entry animations.
-- **Accessibility**: Standardized `Semantics` tags wrapped on product action items, along with contextual `tooltip` popups on all core action buttons.
-- **Responsiveness**: Grid layouts automatically adjust cross-axis item counts based on device widths using fluid `LayoutBuilder` boundaries.
+- **Immersive Page Transitions**: Page-by-page custom slide-in (right-to-left) and fade animations implemented directly in the GoRouter setup for a native look.
+- **Micro-interactions**: Countdown timer on Deals and Home hot-deals screen updating statefully, hero image parallax fade-in.
+- **Accessibility**: Tooltips on all core navigation/icon buttons.
+- **Responsiveness**: Grid layouts automatically adjust cross-axis item counts based on device widths.
 
 ---
 
@@ -69,17 +88,19 @@ lib/
 
 1. Clone the repository and checkout the `main` branch:
    ```bash
+   git clone <repo-url>
+   cd mobileproject
    git checkout main
    ```
-2. Get project dependencies:
+2. Fetch all packages and dependencies:
    ```bash
    flutter pub get
    ```
-3. Run static analyzer to confirm code quality:
+3. Confirm code quality using static analysis:
    ```bash
    flutter analyze
    ```
-4. Build and run the app on a connected emulator or physical device:
+4. Launch the application on a connected device/emulator:
    ```bash
    flutter run
    ```

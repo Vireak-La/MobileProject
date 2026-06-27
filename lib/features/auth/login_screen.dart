@@ -114,11 +114,15 @@ class _CyberRigLoginPageState extends State<CyberRigLoginPage> {
                             ),
                             const SizedBox(height: 8),
                             // Email Input Field
-                            TextField(
-                              style: GoogleFonts.shareTechMono(color: Colors.white),
-                              decoration: _buildInputDecoration(
-                                hintText: 'Email or Username',
-                                prefixIcon: Icons.alternate_email,
+                            Semantics(
+                              label: 'Email address input field',
+                              textField: true,
+                              child: TextField(
+                                style: GoogleFonts.shareTechMono(color: Colors.white),
+                                decoration: _buildInputDecoration(
+                                  hintText: 'Email or Username',
+                                  prefixIcon: Icons.alternate_email,
+                                ),
                               ),
                             ),
                             
@@ -137,15 +141,19 @@ class _CyberRigLoginPageState extends State<CyberRigLoginPage> {
                                   ),
                                 ),
                                 GestureDetector(
+                                  behavior: HitTestBehavior.opaque,
                                   onTap: () {
                                     // Route over to the forgot password recovery workspace
                                      context.push('/forget-password');
                                   },
-                                  child: Text(
-                                    'Forgot Password?',
-                                    style: GoogleFonts.shareTechMono(
-                                      color: const Color(0xFFFF4081), 
-                                      fontSize: 12,
+                                  child: Padding(
+                                    padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
+                                    child: Text(
+                                      'Forgot Password?',
+                                      style: GoogleFonts.shareTechMono(
+                                        color: const Color(0xFFFF4081), 
+                                        fontSize: 12,
+                                      ),
                                     ),
                                   ),
                                 ),
@@ -153,23 +161,27 @@ class _CyberRigLoginPageState extends State<CyberRigLoginPage> {
                             ),
                             const SizedBox(height: 8),
                             // Password Input Field
-                            TextField(
-                              obscureText: _isPasswordObscured,
-                              style: GoogleFonts.shareTechMono(color: Colors.white),
-                              decoration: _buildInputDecoration(
-                                hintText: '••••••••',
-                                prefixIcon: Icons.lock_outline,
-                                suffixIcon: IconButton(
-                                  icon: Icon(
-                                    _isPasswordObscured ? Icons.visibility_outlined : Icons.visibility_off_outlined,
-                                    color: Colors.white38,
-                                    size: 20,
+                            Semantics(
+                              label: 'Password input field',
+                              textField: true,
+                              child: TextField(
+                                obscureText: _isPasswordObscured,
+                                style: GoogleFonts.shareTechMono(color: Colors.white),
+                                decoration: _buildInputDecoration(
+                                  hintText: '••••••••',
+                                  prefixIcon: Icons.lock_outline,
+                                  suffixIcon: IconButton(
+                                    icon: Icon(
+                                      _isPasswordObscured ? Icons.visibility_outlined : Icons.visibility_off_outlined,
+                                      color: Colors.white38,
+                                      size: 20,
+                                    ),
+                                    onPressed: () {
+                                      setState(() {
+                                        _isPasswordObscured = !_isPasswordObscured;
+                                      });
+                                    },
                                   ),
-                                  onPressed: () {
-                                    setState(() {
-                                      _isPasswordObscured = !_isPasswordObscured;
-                                    });
-                                  },
                                 ),
                               ),
                             ),
@@ -177,45 +189,49 @@ class _CyberRigLoginPageState extends State<CyberRigLoginPage> {
                             const SizedBox(height: 32),
 
                             // Vibrant Log In Button
-                            Container(
-                              width: double.infinity,
-                              height: 54,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(12),
-                                gradient: const LinearGradient(
-                                  colors: [
-                                    Color(0xFF00E5FF),
-                                    Color(0xFFD500F9),
-                                  ],
-                                ),
-                              ),
-                              child: ElevatedButton(
-                                onPressed: () {
-                                  // Clear backstack stack history and launch directly into main engine dashboard
-                                   context.go('/dashboard');
-                                },
-                                style: ElevatedButton.styleFrom(
-                                  backgroundColor: Colors.transparent,
-                                  shadowColor: Colors.transparent,
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(12),
+                            Semantics(
+                              label: 'Authenticate and log in to dashboard button',
+                              button: true,
+                              child: Container(
+                                width: double.infinity,
+                                height: 54,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(12),
+                                  gradient: const LinearGradient(
+                                    colors: [
+                                      Color(0xFF00E5FF),
+                                      Color(0xFFD500F9),
+                                    ],
                                   ),
                                 ),
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Text(
-                                      'LOG IN',
-                                      style: GoogleFonts.orbitron(
-                                        fontSize: 18,
-                                        fontWeight: FontWeight.bold,
-                                        color: Colors.white,
-                                        letterSpacing: 1.5,
-                                      ),
+                                child: ElevatedButton(
+                                  onPressed: () {
+                                    // Clear backstack stack history and launch directly into main engine dashboard
+                                     context.go('/dashboard');
+                                  },
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: Colors.transparent,
+                                    shadowColor: Colors.transparent,
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(12),
                                     ),
-                                    const SizedBox(width: 8),
-                                    const Icon(Icons.logout, color: Colors.white, size: 18), 
-                                  ],
+                                  ),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Text(
+                                        'LOG IN',
+                                        style: GoogleFonts.orbitron(
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.white,
+                                          letterSpacing: 1.5,
+                                        ),
+                                      ),
+                                      const SizedBox(width: 8),
+                                      const Icon(Icons.logout, color: Colors.white, size: 18), 
+                                    ],
+                                  ),
                                 ),
                               ),
                             ),

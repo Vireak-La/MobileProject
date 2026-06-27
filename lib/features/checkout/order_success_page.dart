@@ -5,6 +5,59 @@ import 'package:intl/intl.dart';
 import 'checkout_models.dart';
 import '../../theme/app_colors.dart';
 
+class ConfettiParticle {
+  double x;
+  double y;
+  double speed;
+  double size;
+  Color color;
+  double angle;
+  double rotationSpeed;
+
+  ConfettiParticle({
+    required this.x,
+    required this.y,
+    required this.speed,
+    required this.size,
+    required this.color,
+    required this.angle,
+    required this.rotationSpeed,
+  });
+}
+
+class ConfettiPainter extends CustomPainter {
+  final List<ConfettiParticle> particles;
+  ConfettiPainter({required this.particles});
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    for (var p in particles) {
+      final paint = Paint()
+        ..color = p.color
+        ..style = PaintingStyle.fill;
+      
+      final double screenX = p.x * size.width;
+      final double screenY = p.y;
+      
+      if (screenY >= -50 && screenY <= size.height + 50) {
+        canvas.save();
+        canvas.translate(screenX, screenY);
+        canvas.rotate(p.angle);
+        // Draw squares and circles randomly
+        if (p.size % 2 == 0) {
+          canvas.drawRect(Rect.fromCenter(center: Offset.zero, width: p.size, height: p.size), paint);
+        } else {
+          canvas.drawCircle(Offset.zero, p.size / 2, paint);
+        }
+        canvas.restore();
+      }
+    }
+  }
+
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) => true;
+}
+
 class OrderSuccessScreen extends StatefulWidget {
   const OrderSuccessScreen({
     super.key,
@@ -30,6 +83,7 @@ class OrderSuccessScreen extends StatefulWidget {
 class _OrderSuccessScreenState extends State<OrderSuccessScreen> with SingleTickerProviderStateMixin {
   late AnimationController _animController;
   late Animation<double> _glowAnimation;
+  late List<ConfettiParticle> _particles;
 
   @override
   void initState() {
@@ -41,10 +95,47 @@ class _OrderSuccessScreenState extends State<OrderSuccessScreen> with SingleTick
     _glowAnimation = Tween<double>(begin: 0.8, end: 1.2).animate(
       CurvedAnimation(parent: _animController, curve: Curves.easeInOut),
     );
+
+    final random = math.Random();
+    _particles = List.generate(60, (index) {
+      return ConfettiParticle(
+        x: random.nextDouble(),
+        y: random.nextDouble() * -700.0 - 20.0,
+        speed: 3.0 + random.nextDouble() * 4.0,
+        size: 5.0 + random.nextDouble() * 8.0,
+        color: [
+          AppColors.neonCyan,
+          AppColors.neonMagenta,
+          AppColors.neonGreen,
+          const Color(0xFFFFD700),
+          const Color(0xFFFF5722),
+        ][random.nextInt(5)],
+        angle: random.nextDouble() * 2 * math.pi,
+        rotationSpeed: 0.02 + random.nextDouble() * 0.04,
+      );
+    });
+
+    _animController.addListener(_updateParticles);
+  }
+
+  void _updateParticles() {
+    if (!mounted) return;
+    setState(() {
+      for (var p in _particles) {
+        p.y += p.speed;
+        p.angle += p.rotationSpeed;
+        p.x += math.sin(p.y / 50.0) * 0.002;
+        if (p.y > 1000.0) {
+          p.y = -40.0;
+          p.x = math.Random().nextDouble();
+        }
+      }
+    });
   }
 
   @override
   void dispose() {
+    _animController.removeListener(_updateParticles);
     _animController.dispose();
     super.dispose();
   }

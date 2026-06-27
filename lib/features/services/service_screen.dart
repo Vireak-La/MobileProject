@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
 import '../../components/cyber_drawer.dart';
 import '../../theme/app_colors.dart';
+import '../../state/app_state.dart';
 import '../booking/booking_screen.dart';
 import '../chat/chat_screen.dart';
 
@@ -68,6 +70,9 @@ class _ServiceScreenState extends State<ServiceScreen> {
       );
     }
 
+    final appState = Provider.of<AppStateNotifier>(context);
+    final tickets = appState.tickets;
+
     return Scaffold(
       drawer: const CyberDrawer(),
       appBar: AppBar(
@@ -124,6 +129,78 @@ class _ServiceScreenState extends State<ServiceScreen> {
                 });
               },
             ),
+            const SizedBox(height: 32),
+            const Text(
+              'ACTIVE DIAGNOSTIC NODES',
+              style: TextStyle(
+                fontFamily: 'Courier',
+                fontWeight: FontWeight.bold,
+                color: AppColors.neonMagenta,
+                fontSize: 14,
+                letterSpacing: 1.5,
+              ),
+            ),
+            const SizedBox(height: 16),
+            if (tickets.isEmpty)
+              Container(
+                width: double.infinity,
+                padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 16),
+                decoration: BoxDecoration(
+                  color: AppColors.surfaceCard,
+                  borderRadius: BorderRadius.circular(12),
+                  border: Border.all(color: const Color(0xFF1E2B40)),
+                ),
+                child: const Center(
+                  child: Text(
+                    'NO ACTIVE TRACKING NODES RECORDED',
+                    style: TextStyle(
+                      fontFamily: 'Courier',
+                      fontSize: 11,
+                      color: AppColors.textMuted,
+                    ),
+                  ),
+                ),
+              )
+            else
+              ListView.separated(
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                itemCount: tickets.length,
+                separatorBuilder: (context, index) => const SizedBox(height: 12),
+                itemBuilder: (context, index) {
+                  final ticket = tickets[index];
+                  return Card(
+                    margin: EdgeInsets.zero,
+                    child: ListTile(
+                      onTap: () {
+                        context.push('/repair-tracker', extra: ticket.ticketNumber);
+                      },
+                      leading: CircleAvatar(
+                        backgroundColor: AppColors.neonMagenta.withOpacity(0.12),
+                        child: const Icon(Icons.terminal, color: AppColors.neonMagenta, size: 18),
+                      ),
+                      title: Text(
+                        '${ticket.ticketNumber} // ${ticket.deviceName.toUpperCase()}',
+                        style: const TextStyle(
+                          fontFamily: 'Courier',
+                          fontWeight: FontWeight.bold,
+                          fontSize: 12,
+                          color: Colors.white,
+                        ),
+                      ),
+                      subtitle: Text(
+                        'STATUS: ${ticket.status.toUpperCase()}',
+                        style: const TextStyle(
+                          fontFamily: 'Courier',
+                          fontSize: 10,
+                          color: AppColors.neonCyan,
+                        ),
+                      ),
+                      trailing: const Icon(Icons.arrow_forward_ios, size: 14, color: AppColors.textMuted),
+                    ),
+                  );
+                },
+              ),
           ],
         ),
       ),
