@@ -97,8 +97,91 @@ class _HomeStubScreenState extends State<HomeStubScreen> {
   }
 }
 
-class _HeroPanel extends StatelessWidget {
+class _HeroPanel extends StatefulWidget {
   const _HeroPanel();
+
+  @override
+  State<_HeroPanel> createState() => _HeroPanelState();
+}
+
+class _HeroPanelState extends State<_HeroPanel> {
+  late PageController _pageController;
+  late Timer _autoScrollTimer;
+  int _currentPage = 0;
+
+  final List<Map<String, dynamic>> _slides = [
+    {
+      'tag': 'FLAGSHIP RELEASE',
+      'title1': 'TITAN RTX 4090',
+      'title2': 'BUILD',
+      'desc': 'Experience uncompromised dominance.\nEngineered for elite gamers and professional workstation workloads.',
+      'btn': 'CONFIGURE NOW',
+      'detailItem': {
+        'name': 'NVIDIA RTX 4090',
+        'price': 1599,
+        'category': 'GPU',
+        'imageUrl': 'https://i.ebayimg.com/images/g/VmsAAOSwfrlnx8pF/s-l400.jpg',
+        'rating': 5,
+        'tdp': 450,
+        'description': 'The ultimate GeForce GPU. It brings an enormous leap in performance, efficiency, and AI-powered graphics.',
+      }
+    },
+    {
+      'tag': 'LIMITED EDITION',
+      'title1': 'APEX LIQUID CHILL',
+      'title2': 'RIG',
+      'desc': 'Sub-zero custom liquid hardline loops.\nMaximum cooling performance with silent operation under heavy rendering.',
+      'btn': 'CUSTOMIZE NOW',
+      'detailItem': {
+        'name': 'APEX LIQUID Loop',
+        'price': 249,
+        'category': 'COOLER',
+        'imageUrl': 'https://c1.neweggimages.com/ProductImage/35-181-229-V01.jpg',
+        'rating': 5,
+        'tdp': 150,
+        'description': 'Sub-zero custom liquid hardline loops. Maximum cooling performance with silent operation.',
+      }
+    },
+    {
+      'tag': 'HOT PROMOTION',
+      'title1': 'CYBER-PRO LAPTOP',
+      'title2': 'NODE',
+      'desc': 'Desktop grade performance on the move.\nOLED 240Hz screen paired with RTX 4080 Mobile graphics core.',
+      'btn': 'EXPLORE MODEL',
+      'detailItem': {
+        'name': 'CYBER-PRO Laptop',
+        'price': 2199,
+        'category': 'LAPTOP',
+        'imageUrl': 'https://i.ebayimg.com/images/g/VmsAAOSwfrlnx8pF/s-l400.jpg',
+        'rating': 5,
+        'tdp': 250,
+        'description': 'Desktop grade performance on the move. OLED 240Hz screen paired with RTX 4080 Mobile.',
+      }
+    }
+  ];
+
+  @override
+  void initState() {
+    super.initState();
+    _pageController = PageController(initialPage: 0);
+    _autoScrollTimer = Timer.periodic(const Duration(seconds: 4), (timer) {
+      if (_pageController.hasClients) {
+        final nextPage = (_currentPage + 1) % _slides.length;
+        _pageController.animateToPage(
+          nextPage,
+          duration: const Duration(milliseconds: 600),
+          curve: Curves.easeInOutCubic,
+        );
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _autoScrollTimer.cancel();
+    _pageController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -120,102 +203,140 @@ class _HeroPanel extends StatelessWidget {
         decoration: const BoxDecoration(),
         child: SizedBox(
           height: 540,
-          child: Stack(
+          child: Column(
             children: [
-              Positioned(
-                top: 42,
-                left: 0,
-                right: 0,
-                child: _HeroImagePanel(),
-              ),
-              
-              Padding(
-                padding: const EdgeInsets.fromLTRB(18, 18, 18, 20),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Spacer(),
-                    Center(
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
-                        decoration: BoxDecoration(
-                          border: Border.all(color: AppColors.neonCyan, width: 2),
-                          color: Colors.transparent,
-                          borderRadius: BorderRadius.circular(8),
-                          boxShadow: [
-                            BoxShadow(color: AppColors.neonCyan.withOpacity(0.12), blurRadius: 8, spreadRadius: 1),
-                          ],
-                        ),
-                        child: const Text(
-                          'FLAGSHIP RELEASE',
-                          style: TextStyle(
-                            fontFamily: 'Courier',
-                            fontSize: 11,
-                            fontWeight: FontWeight.w900,
-                            color: AppColors.neonCyan,
-                            letterSpacing: 2,
-                          ),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: 8),
-                    const Center(child: _HeroTitle()),
-                    const SizedBox(height: 8),
-                    const Center(
-                      child: Text(
-                        'Experience uncompromised dominance.\nEngineered for elite gamers and professional workstation workloads.',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          fontFamily: 'Courier',
-                          fontSize: 13,
-                          height: 1.45,
-                          color: AppColors.textSecondary,
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: 18),
-                    Row(
+              Expanded(
+                child: PageView.builder(
+                  controller: _pageController,
+                  itemCount: _slides.length,
+                  onPageChanged: (index) {
+                    setState(() {
+                      _currentPage = index;
+                    });
+                  },
+                  itemBuilder: (context, index) {
+                    final slide = _slides[index];
+                    return Stack(
                       children: [
-                        Expanded(
-                          child: GestureDetector(
-                            onTap: () {
-                              context.read<AppStateNotifier>().setScreen(AppScreen.pcBuilder);
-                            },
-                            child: _GradientButton(label: 'CONFIGURE NOW'),
-                          ),
+                        const Positioned(
+                          top: 42,
+                          left: 0,
+                          right: 0,
+                          child: _HeroImagePanel(),
                         ),
-                        const SizedBox(width: 12),
-                        GestureDetector(
-                          onTap: () {
-                            context.push(
-                              '/product-detail',
-                              extra: {
-                                'name': 'NVIDIA RTX 4090',
-                                'price': 1599,
-                                'category': 'GPU',
-                                'imageUrl': 'https://i.ebayimg.com/images/g/VmsAAOSwfrlnx8pF/s-l400.jpg',
-                                'rating': 5,
-                                'tdp': 450,
-                                'description': 'The ultimate GeForce GPU. It brings an enormous leap in performance, efficiency, and AI-powered graphics.',
-                              },
-                            );
-                          },
-                          child: const _GhostButton(label: 'SEE DETAILS'),
+                        
+                        Padding(
+                          padding: const EdgeInsets.fromLTRB(18, 18, 18, 0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              const Spacer(),
+                              Center(
+                                child: Container(
+                                  padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
+                                  decoration: BoxDecoration(
+                                    border: Border.all(color: AppColors.neonCyan, width: 2),
+                                    color: Colors.transparent,
+                                    borderRadius: BorderRadius.circular(8),
+                                    boxShadow: [
+                                      BoxShadow(color: AppColors.neonCyan.withOpacity(0.12), blurRadius: 8, spreadRadius: 1),
+                                    ],
+                                  ),
+                                  child: Text(
+                                    slide['tag'],
+                                    style: const TextStyle(
+                                      fontFamily: 'Courier',
+                                      fontSize: 11,
+                                      fontWeight: FontWeight.w900,
+                                      color: AppColors.neonCyan,
+                                      letterSpacing: 2,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(height: 8),
+                              Center(
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Text(
+                                      slide['title1'],
+                                      textAlign: TextAlign.center,
+                                      style: const TextStyle(
+                                        fontFamily: 'Courier',
+                                        fontSize: 26,
+                                        height: 1,
+                                        fontWeight: FontWeight.w900,
+                                        color: Colors.white,
+                                        letterSpacing: 1.1,
+                                      ),
+                                    ),
+                                    const SizedBox(height: 4),
+                                    Text(
+                                      slide['title2'],
+                                      style: const TextStyle(
+                                        fontFamily: 'Courier',
+                                        fontSize: 26,
+                                        height: 1,
+                                        fontWeight: FontWeight.w900,
+                                        color: Colors.white,
+                                        letterSpacing: 1.1,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              const SizedBox(height: 8),
+                              Center(
+                                child: Text(
+                                  slide['desc'],
+                                  textAlign: TextAlign.center,
+                                  style: const TextStyle(
+                                    fontFamily: 'Courier',
+                                    fontSize: 13,
+                                    height: 1.45,
+                                    color: AppColors.textSecondary,
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(height: 18),
+                              Row(
+                                children: [
+                                  Expanded(
+                                    child: GestureDetector(
+                                      onTap: () {
+                                        context.read<AppStateNotifier>().setScreen(AppScreen.pcBuilder);
+                                      },
+                                      child: _GradientButton(label: slide['btn']),
+                                    ),
+                                  ),
+                                  const SizedBox(width: 12),
+                                  GestureDetector(
+                                    onTap: () {
+                                      context.push(
+                                        '/product-detail',
+                                        extra: slide['detailItem'],
+                                      );
+                                    },
+                                    child: const _GhostButton(label: 'SEE DETAILS'),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
                         ),
                       ],
-                    ),
-                    const SizedBox(height: 18),
-                    const Center(
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          _SliderDot(active: true),
-                          _SliderDot(active: false),
-                          _SliderDot(active: false),
-                        ],
-                      ),
-                    ),
-                  ],
+                    );
+                  },
+                ),
+              ),
+              const SizedBox(height: 18),
+              Center(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: List.generate(_slides.length, (index) {
+                    return _SliderDot(active: _currentPage == index);
+                  }),
                 ),
               ),
             ],
@@ -270,42 +391,7 @@ class _HeroImagePanel extends StatelessWidget {
   }
 }
 
-class _HeroTitle extends StatelessWidget {
-  const _HeroTitle();
 
-  @override
-  Widget build(BuildContext context) {
-    return const Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Text(
-          'TITAN RTX 4090',
-          textAlign: TextAlign.center,
-          style: TextStyle(
-            fontFamily: 'Courier',
-            fontSize: 26,
-            height: 1,
-            fontWeight: FontWeight.w900,
-            color: Colors.white,
-            letterSpacing: 1.1,
-          ),
-        ),
-        SizedBox(height: 4),
-        Text(
-          'BUILD',
-          style: TextStyle(
-            fontFamily: 'Courier',
-            fontSize: 26,
-            height: 1,
-            fontWeight: FontWeight.w900,
-            color: Colors.white,
-            letterSpacing: 1.1,
-          ),
-        ),
-      ],
-    );
-  }
-}
 
 class _GradientButton extends StatelessWidget {
   const _GradientButton({required this.label});
