@@ -638,28 +638,82 @@ class _MatrixCard extends StatelessWidget {
   }
 }
 
-class _BrandStrip extends StatelessWidget {
+class _BrandStrip extends StatefulWidget {
   const _BrandStrip();
 
   @override
-  Widget build(BuildContext context) {
-    final brands = ['ASUS', 'MSI', 'CORSAIR', 'NZXT', 'LOGITECH'];
+  State<_BrandStrip> createState() => _BrandStripState();
+}
 
+class _BrandStripState extends State<_BrandStrip> {
+  late ScrollController _scrollController;
+  Timer? _timer;
+  final double _scrollSpeed = 0.6;
+
+  final List<String> _brands = [
+    'ASUS', 'MSI', 'CORSAIR', 'NZXT', 'LOGITECH',
+    'INTEL', 'NVIDIA', 'AMD', 'RAZER',
+  ];
+
+  late List<String> _loopingBrands;
+
+  @override
+  void initState() {
+    super.initState();
+    _loopingBrands = [];
+    for (int i = 0; i < 5; i++) {
+      _loopingBrands.addAll(_brands);
+    }
+    _scrollController = ScrollController();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _startAutoScroll();
+    });
+  }
+
+  void _startAutoScroll() {
+    _timer = Timer.periodic(const Duration(milliseconds: 16), (timer) {
+      if (!mounted) return;
+      if (_scrollController.hasClients) {
+        final maxScroll = _scrollController.position.maxScrollExtent;
+        final currentScroll = _scrollController.offset;
+        
+        double nextScroll = currentScroll + _scrollSpeed;
+        final double oneBlockWidth = maxScroll / 5;
+        if (nextScroll >= oneBlockWidth * 3) {
+          nextScroll = nextScroll - oneBlockWidth;
+        }
+        
+        _scrollController.jumpTo(nextScroll);
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _timer?.cancel();
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return SizedBox(
       height: 40,
       child: ListView.separated(
+        controller: _scrollController,
         scrollDirection: Axis.horizontal,
-        physics: const BouncingScrollPhysics(),
-        itemCount: brands.length,
-        separatorBuilder: (_, _) => const SizedBox(width: 18),
+        physics: const NeverScrollableScrollPhysics(),
+        itemCount: _loopingBrands.length,
+        separatorBuilder: (context, index) => const SizedBox(width: 24),
         itemBuilder: (context, index) {
           return Center(
             child: Text(
-              brands[index],
-              style: TextStyle(
+              _loopingBrands[index],
+              style: const TextStyle(
                 color: AppColors.textMuted,
                 fontFamily: 'Courier',
-                fontSize: 24,
+                fontSize: 22,
                 fontWeight: FontWeight.w900,
                 letterSpacing: 2.2,
               ),
