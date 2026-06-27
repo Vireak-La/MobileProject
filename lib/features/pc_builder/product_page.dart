@@ -215,13 +215,16 @@ class ProductCard extends StatelessWidget {
                 child: Container(
                   width: double.infinity,
                   color: const Color(0xFF1E2B40),
-                  child: Image.network(
-                    item['imageUrl'] ?? '',
-                    fit: BoxFit.cover,
-                    errorBuilder: (_, __, ___) => Icon(
-                      Icons.computer,
-                      size: 48,
-                      color: AppColors.neonCyan.withOpacity(0.5),
+                  child: Hero(
+                    tag: 'product-image-${item['name']}',
+                    child: Image.network(
+                      item['imageUrl'] ?? '',
+                      fit: BoxFit.cover,
+                      errorBuilder: (_, __, ___) => Icon(
+                        Icons.computer,
+                        size: 48,
+                        color: AppColors.neonCyan.withOpacity(0.5),
+                      ),
                     ),
                   ),
                 ),

@@ -88,14 +88,17 @@ class ProductDetailScreen extends StatelessWidget {
                           color: AppColors.neonCyan,
                         ),
                       )
-                    : Image.network(
-                        product?['imageUrl'] ?? '',
-                        fit: BoxFit.cover,
-                        errorBuilder: (_, __, ___) => Image.asset(
-                          'assets/images/gaming-computer-case-isolated-png.webp',
-                          fit: BoxFit.contain,
-                          errorBuilder: (_, __, ___) => const Center(
-                            child: Icon(Icons.computer, size: 120, color: AppColors.neonMagenta),
+                    : Hero(
+                        tag: 'product-image-$title',
+                        child: Image.network(
+                          product?['imageUrl'] ?? '',
+                          fit: BoxFit.cover,
+                          errorBuilder: (_, __, ___) => Image.asset(
+                            'assets/images/gaming-computer-case-isolated-png.webp',
+                            fit: BoxFit.contain,
+                            errorBuilder: (_, __, ___) => const Center(
+                              child: Icon(Icons.computer, size: 120, color: AppColors.neonMagenta),
+                            ),
                           ),
                         ),
                       ),
