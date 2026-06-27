@@ -163,18 +163,35 @@ class _ProductPageState extends State<ProductPage> {
 
           // Products Grid
           Expanded(
-            child: GridView.builder(
-              padding: const EdgeInsets.all(12),
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
-                childAspectRatio: 0.65,
-                crossAxisSpacing: 12,
-                mainAxisSpacing: 12,
-              ),
-              itemCount: items.length,
-              itemBuilder: (context, index) {
-                final item = items[index];
-                return ProductCard(item: item);
+            child: LayoutBuilder(
+              builder: (context, constraints) {
+                final width = constraints.maxWidth;
+                int crossAxisCount = 2;
+                double childAspectRatio = 0.62;
+                if (width > 1200) {
+                  crossAxisCount = 5;
+                  childAspectRatio = 0.65;
+                } else if (width > 900) {
+                  crossAxisCount = 4;
+                  childAspectRatio = 0.65;
+                } else if (width > 600) {
+                  crossAxisCount = 3;
+                  childAspectRatio = 0.63;
+                }
+                return GridView.builder(
+                  padding: const EdgeInsets.all(12),
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: crossAxisCount,
+                    childAspectRatio: childAspectRatio,
+                    crossAxisSpacing: 12,
+                    mainAxisSpacing: 12,
+                  ),
+                  itemCount: items.length,
+                  itemBuilder: (context, index) {
+                    final item = items[index];
+                    return ProductCard(item: item);
+                  },
+                );
               },
             ),
           ),
