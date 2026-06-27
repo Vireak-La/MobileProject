@@ -84,9 +84,7 @@ class AppStateNotifier extends ChangeNotifier {
   bool _isTyping = false;
   bool get isTyping => _isTyping;
 
-  // Favorites
-  final List<String> _favoriteProductIds = [];
-  List<String> get favoriteProductIds => _favoriteProductIds;
+
 
   // Booking a new service
   String bookRepair({
@@ -186,15 +184,7 @@ class AppStateNotifier extends ChangeNotifier {
     });
   }
 
-  // Handle Favorites toggle
-  void toggleFavorite(String productId) {
-    if (_favoriteProductIds.contains(productId)) {
-      _favoriteProductIds.remove(productId);
-    } else {
-      _favoriteProductIds.add(productId);
-    }
-    notifyListeners();
-  }
+
 
   // Saved Builds State
   final List<SavedBuild> _savedBuilds = [
