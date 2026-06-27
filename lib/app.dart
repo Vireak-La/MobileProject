@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:mobileproject/features/map/map_screen.dart';
 import 'package:mobileproject/features/user/ProfilePage.dart';
 import 'package:provider/provider.dart';
+import 'components/cyber_drawer.dart';
 
 // Authentication Feature Components
 import 'package:mobileproject/features/auth/start_screen.dart';
@@ -98,6 +99,7 @@ class _MainAppShellState extends State<MainAppShell> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      drawer: const CyberDrawer(),
       body: _getActiveScreen(),
       bottomNavigationBar: Container(
         decoration: BoxDecoration(

@@ -1,7 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import '../theme/app_colors.dart';
-import '../state/app_state.dart';
+import '../features/checkout/cart.dart';
+import '../features/chat/chat_screen.dart';
+import '../features/home/compare_page.dart';
+import '../features/home/saved_builds_page.dart';
+import '../features/home/deals_sales_page.dart';
+import '../features/home/community_page.dart';
+import '../features/home/about_us_page.dart';
+import '../features/home/help_support_page.dart';
+import '../features/map/map_screen.dart';
+import '../features/services/service_screen.dart';
 
 class CyberDrawer extends StatelessWidget {
   const CyberDrawer({super.key});
@@ -54,17 +62,16 @@ class CyberDrawer extends StatelessWidget {
                 _buildDrawerItem(
                   icon: Icons.home_outlined,
                   title: 'Home',
-                  onTap: () {
-                    Navigator.of(context).pop();
-                    context.read<AppStateNotifier>().setScreen(AppScreen.home);
-                  },
+                  onTap: () => Navigator.of(context).pop(),
                 ),
                 _buildDrawerItem(
                   icon: Icons.shopping_cart_outlined,
                   title: 'Cart',
                   onTap: () {
                     Navigator.of(context).pop();
-                    context.read<AppStateNotifier>().setScreen(AppScreen.cart);
+                    Navigator.of(context).push(MaterialPageRoute(
+                      builder: (_) => const CartScreen(),
+                    ));
                   },
                 ),
                 _buildDrawerItem(
@@ -72,23 +79,29 @@ class CyberDrawer extends StatelessWidget {
                   title: 'Compare Components',
                   onTap: () {
                     Navigator.of(context).pop();
-                    context.read<AppStateNotifier>().setScreen(AppScreen.compare);
+                    Navigator.of(context).push(MaterialPageRoute(
+                      builder: (_) => const ComparePage(),
+                    ));
                   },
                 ),
                 _buildDrawerItem(
                   icon: Icons.bookmark_border_outlined,
-                  title: 'Saved Build',
+                  title: 'Saved Builds',
                   onTap: () {
                     Navigator.of(context).pop();
-                    context.read<AppStateNotifier>().setScreen(AppScreen.savedBuilds);
+                    Navigator.of(context).push(MaterialPageRoute(
+                      builder: (_) => const SavedBuildsPage(),
+                    ));
                   },
                 ),
                 _buildDrawerItem(
-                  icon: Icons.build_circle_outlined, 
-                  title: 'Book/Track Repair',
+                  icon: Icons.build_circle_outlined,
+                  title: 'Book / Track Repair',
                   onTap: () {
                     Navigator.of(context).pop();
-                    context.read<AppStateNotifier>().setScreen(AppScreen.services);
+                    Navigator.of(context).push(MaterialPageRoute(
+                      builder: (_) => const ServiceScreen(),
+                    ));
                   },
                 ),
                 _buildDrawerItem(
@@ -96,23 +109,39 @@ class CyberDrawer extends StatelessWidget {
                   title: 'Deals & Sales',
                   onTap: () {
                     Navigator.of(context).pop();
-                    context.read<AppStateNotifier>().setScreen(AppScreen.dealsSales);
+                    Navigator.of(context).push(MaterialPageRoute(
+                      builder: (_) => const DealsSalesPage(),
+                    ));
+                  },
+                ),
+                _buildDrawerItem(
+                  icon: Icons.people_outline,
+                  title: 'Community',
+                  onTap: () {
+                    Navigator.of(context).pop();
+                    Navigator.of(context).push(MaterialPageRoute(
+                      builder: (_) => const CommunityPage(),
+                    ));
                   },
                 ),
                 _buildDrawerItem(
                   icon: Icons.location_on_outlined,
                   title: 'Locations',
-                  onTap: () { 
+                  onTap: () {
                     Navigator.of(context).pop();
-                    context.read<AppStateNotifier>().setScreen(AppScreen.profile);
+                    Navigator.of(context).push(MaterialPageRoute(
+                      builder: (_) => const MapScreen(),
+                    ));
                   },
                 ),
                 _buildDrawerItem(
-                  icon: Icons.support_agent_outlined, // Headset icon
+                  icon: Icons.support_agent_outlined,
                   title: 'Chat',
                   onTap: () {
                     Navigator.of(context).pop();
-                    context.read<AppStateNotifier>().setScreen(AppScreen.chat);
+                    Navigator.of(context).push(MaterialPageRoute(
+                      builder: (_) => const ChatScreen(),
+                    ));
                   },
                 ),
                 _buildDrawerItem(
@@ -120,15 +149,19 @@ class CyberDrawer extends StatelessWidget {
                   title: 'About Us',
                   onTap: () {
                     Navigator.of(context).pop();
-                    context.read<AppStateNotifier>().setScreen(AppScreen.aboutUs);
+                    Navigator.of(context).push(MaterialPageRoute(
+                      builder: (_) => const AboutUsPage(),
+                    ));
                   },
                 ),
                 _buildDrawerItem(
                   icon: Icons.help_outline,
-                  title: 'Help and Support',
+                  title: 'Help & Support',
                   onTap: () {
                     Navigator.of(context).pop();
-                    context.read<AppStateNotifier>().setScreen(AppScreen.helpSupport);
+                    Navigator.of(context).push(MaterialPageRoute(
+                      builder: (_) => const HelpSupportPage(),
+                    ));
                   },
                 ),
               ],
