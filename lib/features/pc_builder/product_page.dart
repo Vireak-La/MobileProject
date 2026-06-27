@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:provider/provider.dart';
 import '../../theme/app_colors.dart';
 import '../../components/cyber_drawer.dart';
-import '../../state/app_state.dart';
 import '../../data/product_repository.dart';
 
 class ProductPage extends StatefulWidget {
@@ -207,9 +205,7 @@ class ProductCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final appState = Provider.of<AppStateNotifier>(context);
     final String name = item['name'] ?? '';
-    final isFavorited = appState.favoriteProductIds.contains(name);
 
     return Semantics(
       label: 'Product card for $name',
@@ -300,9 +296,9 @@ class ProductCard extends StatelessWidget {
                     ),
                     const SizedBox(height: 6),
                     
-                    // Rating & Favorites
+                    // Rating
                     Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      mainAxisAlignment: MainAxisAlignment.start,
                       children: [
                         // Star rating
                         Row(
@@ -314,28 +310,6 @@ class ProductCard extends StatelessWidget {
                               size: 10,
                             );
                           }),
-                        ),
-                        
-                        // Favorite
-                        IconButton(
-                          padding: EdgeInsets.zero,
-                          constraints: const BoxConstraints(),
-                          tooltip: isFavorited ? 'Remove from favorites' : 'Add to favorites',
-                          icon: Icon(
-                            isFavorited ? Icons.favorite : Icons.favorite_border,
-                            color: AppColors.neonMagenta,
-                            size: 20,
-                          ),
-                          onPressed: () {
-                            appState.toggleFavorite(name);
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
-                                content: Text(isFavorited 
-                                    ? 'REMOVED $name FROM FAVORITES' 
-                                    : 'ADDED $name TO FAVORITES'),
-                              ),
-                            );
-                          },
                         ),
                       ],
                     ),

@@ -664,7 +664,9 @@ void dispose() {
             label: 'VIEW CART',
             textColor: AppColors.neonCyan,
             onPressed: () {
-              context.push('/cart');
+              if (mounted) {
+                context.push('/cart');
+              }
             },
           ),
         ),

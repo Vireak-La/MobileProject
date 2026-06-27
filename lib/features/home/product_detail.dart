@@ -43,7 +43,7 @@ class ProductDetailScreen extends StatelessWidget {
       }
     }
 
-    final isFavorited = appState.favoriteProductIds.contains(title);
+
 
     return Scaffold(
       backgroundColor: const Color(0xFF05080D),
@@ -274,33 +274,7 @@ class ProductDetailScreen extends StatelessWidget {
         color: Colors.transparent,
         child: Row(
           children: [
-            GestureDetector(
-              onTap: () {
-                appState.toggleFavorite(title);
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text(isFavorited 
-                        ? 'REMOVED $title FROM FAVORITES' 
-                        : 'ADDED $title TO FAVORITES'),
-                    backgroundColor: AppColors.surfaceElevated,
-                  ),
-                );
-              },
-              child: Container(
-                width: 56,
-                height: 56,
-                decoration: BoxDecoration(
-                  color: const Color(0xFF0D141A), 
-                  borderRadius: BorderRadius.circular(12), 
-                  border: Border.all(color: const Color(0xFF243447)),
-                ),
-                child: Icon(
-                  isFavorited ? Icons.favorite : Icons.favorite_border, 
-                  color: AppColors.neonMagenta,
-                ),
-              ),
-            ),
-            const SizedBox(width: 12),
+
             Expanded(
               child: GestureDetector(
                 onTap: () {
