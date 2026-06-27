@@ -7,7 +7,7 @@ class ProductRepository {
   static const String imgPsu = 'https://images.unsplash.com/photo-1601524909162-be87252be298?w=500&q=80';
   static const String imgCase = 'https://images.unsplash.com/photo-1624705002806-5d72df19c3ad?w=500&q=80';
 
-  static final List<Map<String, dynamic>> cpus = [
+  static final List<Map<String, dynamic>> _cpus = [
     {'name': 'AMD Ryzen 9 7950X', 'price': 699, 'category': 'CPU', 'imageUrl': imgCpu, 'rating': 5, 'socket': 'AM5', 'tdp': 170},
     {'name': 'AMD Ryzen 7 7800X3D', 'price': 380, 'category': 'CPU', 'imageUrl': imgCpu, 'rating': 5, 'socket': 'AM5', 'tdp': 120},
     {'name': 'AMD Ryzen 5 7600X', 'price': 229, 'category': 'CPU', 'imageUrl': imgCpu, 'rating': 4, 'socket': 'AM5', 'tdp': 105},
@@ -30,7 +30,7 @@ class ProductRepository {
     {'name': 'Intel Core i5-13400', 'price': 209, 'category': 'CPU', 'imageUrl': imgCpu, 'rating': 4, 'socket': 'LGA1700', 'tdp': 65},
   ];
 
-  static final List<Map<String, dynamic>> motherboards = [
+  static final List<Map<String, dynamic>> _motherboards = [
     {'name': 'MSI MAG B650 Tomahawk', 'price': 190, 'category': 'Motherboard', 'imageUrl': imgMotherboard, 'rating': 4, 'socket': 'AM5'},
     {'name': 'ASUS ROG Strix B650E', 'price': 320, 'category': 'Motherboard', 'imageUrl': imgMotherboard, 'rating': 5, 'socket': 'AM5'},
     {'name': 'ASUS PRIME X670-P', 'price': 240, 'category': 'Motherboard', 'imageUrl': imgMotherboard, 'rating': 4, 'socket': 'AM5'},
@@ -53,7 +53,7 @@ class ProductRepository {
     {'name': 'Gigabyte B550 AORUS Elite', 'price': 149, 'category': 'Motherboard', 'imageUrl': imgMotherboard, 'rating': 4, 'socket': 'AM4'},
   ];
 
-  static final List<Map<String, dynamic>> rams = [
+  static final List<Map<String, dynamic>> _rams = [
     {'name': 'G.Skill Trident Z5 32GB DDR5', 'price': 90, 'category': 'RAM', 'imageUrl': imgRam, 'rating': 5, 'type': 'DDR5'},
     {'name': 'Corsair Vengeance 32GB DDR4', 'price': 75, 'category': 'RAM', 'imageUrl': imgRam, 'rating': 4, 'type': 'DDR4'},
     {'name': 'Kingston Fury Beast 32GB DDR5', 'price': 95, 'category': 'RAM', 'imageUrl': imgRam, 'rating': 5, 'type': 'DDR5'},
@@ -76,7 +76,7 @@ class ProductRepository {
     {'name': 'Corsair Vengeance LPX 16GB DDR4', 'price': 39, 'category': 'RAM', 'imageUrl': imgRam, 'rating': 4, 'type': 'DDR4'},
   ];
 
-  static final List<Map<String, dynamic>> gpus = [
+  static final List<Map<String, dynamic>> _gpus = [
     {'name': 'NVIDIA RTX 4090', 'price': 1599, 'category': 'GPU', 'imageUrl': imgGpu, 'rating': 5, 'tdp': 450},
     {'name': 'NVIDIA RTX 4080', 'price': 1199, 'category': 'GPU', 'imageUrl': imgGpu, 'rating': 5, 'tdp': 320},
     {'name': 'NVIDIA RTX 4070 Ti Super', 'price': 790, 'category': 'GPU', 'imageUrl': imgGpu, 'rating': 4, 'tdp': 285},
@@ -99,7 +99,7 @@ class ProductRepository {
     {'name': 'AMD Radeon RX 6600', 'price': 209, 'category': 'GPU', 'imageUrl': imgGpu, 'rating': 4, 'tdp': 132},
   ];
 
-  static final List<Map<String, dynamic>> storages = [
+  static final List<Map<String, dynamic>> _storages = [
     {'name': 'Samsung 990 Pro 2TB NVMe', 'price': 170, 'category': 'Storage', 'imageUrl': imgStorage, 'rating': 5},
     {'name': 'Crucial T700 2TB Gen5 SSD', 'price': 280, 'category': 'Storage', 'imageUrl': imgStorage, 'rating': 5},
     {'name': 'WD Black SN850X 1TB', 'price': 95, 'category': 'Storage', 'imageUrl': imgStorage, 'rating': 5},
@@ -122,7 +122,7 @@ class ProductRepository {
     {'name': 'Seagate FireCuda 530 1TB', 'price': 119, 'category': 'Storage', 'imageUrl': imgStorage, 'rating': 5},
   ];
 
-  static final List<Map<String, dynamic>> psus = [
+  static final List<Map<String, dynamic>> _psus = [
     {'name': 'Corsair RM850x 850W Gold', 'price': 130, 'category': 'PSU', 'imageUrl': imgPsu, 'rating': 5, 'watt': 850},
     {'name': 'EVGA SuperNOVA 1000 G7', 'price': 190, 'category': 'PSU', 'imageUrl': imgPsu, 'rating': 5, 'watt': 1000},
     {'name': 'Seasonic Focus GX-750W', 'price': 115, 'category': 'PSU', 'imageUrl': imgPsu, 'rating': 4, 'watt': 750},
@@ -145,7 +145,7 @@ class ProductRepository {
     {'name': 'Apex Gaming 750W Gold', 'price': 89, 'category': 'PSU', 'imageUrl': imgPsu, 'rating': 4, 'watt': 750},
   ];
 
-  static final List<Map<String, dynamic>> cases = [
+  static final List<Map<String, dynamic>> _cases = [
     {'name': 'Lian Li O11 Dynamic EVO', 'price': 160, 'category': 'Case', 'imageUrl': imgCase, 'rating': 5},
     {'name': 'NZXT H9 Flow White', 'price': 150, 'category': 'Case', 'imageUrl': imgCase, 'rating': 5},
     {'name': 'Corsair 4000D Airflow', 'price': 105, 'category': 'Case', 'imageUrl': imgCase, 'rating': 4},
@@ -168,6 +168,41 @@ class ProductRepository {
     {'name': 'Cougar Conquer Cyber Case', 'price': 349, 'category': 'Case', 'imageUrl': imgCase, 'rating': 5},
   ];
 
+  static List<Map<String, dynamic>> get cpus {
+    _ensureInitialized();
+    return _cpus;
+  }
+
+  static List<Map<String, dynamic>> get motherboards {
+    _ensureInitialized();
+    return _motherboards;
+  }
+
+  static List<Map<String, dynamic>> get rams {
+    _ensureInitialized();
+    return _rams;
+  }
+
+  static List<Map<String, dynamic>> get gpus {
+    _ensureInitialized();
+    return _gpus;
+  }
+
+  static List<Map<String, dynamic>> get storages {
+    _ensureInitialized();
+    return _storages;
+  }
+
+  static List<Map<String, dynamic>> get psus {
+    _ensureInitialized();
+    return _psus;
+  }
+
+  static List<Map<String, dynamic>> get cases {
+    _ensureInitialized();
+    return _cases;
+  }
+
   static List<Map<String, dynamic>> get allProducts {
     return [
       ...cpus,
@@ -178,5 +213,98 @@ class ProductRepository {
       ...psus,
       ...cases,
     ];
+  }
+
+  static bool _initialized = false;
+
+  static void _ensureInitialized() {
+    if (_initialized) return;
+    _initialized = true;
+
+    for (var item in _cpus) {
+      item['imageUrl'] = _getCpuImage(item['name'] as String);
+    }
+    for (var item in _motherboards) {
+      item['imageUrl'] = _getMoboImage(item['name'] as String);
+    }
+    for (var item in _rams) {
+      item['imageUrl'] = _getRamImage(item['name'] as String);
+    }
+    for (var item in _gpus) {
+      item['imageUrl'] = _getGpuImage(item['name'] as String);
+    }
+    for (var item in _storages) {
+      item['imageUrl'] = _getStorageImage(item['name'] as String);
+    }
+    for (var item in _psus) {
+      item['imageUrl'] = _getPsuImage(item['name'] as String);
+    }
+    for (var item in _cases) {
+      item['imageUrl'] = _getCaseImage(item['name'] as String);
+    }
+  }
+
+  static String _getCpuImage(String name) {
+    final images = [
+      'https://images.unsplash.com/photo-1591405351990-4726e331f141?w=500&q=80',
+      'https://images.unsplash.com/photo-1607604276583-eef5d076aa5f?w=500&q=80',
+      'https://images.unsplash.com/photo-1581092160607-ee22621dd758?w=500&q=80',
+      'https://images.unsplash.com/photo-1563770660941-20978e870e26?w=500&q=80',
+    ];
+    return images[name.hashCode.abs() % images.length];
+  }
+
+  static String _getMoboImage(String name) {
+    final images = [
+      'https://images.unsplash.com/photo-1518770660439-4636190af475?w=500&q=80',
+      'https://images.unsplash.com/photo-1555680202-c86f0e12f086?w=500&q=80',
+      'https://images.unsplash.com/photo-1614850523459-c2f4c699c52e?w=500&q=80',
+      'https://images.unsplash.com/photo-1562408590-e32931084e23?w=500&q=80',
+    ];
+    return images[name.hashCode.abs() % images.length];
+  }
+
+  static String _getRamImage(String name) {
+    final images = [
+      'https://images.unsplash.com/photo-1562976540-1502c2145186?w=500&q=80',
+      'https://images.unsplash.com/photo-1542751371-adc38448a05e?w=500&q=80',
+      'https://images.unsplash.com/photo-1551645121-d1034da75057?w=500&q=80',
+    ];
+    return images[name.hashCode.abs() % images.length];
+  }
+
+  static String _getGpuImage(String name) {
+    final images = [
+      'https://images.unsplash.com/photo-1591488320449-011701bb6704?w=500&q=80',
+      'https://images.unsplash.com/photo-1607604276583-eef5d076aa5f?w=500&q=80',
+      'https://images.unsplash.com/photo-1587202372775-e229f172b9d7?w=500&q=80',
+    ];
+    return images[name.hashCode.abs() % images.length];
+  }
+
+  static String _getStorageImage(String name) {
+    final images = [
+      'https://images.unsplash.com/photo-1544244015-0df4b3ffc6b0?w=500&q=80',
+      'https://images.unsplash.com/photo-1601524909162-be87252be298?w=500&q=80',
+      'https://images.unsplash.com/photo-1531403009284-440f080d1e12?w=500&q=80',
+    ];
+    return images[name.hashCode.abs() % images.length];
+  }
+
+  static String _getPsuImage(String name) {
+    final images = [
+      'https://images.unsplash.com/photo-1601524909162-be87252be298?w=500&q=80',
+      'https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=500&q=80',
+    ];
+    return images[name.hashCode.abs() % images.length];
+  }
+
+  static String _getCaseImage(String name) {
+    final images = [
+      'https://images.unsplash.com/photo-1624705002806-5d72df19c3ad?w=500&q=80',
+      'https://images.unsplash.com/photo-1587202372775-e229f172b9d7?w=500&q=80',
+      'https://images.unsplash.com/photo-1618424181497-157f25b6ddd5?w=500&q=80',
+    ];
+    return images[name.hashCode.abs() % images.length];
   }
 }
