@@ -1,11 +1,11 @@
 class ProductRepository {
-  static const String imgCpu = 'https://images.unsplash.com/photo-1591405351990-4726e331f141?w=500&q=80';
-  static const String imgMotherboard = 'https://images.unsplash.com/photo-1518770660439-4636190af475?w=500&q=80';
-  static const String imgRam = 'https://images.unsplash.com/photo-1562976540-1502c2145186?w=500&q=80';
-  static const String imgGpu = 'https://images.unsplash.com/photo-1591488320449-011701bb6704?w=500&q=80';
-  static const String imgStorage = 'https://images.unsplash.com/photo-1544244015-0df4b3ffc6b0?w=500&q=80';
-  static const String imgPsu = 'https://images.unsplash.com/photo-1601524909162-be87252be298?w=500&q=80';
-  static const String imgCase = 'https://images.unsplash.com/photo-1624705002806-5d72df19c3ad?w=500&q=80';
+  static const String imgCpu = 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRHMNZjbSIorUX9H14KO8GRrbvsI4797sKllmSfPI_hevDgcPISpVuZ5BM&s=10';
+  static const String imgMotherboard = 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRg5f9eaLD6-RiZUuOFTsXoIE1hdM2Tb04UOkdNPX6VgVBf1Z7Hzxw41o16&s=10';
+  static const String imgRam = 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSEF9Dit6kQkhucb8R-eQ2qWmZ_aOItm2LR6yBYRVpTsx77yRCHFB540k1N&s=10';
+  static const String imgGpu = 'https://i.ebayimg.com/images/g/VmsAAOSwfrlnx8pF/s-l400.jpg';
+  static const String imgStorage = 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQU274yVum1QqcAortlmLHIO6EWcELFa3vx9iayO3f8uQ&s=10';
+  static const String imgPsu = 'https://c8.alamy.com/comp/G29229/pc-power-supply-isolated-G29229.jpg';
+  static const String imgCase = 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR1658EwibLcEZYgNBeY5OoVW1-hyDyDifVz4r3IMCTNlqaTumyqazJbe43&s=10';
 
   static final List<Map<String, dynamic>> _cpus = [
     {'name': 'AMD Ryzen 9 7950X', 'price': 699, 'category': 'CPU', 'imageUrl': imgCpu, 'rating': 5, 'socket': 'AM5', 'tdp': 170},

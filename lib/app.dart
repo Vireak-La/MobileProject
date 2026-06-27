@@ -60,11 +60,21 @@ final GoRouter _router = GoRouter(
     ),
     GoRoute(
       path: '/login',
-      builder: (context, state) => const CyberRigLoginPage(),
+      pageBuilder: (context, state) => CustomTransitionPage<void>(
+        key: state.pageKey,
+        child: const CyberRigLoginPage(),
+        transitionsBuilder: (context, animation, secondaryAnimation, child) =>
+            FadeTransition(opacity: animation, child: child),
+      ),
     ),
     GoRoute(
       path: '/register',
-      builder: (context, state) => const CyberRigRegisterPage(),
+      pageBuilder: (context, state) => CustomTransitionPage<void>(
+        key: state.pageKey,
+        child: const CyberRigRegisterPage(),
+        transitionsBuilder: (context, animation, secondaryAnimation, child) =>
+            FadeTransition(opacity: animation, child: child),
+      ),
     ),
     GoRoute(
       path: '/verify-email',
@@ -80,7 +90,12 @@ final GoRouter _router = GoRouter(
     ),
     GoRoute(
       path: '/dashboard',
-      builder: (context, state) => const MainAppShell(),
+      pageBuilder: (context, state) => CustomTransitionPage<void>(
+        key: state.pageKey,
+        child: const MainAppShell(),
+        transitionsBuilder: (context, animation, secondaryAnimation, child) =>
+            FadeTransition(opacity: animation, child: child),
+      ),
     ),
     GoRoute(
       path: '/profile',
@@ -88,43 +103,97 @@ final GoRouter _router = GoRouter(
     ),
     GoRoute(
       path: '/cart',
-      builder: (context, state) => const CartScreen(),
+      pageBuilder: (context, state) => CustomTransitionPage<void>(
+        key: state.pageKey,
+        child: const CartScreen(),
+        transitionsBuilder: (context, animation, secondaryAnimation, child) =>
+            SlideTransition(
+          position: animation.drive(
+            Tween<Offset>(begin: const Offset(1.0, 0.0), end: Offset.zero)
+                .chain(CurveTween(curve: Curves.easeInOutCubic)),
+          ),
+          child: child,
+        ),
+      ),
     ),
     GoRoute(
       path: '/checkout',
-      builder: (context, state) {
+      pageBuilder: (context, state) {
         final items = state.extra as List<CheckoutCartItem>;
-        return CheckoutScreen(items: items);
+        return CustomTransitionPage<void>(
+          key: state.pageKey,
+          child: CheckoutScreen(items: items),
+          transitionsBuilder: (context, animation, secondaryAnimation, child) =>
+              SlideTransition(
+            position: animation.drive(
+              Tween<Offset>(begin: const Offset(1.0, 0.0), end: Offset.zero)
+                  .chain(CurveTween(curve: Curves.easeInOutCubic)),
+            ),
+            child: child,
+          ),
+        );
       },
     ),
     GoRoute(
       path: '/order-success',
-      builder: (context, state) {
+      pageBuilder: (context, state) {
         final extra = state.extra as Map<String, dynamic>;
-        return OrderSuccessScreen(
-          orderNumber: extra['orderNumber'] as String,
-          items: extra['items'] as List<CheckoutCartItem>,
-          total: extra['total'] as double,
-          paymentMethod: extra['paymentMethod'] as String,
-          name: extra['name'] as String,
-          address: extra['address'] as String,
+        return CustomTransitionPage<void>(
+          key: state.pageKey,
+          child: OrderSuccessScreen(
+            orderNumber: extra['orderNumber'] as String,
+            items: extra['items'] as List<CheckoutCartItem>,
+            total: extra['total'] as double,
+            paymentMethod: extra['paymentMethod'] as String,
+            name: extra['name'] as String,
+            address: extra['address'] as String,
+          ),
+          transitionsBuilder: (context, animation, secondaryAnimation, child) =>
+              FadeTransition(opacity: animation, child: child),
         );
       },
     ),
     GoRoute(
       path: '/product-detail',
-      builder: (context, state) {
+      pageBuilder: (context, state) {
         final product = state.extra as Map<String, dynamic>?;
-        return ProductDetailScreen(product: product);
+        return CustomTransitionPage<void>(
+          key: state.pageKey,
+          child: ProductDetailScreen(product: product),
+          transitionsBuilder: (context, animation, secondaryAnimation, child) =>
+              SlideTransition(
+            position: animation.drive(
+              Tween<Offset>(begin: const Offset(0.0, 1.0), end: Offset.zero)
+                  .chain(CurveTween(curve: Curves.easeInOutCubic)),
+            ),
+            child: child,
+          ),
+        );
       },
     ),
     GoRoute(
       path: '/search',
-      builder: (context, state) => const SearchScreen(),
+      pageBuilder: (context, state) => CustomTransitionPage<void>(
+        key: state.pageKey,
+        child: const SearchScreen(),
+        transitionsBuilder: (context, animation, secondaryAnimation, child) =>
+            FadeTransition(opacity: animation, child: child),
+      ),
     ),
     GoRoute(
       path: '/compare',
-      builder: (context, state) => const ComparePage(),
+      pageBuilder: (context, state) => CustomTransitionPage<void>(
+        key: state.pageKey,
+        child: const ComparePage(),
+        transitionsBuilder: (context, animation, secondaryAnimation, child) =>
+            SlideTransition(
+          position: animation.drive(
+            Tween<Offset>(begin: const Offset(1.0, 0.0), end: Offset.zero)
+                .chain(CurveTween(curve: Curves.easeInOutCubic)),
+          ),
+          child: child,
+        ),
+      ),
     ),
     GoRoute(
       path: '/saved-builds',
@@ -132,26 +201,81 @@ final GoRouter _router = GoRouter(
     ),
     GoRoute(
       path: '/services',
-      builder: (context, state) => const ServiceScreen(),
+      pageBuilder: (context, state) => CustomTransitionPage<void>(
+        key: state.pageKey,
+        child: const ServiceScreen(),
+        transitionsBuilder: (context, animation, secondaryAnimation, child) =>
+            SlideTransition(
+          position: animation.drive(
+            Tween<Offset>(begin: const Offset(1.0, 0.0), end: Offset.zero)
+                .chain(CurveTween(curve: Curves.easeInOutCubic)),
+          ),
+          child: child,
+        ),
+      ),
     ),
     GoRoute(
       path: '/booking',
-      builder: (context, state) => const BookingScreen(),
+      pageBuilder: (context, state) => CustomTransitionPage<void>(
+        key: state.pageKey,
+        child: const BookingScreen(),
+        transitionsBuilder: (context, animation, secondaryAnimation, child) =>
+            SlideTransition(
+          position: animation.drive(
+            Tween<Offset>(begin: const Offset(1.0, 0.0), end: Offset.zero)
+                .chain(CurveTween(curve: Curves.easeInOutCubic)),
+          ),
+          child: child,
+        ),
+      ),
     ),
     GoRoute(
       path: '/repair-tracker',
-      builder: (context, state) {
+      pageBuilder: (context, state) {
         final ticket = state.extra as String?;
-        return RepairTrackerScreen(initialTicketNumber: ticket);
+        return CustomTransitionPage<void>(
+          key: state.pageKey,
+          child: RepairTrackerScreen(initialTicketNumber: ticket),
+          transitionsBuilder: (context, animation, secondaryAnimation, child) =>
+              SlideTransition(
+            position: animation.drive(
+              Tween<Offset>(begin: const Offset(1.0, 0.0), end: Offset.zero)
+                  .chain(CurveTween(curve: Curves.easeInOutCubic)),
+            ),
+            child: child,
+          ),
+        );
       },
     ),
     GoRoute(
       path: '/chat',
-      builder: (context, state) => const ChatScreen(),
+      pageBuilder: (context, state) => CustomTransitionPage<void>(
+        key: state.pageKey,
+        child: const ChatScreen(),
+        transitionsBuilder: (context, animation, secondaryAnimation, child) =>
+            SlideTransition(
+          position: animation.drive(
+            Tween<Offset>(begin: const Offset(1.0, 0.0), end: Offset.zero)
+                .chain(CurveTween(curve: Curves.easeInOutCubic)),
+          ),
+          child: child,
+        ),
+      ),
     ),
     GoRoute(
       path: '/deals-sales',
-      builder: (context, state) => const DealsSalesPage(),
+      pageBuilder: (context, state) => CustomTransitionPage<void>(
+        key: state.pageKey,
+        child: const DealsSalesPage(),
+        transitionsBuilder: (context, animation, secondaryAnimation, child) =>
+            SlideTransition(
+          position: animation.drive(
+            Tween<Offset>(begin: const Offset(1.0, 0.0), end: Offset.zero)
+                .chain(CurveTween(curve: Curves.easeInOutCubic)),
+          ),
+          child: child,
+        ),
+      ),
     ),
     GoRoute(
       path: '/community',
@@ -171,11 +295,33 @@ final GoRouter _router = GoRouter(
     ),
     GoRoute(
       path: '/edit-profile',
-      builder: (context, state) => const EditProfilePage(),
+      pageBuilder: (context, state) => CustomTransitionPage<void>(
+        key: state.pageKey,
+        child: const EditProfilePage(),
+        transitionsBuilder: (context, animation, secondaryAnimation, child) =>
+            SlideTransition(
+          position: animation.drive(
+            Tween<Offset>(begin: const Offset(1.0, 0.0), end: Offset.zero)
+                .chain(CurveTween(curve: Curves.easeInOutCubic)),
+          ),
+          child: child,
+        ),
+      ),
     ),
     GoRoute(
       path: '/order-history',
-      builder: (context, state) => const OrderHistoryScreen(),
+      pageBuilder: (context, state) => CustomTransitionPage<void>(
+        key: state.pageKey,
+        child: const OrderHistoryScreen(),
+        transitionsBuilder: (context, animation, secondaryAnimation, child) =>
+            SlideTransition(
+          position: animation.drive(
+            Tween<Offset>(begin: const Offset(1.0, 0.0), end: Offset.zero)
+                .chain(CurveTween(curve: Curves.easeInOutCubic)),
+          ),
+          child: child,
+        ),
+      ),
     ),
   ],
 );
@@ -288,7 +434,7 @@ class _MainAppShellState extends State<MainAppShell> {
               _buildNavItem(Icons.home_outlined, Icons.home, 'HOME'),
               _buildNavItem(Icons.memory_outlined, Icons.memory, 'BUILD'),
               _buildNavItem(Icons.shopping_cart_outlined, Icons.shopping_cart, 'SHOP'),
-              _buildNavItem(Icons.photo_library_outlined, Icons.photo_library, 'Show Room'),
+              _buildNavItem(Icons.photo_library_outlined, Icons.photo_library, 'GALLERY'),
               _buildNavItem(Icons.person_outline, Icons.person, 'PROFILE'),
             ],
           ),

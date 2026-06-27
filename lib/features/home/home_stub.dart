@@ -59,101 +59,124 @@ class _HeroPanel extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      clipBehavior: Clip.antiAlias,
-      decoration: BoxDecoration(
-
-      ),
-      child: SizedBox(
-        height: 540,
-        child: Stack(
-          children: [
-            Positioned(
-              top: 42,
-              left: 0,
-              right: 0,
-              child: _HeroImagePanel(),
-            ),
-            
-            Padding(
-              padding: const EdgeInsets.fromLTRB(18, 18, 18, 20),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Spacer(),
-                  Center(
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
-                      decoration: BoxDecoration(
-                        border: Border.all(color: AppColors.neonCyan, width: 2),
-                        color: Colors.transparent,
-                        borderRadius: BorderRadius.circular(8),
-                        boxShadow: [
-                          BoxShadow(color: AppColors.neonCyan.withOpacity(0.12), blurRadius: 8, spreadRadius: 1),
-                        ],
+    return TweenAnimationBuilder<double>(
+      tween: Tween<double>(begin: 0.0, end: 1.0),
+      duration: const Duration(milliseconds: 800),
+      curve: Curves.easeOutCubic,
+      builder: (context, value, child) {
+        return Transform.translate(
+          offset: Offset(0, 30 * (1.0 - value)),
+          child: Opacity(
+            opacity: value,
+            child: child,
+          ),
+        );
+      },
+      child: Container(
+        clipBehavior: Clip.antiAlias,
+        decoration: const BoxDecoration(),
+        child: SizedBox(
+          height: 540,
+          child: Stack(
+            children: [
+              Positioned(
+                top: 42,
+                left: 0,
+                right: 0,
+                child: _HeroImagePanel(),
+              ),
+              
+              Padding(
+                padding: const EdgeInsets.fromLTRB(18, 18, 18, 20),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Spacer(),
+                    Center(
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
+                        decoration: BoxDecoration(
+                          border: Border.all(color: AppColors.neonCyan, width: 2),
+                          color: Colors.transparent,
+                          borderRadius: BorderRadius.circular(8),
+                          boxShadow: [
+                            BoxShadow(color: AppColors.neonCyan.withOpacity(0.12), blurRadius: 8, spreadRadius: 1),
+                          ],
+                        ),
+                        child: const Text(
+                          'FLAGSHIP RELEASE',
+                          style: TextStyle(
+                            fontFamily: 'Courier',
+                            fontSize: 11,
+                            fontWeight: FontWeight.w900,
+                            color: AppColors.neonCyan,
+                            letterSpacing: 2,
+                          ),
+                        ),
                       ),
-                      child: const Text(
-                        'FLAGSHIP RELEASE',
+                    ),
+                    const SizedBox(height: 8),
+                    const Center(child: _HeroTitle()),
+                    const SizedBox(height: 8),
+                    const Center(
+                      child: Text(
+                        'Experience uncompromised dominance.\nEngineered for elite gamers and professional workstation workloads.',
+                        textAlign: TextAlign.center,
                         style: TextStyle(
                           fontFamily: 'Courier',
-                          fontSize: 11,
-                          fontWeight: FontWeight.w900,
-                          color: AppColors.neonCyan,
-                          letterSpacing: 2,
+                          fontSize: 13,
+                          height: 1.45,
+                          color: AppColors.textSecondary,
                         ),
                       ),
                     ),
-                  ),
-                  const SizedBox(height: 8),
-                  const Center(child: _HeroTitle()),
-                  const SizedBox(height: 8),
-                  const Center(
-                    child: Text(
-                      'Experience uncompromised dominance.\nEngineered for elite gamers and professional workstation workloads.',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontFamily: 'Courier',
-                        fontSize: 13,
-                        height: 1.45,
-                        color: AppColors.textSecondary,
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 18),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: GestureDetector(
-                          onTap: () {
-                            context.read<AppStateNotifier>().setScreen(AppScreen.pcBuilder);
-                          },
-                          child: _GradientButton(label: 'CONFIGURE NOW'),
-                        ),
-                      ),
-                      const SizedBox(width: 12),
-                      GestureDetector(
-                        onTap: () {
-                          context.push('/product-detail');
-                        },
-                        child: const _GhostButton(label: 'SEE DETAILS'),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 18),
-                  const Center(
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
+                    const SizedBox(height: 18),
+                    Row(
                       children: [
-                        _SliderDot(active: true),
-                        _SliderDot(active: false),
-                        _SliderDot(active: false),
+                        Expanded(
+                          child: GestureDetector(
+                            onTap: () {
+                              context.read<AppStateNotifier>().setScreen(AppScreen.pcBuilder);
+                            },
+                            child: _GradientButton(label: 'CONFIGURE NOW'),
+                          ),
+                        ),
+                        const SizedBox(width: 12),
+                        GestureDetector(
+                          onTap: () {
+                            context.push(
+                              '/product-detail',
+                              extra: {
+                                'name': 'NVIDIA RTX 4090',
+                                'price': 1599,
+                                'category': 'GPU',
+                                'imageUrl': 'https://i.ebayimg.com/images/g/VmsAAOSwfrlnx8pF/s-l400.jpg',
+                                'rating': 5,
+                                'tdp': 450,
+                                'description': 'The ultimate GeForce GPU. It brings an enormous leap in performance, efficiency, and AI-powered graphics.',
+                              },
+                            );
+                          },
+                          child: const _GhostButton(label: 'SEE DETAILS'),
+                        ),
                       ],
                     ),
-                  ),
-                ],
+                    const SizedBox(height: 18),
+                    const Center(
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          _SliderDot(active: true),
+                          _SliderDot(active: false),
+                          _SliderDot(active: false),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
