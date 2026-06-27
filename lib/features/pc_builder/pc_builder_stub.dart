@@ -660,6 +660,7 @@ void dispose() {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text('Added $addedCount components to cart!'),
+          duration: const Duration(seconds: 1),
           action: SnackBarAction(
             label: 'VIEW CART',
             textColor: AppColors.neonCyan,
@@ -673,7 +674,10 @@ void dispose() {
       );
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Please select at least one component first.')),
+        const SnackBar(
+          content: Text('Please select at least one component first.'),
+          duration: Duration(seconds: 1),
+        ),
       );
     }
   }
