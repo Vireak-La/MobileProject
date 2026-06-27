@@ -337,7 +337,7 @@ class MyApp extends StatelessWidget {
     return ChangeNotifierProvider(
       create: (_) => AppStateNotifier(),
       child: MaterialApp.router(
-        title: 'RGB Nexus - Computer Shop',
+        title: 'Cyber-Rig Pro - Computer Shop',
         theme: AppTheme.darkTheme,
         debugShowCheckedModeBanner: false,
         routerConfig: _router,
