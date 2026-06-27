@@ -1,6 +1,6 @@
-# RGB Nexus // Custom PC Builder & Premium Shop
+# Cyber-Rig Pro // Custom PC Builder & Premium Shop
 
-RGB Nexus is a premium, high-fidelity Flutter mobile application designed for custom PC building enthusiasts and hardware shoppers. Built with a futuristic cyber-aesthetic, it features custom neon visuals, fluid animations, responsive layouts, and robust reactive state management.
+Cyber-Rig Pro is a premium, high-fidelity Flutter mobile application designed for custom PC building enthusiasts and hardware shoppers. Built with a futuristic cyber-aesthetic, it features custom neon visuals, fluid animations, responsive layouts, and robust reactive state management.
 
 ---
 
@@ -88,8 +88,8 @@ lib/
 
 1. Clone the repository and checkout the `main` branch:
    ```bash
-   git clone <repo-url>
-   cd mobileproject
+   git clone https://github.com/Vireak-La/MobileProject
+   cd MobileProject
    git checkout main
    ```
 2. Fetch all packages and dependencies:
