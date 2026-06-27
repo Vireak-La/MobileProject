@@ -392,9 +392,7 @@ class AppStateNotifier extends ChangeNotifier {
   }
 
   void loadComponentIntoBuilder(String category, String name) {
-    if (_loadedBuildComponents == null) {
-      _loadedBuildComponents = {};
-    }
+    _loadedBuildComponents ??= {};
     _loadedBuildComponents![category] = name;
     _currentScreen = AppScreen.pcBuilder;
     notifyListeners();

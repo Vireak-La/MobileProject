@@ -43,8 +43,8 @@ import 'features/booking/repair_tracker_screen.dart';
 import 'features/chat/chat_screen.dart';
 import 'features/map/map_screen.dart';
 
-import 'features/user/ProfilePage.dart';
-import 'features/user/EditProfilePage.dart';
+import 'features/user/profile_page.dart';
+import 'features/user/edit_profile_page.dart';
 import 'features/user/order_history_page.dart';
 
 void main() {

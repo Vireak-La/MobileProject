@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'dart:math' as math;
-import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
 import 'checkout_models.dart';
 import '../../theme/app_colors.dart';
-import '../../state/app_state.dart';
 
 class OrderSuccessScreen extends StatefulWidget {
   const OrderSuccessScreen({

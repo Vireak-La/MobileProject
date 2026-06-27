@@ -93,10 +93,10 @@ class ProductDetailScreen extends StatelessWidget {
                         child: Image.network(
                           product?['imageUrl'] ?? '',
                           fit: BoxFit.cover,
-                          errorBuilder: (_, __, ___) => Image.asset(
+                          errorBuilder: (_, _, _) => Image.asset(
                             'assets/images/gaming-computer-case-isolated-png.webp',
                             fit: BoxFit.contain,
-                            errorBuilder: (_, __, ___) => const Center(
+                            errorBuilder: (_, _, _) => const Center(
                               child: Icon(Icons.computer, size: 120, color: AppColors.neonMagenta),
                             ),
                           ),

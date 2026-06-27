@@ -398,7 +398,7 @@ class _HardwareStrip extends StatelessWidget {
         scrollDirection: Axis.horizontal,
         physics: const BouncingScrollPhysics(),
         itemBuilder: (context, index) => cards[index],
-        separatorBuilder: (_, __) => const SizedBox(width: 14),
+        separatorBuilder: (_, _) => const SizedBox(width: 14),
         itemCount: cards.length,
       ),
     );
@@ -466,7 +466,7 @@ class _BrandStrip extends StatelessWidget {
         scrollDirection: Axis.horizontal,
         physics: const BouncingScrollPhysics(),
         itemCount: brands.length,
-        separatorBuilder: (_, __) => const SizedBox(width: 18),
+        separatorBuilder: (_, _) => const SizedBox(width: 18),
         itemBuilder: (context, index) {
           return Center(
             child: Text(

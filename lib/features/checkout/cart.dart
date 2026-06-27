@@ -3,7 +3,6 @@ import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import '../../theme/app_colors.dart';
 import '../../state/app_state.dart';
-import 'checkout.dart';
 import 'checkout_models.dart';
 
 class CartScreen extends StatefulWidget {
@@ -19,12 +18,12 @@ class _CartScreenState extends State<CartScreen> {
 	@override
 	Widget build(BuildContext context) {
 		final appState = Provider.of<AppStateNotifier>(context);
-		final _items = appState.cartItems;
+		final items = appState.cartItems;
 		
-		final double _subtotal = CheckoutPricing.subtotal(_items);
-		final double _tax = CheckoutPricing.tax(_subtotal);
-		final double _shipping = CheckoutPricing.shipping(_subtotal);
-		final double _total = CheckoutPricing.total(_items);
+		final double subtotal = CheckoutPricing.subtotal(items);
+		final double tax = CheckoutPricing.tax(subtotal);
+		final double shipping = CheckoutPricing.shipping(subtotal);
+		final double total = CheckoutPricing.total(items);
 
 		return Scaffold(
 			backgroundColor: AppColors.background,
@@ -67,7 +66,7 @@ class _CartScreenState extends State<CartScreen> {
 												child: Image.asset(
 													'assets/images/buildofthemonth.webp',
 													fit: BoxFit.cover,
-													errorBuilder: (_, __, ___) => const SizedBox(),
+													errorBuilder: (_, _, _) => const SizedBox(),
 												),
 											),
 										),
@@ -82,7 +81,7 @@ class _CartScreenState extends State<CartScreen> {
 															width: 96,
 															height: 96,
 															fit: BoxFit.contain,
-															errorBuilder: (_, __, ___) => const Icon(Icons.computer, size: 64, color: AppColors.neonCyan),
+															errorBuilder: (_, _, _) => const Icon(Icons.computer, size: 64, color: AppColors.neonCyan),
 														),
 													),
 													const SizedBox(width: 16),
@@ -120,7 +119,7 @@ class _CartScreenState extends State<CartScreen> {
 						),
 					),
 					Expanded(
-						child: _items.isEmpty
+						child: items.isEmpty
 								? Center(
 										child: Column(
 											mainAxisAlignment: MainAxisAlignment.center,
@@ -154,10 +153,10 @@ class _CartScreenState extends State<CartScreen> {
 									)
 								: ListView.separated(
 										padding: const EdgeInsets.fromLTRB(16, 4, 16, 120),
-										itemCount: _items.length,
-										separatorBuilder: (_, __) => const SizedBox(height: 12),
+										itemCount: items.length,
+										separatorBuilder: (_, _) => const SizedBox(height: 12),
 										itemBuilder: (context, index) {
-											final item = _items[index];
+											final item = items[index];
 											return Card(
 												margin: EdgeInsets.zero,
 												color: AppColors.surfaceCard,
@@ -322,11 +321,11 @@ class _CartScreenState extends State<CartScreen> {
 					child: Column(
 						mainAxisSize: MainAxisSize.min,
 						children: [
-							_SummaryLine(label: 'Subtotal', value: moneyFormat.format(_subtotal)),
+							_SummaryLine(label: 'Subtotal', value: moneyFormat.format(subtotal)),
 							const SizedBox(height: 6),
-							_SummaryLine(label: 'Tax (8%)', value: moneyFormat.format(_tax)),
+							_SummaryLine(label: 'Tax (8%)', value: moneyFormat.format(tax)),
 							const SizedBox(height: 6),
-							_SummaryLine(label: 'Shipping', value: _shipping == 0 ? 'FREE' : moneyFormat.format(_shipping)),
+							_SummaryLine(label: 'Shipping', value: shipping == 0 ? 'FREE' : moneyFormat.format(shipping)),
 							const SizedBox(height: 10),
 							const Divider(color: Color(0xFF213146)),
 							const SizedBox(height: 10),
@@ -343,7 +342,7 @@ class _CartScreenState extends State<CartScreen> {
 										),
 									),
 									Text(
-										moneyFormat.format(_total),
+										moneyFormat.format(total),
 										style: const TextStyle(
 											fontSize: 20,
 											color: AppColors.neonCyan,
@@ -361,10 +360,10 @@ class _CartScreenState extends State<CartScreen> {
 										backgroundColor: AppColors.neonCyan,
 										foregroundColor: Colors.black,
 									),
-									onPressed: _items.isEmpty
+									onPressed: items.isEmpty
 											? null
 											: () {
-													context.push('/checkout', extra: List<CheckoutCartItem>.from(_items));
+													context.push('/checkout', extra: List<CheckoutCartItem>.from(items));
 												},
 									child: const Text(
 										'PROCEED TO CHECKOUT',

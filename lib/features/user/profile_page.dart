@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:mobileproject/features/user/EditProfilePage.dart';
+import 'package:mobileproject/features/user/edit_profile_page.dart';
 import 'package:mobileproject/features/user/order_history_page.dart';
 import 'package:provider/provider.dart';
 import '../../state/app_state.dart'; // Adjust path to your app_state.dart
@@ -96,6 +96,6 @@ class _ProfilePageState extends State<ProfilePage> {
   Widget _buildToggleTile(IconData icon, String title, bool value, Function(bool) onChanged) => ListTile(
     leading: Icon(icon, color: Colors.white70),
     title: Text(title, style: const TextStyle(color: Colors.white)),
-    trailing: Switch(value: value, onChanged: onChanged, activeColor: Colors.cyanAccent),
+    trailing: Switch(value: value, onChanged: onChanged, activeThumbColor: Colors.cyanAccent),
   );
 }

@@ -257,7 +257,7 @@ class _PcBuilderStubScreenState extends State<PcBuilderStubScreen> {
           ),
         ),
         trailing: Text(
-          '\$${price}',
+          '\$$price',
           style: const TextStyle(
             fontFamily: 'Courier',
             fontSize: 12,
@@ -271,13 +271,27 @@ class _PcBuilderStubScreenState extends State<PcBuilderStubScreen> {
 
   int _priceOf(String name) {
     if (name == 'Awaiting selection...' || name.isEmpty) return 0;
-    for (var c in cpus) if (c['name'] == name) return c['price'] as int;
-    for (var m in motherboards) if (m['name'] == name) return m['price'] as int;
-    for (var r in rams) if (r['name'] == name) return r['price'] as int;
-    for (var g in gpus) if (g['name'] == name) return g['price'] as int;
-    for (var s in storages) if (s['name'] == name) return s['price'] as int;
-    for (var p in psus) if (p['name'] == name) return p['price'] as int;
-    for (var c in cases) if (c['name'] == name) return c['price'] as int;
+    for (var c in cpus) {
+      if (c['name'] == name) return c['price'] as int;
+    }
+    for (var m in motherboards) {
+      if (m['name'] == name) return m['price'] as int;
+    }
+    for (var r in rams) {
+      if (r['name'] == name) return r['price'] as int;
+    }
+    for (var g in gpus) {
+      if (g['name'] == name) return g['price'] as int;
+    }
+    for (var s in storages) {
+      if (s['name'] == name) return s['price'] as int;
+    }
+    for (var p in psus) {
+      if (p['name'] == name) return p['price'] as int;
+    }
+    for (var c in cases) {
+      if (c['name'] == name) return c['price'] as int;
+    }
     return 0;
   }
 

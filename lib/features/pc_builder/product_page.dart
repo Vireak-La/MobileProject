@@ -237,7 +237,7 @@ class ProductCard extends StatelessWidget {
                     child: Image.network(
                       item['imageUrl'] ?? '',
                       fit: BoxFit.cover,
-                      errorBuilder: (_, __, ___) => Icon(
+                      errorBuilder: (_, _, _) => Icon(
                         Icons.computer,
                         size: 48,
                         color: AppColors.neonCyan.withOpacity(0.5),
