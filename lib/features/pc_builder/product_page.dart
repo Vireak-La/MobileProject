@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 import 'dart:math';
+import 'package:provider/provider.dart';
 import '../../theme/app_colors.dart';
 import '../../components/cyber_drawer.dart';
 import '../checkout/cart.dart';
+import '../checkout/checkout_models.dart';
+import '../home/product_detail.dart';
+import '../../state/app_state.dart';
 
 class ProductPage extends StatefulWidget {
   const ProductPage({super.key});
@@ -282,123 +286,150 @@ class ProductCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final appState = Provider.of<AppStateNotifier>(context);
+    final String name = item['name'] ?? '';
+    final isFavorited = appState.favoriteProductIds.contains(name);
+
     return Card(
       color: AppColors.surfaceCard,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(12),
         side: const BorderSide(color: AppColors.surfaceElevated),
       ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          // Image Placeholder
-          Expanded(
-            child: Container(
-              width: double.infinity,
-              decoration: const BoxDecoration(
-                color: AppColors.surfaceElevated,
-                borderRadius: BorderRadius.vertical(top: Radius.circular(12)),
-              ),
-              child: const Icon(
-                Icons.computer,
-                size: 60,
-                color: AppColors.neonMagenta,
+      child: InkWell(
+        borderRadius: BorderRadius.circular(12),
+        onTap: () {
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (_) => ProductDetailScreen(product: item),
+            ),
+          );
+        },
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // Image Placeholder
+            Expanded(
+              child: Container(
+                width: double.infinity,
+                decoration: const BoxDecoration(
+                  color: AppColors.surfaceElevated,
+                  borderRadius: BorderRadius.vertical(top: Radius.circular(12)),
+                ),
+                child: const Icon(
+                  Icons.computer,
+                  size: 60,
+                  color: AppColors.neonMagenta,
+                ),
               ),
             ),
-          ),
-          
-          // Details
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                // Name
-                Text(
-                  item['name'],
-                  style: const TextStyle(
-                    fontSize: 12,
-                    fontWeight: FontWeight.bold,
+            
+            // Details
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // Name
+                  Text(
+                    name,
+                    style: const TextStyle(
+                      fontSize: 12,
+                      fontWeight: FontWeight.bold,
+                    ),
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
                   ),
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
-                ),
-                const SizedBox(height: 4),
-                
-                // Star Rating
-                Row(
-                  children: List.generate(5, (index) {
-                    int rating = item['rating'] ?? 5;
-                    return Icon(
-                      index < rating ? Icons.star : Icons.star_border,
-                      size: 14,
-                      color: Colors.amber,
-                    );
-                  }),
-                ),
-                const SizedBox(height: 8),
-                
-                // Price
-                Text(
-                  '\$${item['price']}',
-                  style: const TextStyle(
-                    fontFamily: 'Courier',
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                    color: AppColors.neonGreen,
+                  const SizedBox(height: 4),
+                  
+                  // Star Rating
+                  Row(
+                    children: List.generate(5, (index) {
+                      int rating = item['rating'] ?? 5;
+                      return Icon(
+                        index < rating ? Icons.star : Icons.star_border,
+                        size: 14,
+                        color: Colors.amber,
+                      );
+                    }),
                   ),
-                ),
-                const SizedBox(height: 8),
-                
-                // Buttons
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    // Add to cart
-                    Expanded(
-                      child: ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          padding: const EdgeInsets.symmetric(vertical: 0),
-                          backgroundColor: AppColors.neonCyan,
-                          foregroundColor: Colors.black,
-                          minimumSize: const Size(0, 32),
-                        ),
-                        onPressed: () {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(content: Text('${item['name']} added to cart')),
-                          );
-                        },
-                        child: const Text(
-                          'ADD',
-                          style: TextStyle(
-                            fontSize: 12,
-                            fontWeight: FontWeight.bold,
+                  const SizedBox(height: 8),
+                  
+                  // Price
+                  Text(
+                    '\$${item['price']}',
+                    style: const TextStyle(
+                      fontFamily: 'Courier',
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                      color: AppColors.neonGreen,
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  
+                  // Buttons
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      // Add to cart
+                      Expanded(
+                        child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            padding: const EdgeInsets.symmetric(vertical: 0),
+                            backgroundColor: AppColors.neonCyan,
+                            foregroundColor: Colors.black,
+                            minimumSize: const Size(0, 32),
+                          ),
+                          onPressed: () {
+                            appState.addToCart(CheckoutCartItem(
+                              name: name,
+                              category: item['category'] ?? 'Component',
+                              price: (item['price'] as num).toDouble(),
+                              quantity: 1,
+                              imageAsset: '',
+                              compatibilityTag: item['category'] == 'CPU' ? 'AM5' : 'PCIe',
+                            ));
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(content: Text('$name added to cart')),
+                            );
+                          },
+                          child: const Text(
+                            'ADD',
+                            style: TextStyle(
+                              fontSize: 12,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                    const SizedBox(width: 4),
-                    // Favorite
-                    IconButton(
-                      padding: EdgeInsets.zero,
-                      constraints: const BoxConstraints(),
-                      icon: const Icon(
-                        Icons.favorite_border,
-                        color: AppColors.neonMagenta,
-                        size: 20,
+                      const SizedBox(width: 4),
+                      // Favorite
+                      IconButton(
+                        padding: EdgeInsets.zero,
+                        constraints: const BoxConstraints(),
+                        icon: Icon(
+                          isFavorited ? Icons.favorite : Icons.favorite_border,
+                          color: AppColors.neonMagenta,
+                          size: 20,
+                        ),
+                        onPressed: () {
+                          appState.toggleFavorite(name);
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text(isFavorited 
+                                  ? 'REMOVED $name FROM FAVORITES' 
+                                  : 'ADDED $name TO FAVORITES'),
+                            ),
+                          );
+                        },
                       ),
-                      onPressed: () {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(content: Text('${item['name']} favorited')),
-                        );
-                      },
-                    ),
-                  ],
-                ),
-              ],
+                    ],
+                  ),
+                ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

@@ -3,6 +3,7 @@ import 'dart:math';
 import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import '../data/mock_repository.dart';
+import '../features/checkout/checkout_models.dart';
 
 class ChatMessage {
   final String sender; // 'user' or 'agent'
@@ -295,6 +296,125 @@ class AppStateNotifier extends ChangeNotifier {
       notifyListeners();
     }
   }
+
+  // --- Cart & Order History State Management ---
+  final List<CheckoutCartItem> _cartItems = List<CheckoutCartItem>.from(samplePcBuildItems());
+  List<CheckoutCartItem> get cartItems => _cartItems;
+
+  final List<MockOrder> _orderHistory = [
+    MockOrder(
+      orderId: 'NEXUS-8812',
+      date: DateTime.now().subtract(const Duration(days: 12)),
+      total: 1079.00,
+      status: 'DELIVERED',
+      items: [
+        const CheckoutCartItem(
+          name: 'Intel Core i7-13700K',
+          category: 'CPU',
+          price: 420.00,
+          quantity: 1,
+          imageAsset: '',
+          compatibilityTag: 'LGA1700',
+        ),
+        const CheckoutCartItem(
+          name: 'NVIDIA RTX 4070',
+          category: 'GPU',
+          price: 599.00,
+          quantity: 1,
+          imageAsset: '',
+          compatibilityTag: 'PCIe',
+        ),
+        const CheckoutCartItem(
+          name: 'Crucial P3 1TB NVMe',
+          category: 'Storage',
+          price: 55.00,
+          quantity: 1,
+          imageAsset: '',
+          compatibilityTag: 'M.2',
+        ),
+      ],
+    ),
+  ];
+  List<MockOrder> get orderHistory => _orderHistory;
+
+  void addToCart(CheckoutCartItem item) {
+    final existingIndex = _cartItems.indexWhere((i) => i.name == item.name);
+    if (existingIndex >= 0) {
+      final existing = _cartItems[existingIndex];
+      _cartItems[existingIndex] = existing.copyWith(quantity: existing.quantity + item.quantity);
+    } else {
+      _cartItems.add(item);
+    }
+    notifyListeners();
+  }
+
+  void removeFromCart(String name) {
+    _cartItems.removeWhere((item) => item.name == name);
+    notifyListeners();
+  }
+
+  void updateCartItemQuantity(String name, int newQty) {
+    final idx = _cartItems.indexWhere((item) => item.name == name);
+    if (idx >= 0) {
+      if (newQty <= 0) {
+        _cartItems.removeAt(idx);
+      } else {
+        _cartItems[idx] = _cartItems[idx].copyWith(quantity: newQty);
+      }
+      notifyListeners();
+    }
+  }
+
+  void clearCart() {
+    _cartItems.clear();
+    notifyListeners();
+  }
+
+  String placeOrder() {
+    if (_cartItems.isEmpty) return '';
+    final orderId = 'NEXUS-${Random().nextInt(9000) + 1000}';
+    final total = CheckoutPricing.total(_cartItems);
+    
+    _orderHistory.insert(
+      0,
+      MockOrder(
+        orderId: orderId,
+        date: DateTime.now(),
+        total: total,
+        status: 'PROCESSING',
+        items: List<CheckoutCartItem>.from(_cartItems),
+      ),
+    );
+    
+    _cartItems.clear();
+    notifyListeners();
+    return orderId;
+  }
+
+  void loadComponentIntoBuilder(String category, String name) {
+    if (_loadedBuildComponents == null) {
+      _loadedBuildComponents = {};
+    }
+    _loadedBuildComponents![category] = name;
+    _currentScreen = AppScreen.pcBuilder;
+    notifyListeners();
+  }
+}
+
+class MockOrder {
+  final String orderId;
+  final DateTime date;
+  final double total;
+  final String status;
+  final List<CheckoutCartItem> items;
+
+  MockOrder({
+    required this.orderId,
+    required this.date,
+    required this.total,
+    required this.status,
+    required this.items,
+  });
 }
 
 class SavedBuild {

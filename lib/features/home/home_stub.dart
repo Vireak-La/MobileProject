@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../theme/app_colors.dart';
 import 'product_detail.dart';
+import 'search_screen.dart';
 import '../../components/cyber_drawer.dart';
 import 'package:provider/provider.dart';
 import '../../state/app_state.dart';
@@ -17,7 +18,11 @@ class HomeStubScreen extends StatelessWidget {
         actions: [
           IconButton(
             icon: const Icon(Icons.search, color: AppColors.neonCyan),
-            onPressed: () {},
+            onPressed: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(builder: (_) => const SearchScreen()),
+              );
+            },
           )
         ],
       ),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mobileproject/features/user/EditProfilePage.dart';
+import 'package:mobileproject/features/user/order_history_page.dart';
 import 'package:provider/provider.dart';
 import '../../state/app_state.dart'; // Adjust path to your app_state.dart
 
@@ -36,6 +37,11 @@ class _ProfilePageState extends State<ProfilePage> {
               Navigator.push(context, MaterialPageRoute(builder: (_) => const EditProfilePage()));
             }),
             _buildListTile(Icons.lock_outline, "Security/Password", () {}),
+          ]),
+          _buildSection("PURCHASES", [
+            _buildListTile(Icons.history, "Order History", () {
+              Navigator.push(context, MaterialPageRoute(builder: (_) => const OrderHistoryScreen()));
+            }),
           ]),
           _buildSection("SYSTEM", [
             _buildToggleTile(Icons.notifications_none, "Notifications", appState.notificationsEnabled, (val) {

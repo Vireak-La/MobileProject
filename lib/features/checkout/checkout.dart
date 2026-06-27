@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../../theme/app_colors.dart';
+import '../../state/app_state.dart';
 import 'checkout_models.dart';
 import 'order_success_page.dart';
 
@@ -58,12 +60,12 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
 			_isPlacingOrder = false;
 		});
 
-		final orderNo = _nextOrderNumber();
+		final orderNo = Provider.of<AppStateNotifier>(context, listen: false).placeOrder();
 
 		Navigator.of(context).pushReplacement(
 			MaterialPageRoute(
 				builder: (_) => OrderSuccessScreen(
-					orderNumber: orderNo,
+					orderNumber: orderNo.isNotEmpty ? orderNo : 'NEXUS-MOCK',
 					items: widget.items,
 					total: _total,
 					paymentMethod: _paymentMethod,

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../checkout/cart.dart';
+import '../checkout/checkout_models.dart';
 import '../../theme/app_colors.dart';
 import '../../components/cyber_drawer.dart';
 import '../../state/app_state.dart';
@@ -655,8 +656,51 @@ void dispose() {
 }
 
   void _atc() {
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Build added to Cart')),
-    );
+    final appState = Provider.of<AppStateNotifier>(context, listen: false);
+    int addedCount = 0;
+
+    void addIfSelected(String category, String name) {
+      if (name != 'Awaiting selection...') {
+        final price = _priceOf(name).toDouble();
+        appState.addToCart(CheckoutCartItem(
+          name: name,
+          category: category,
+          price: price,
+          quantity: 1,
+          imageAsset: '',
+          compatibilityTag: category == 'CPU' ? 'AM5' : 'PCIe',
+        ));
+        addedCount++;
+      }
+    }
+
+    addIfSelected('CPU', currentCpu);
+    addIfSelected('Motherboard', currentMotherboard);
+    addIfSelected('RAM', currentRam);
+    addIfSelected('GPU', currentGpu);
+    addIfSelected('Storage', currentStorage);
+    addIfSelected('PSU', currentPsu);
+    addIfSelected('Case', currentCase);
+
+    if (addedCount > 0) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Added $addedCount components to cart!'),
+          action: SnackBarAction(
+            label: 'VIEW CART',
+            textColor: AppColors.neonCyan,
+            onPressed: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(builder: (_) => const CartScreen()),
+              );
+            },
+          ),
+        ),
+      );
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Please select at least one component first.')),
+      );
+    }
   }
 }
