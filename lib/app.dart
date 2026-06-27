@@ -78,7 +78,10 @@ final GoRouter _router = GoRouter(
     ),
     GoRoute(
       path: '/verify-email',
-      builder: (context, state) => const CyberRigVerifyEmailPage(),
+      builder: (context, state) {
+        final isRegister = state.extra as bool? ?? false;
+        return CyberRigVerifyEmailPage(isRegister: isRegister);
+      },
     ),
     GoRoute(
       path: '/forget-password',

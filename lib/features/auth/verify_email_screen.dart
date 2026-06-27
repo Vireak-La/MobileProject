@@ -4,7 +4,8 @@ import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class CyberRigVerifyEmailPage extends StatefulWidget {
-  const CyberRigVerifyEmailPage({super.key});
+  final bool isRegister;
+  const CyberRigVerifyEmailPage({super.key, this.isRegister = false});
 
   @override
   State<CyberRigVerifyEmailPage> createState() => _CyberRigVerifyEmailPageState();
@@ -271,10 +272,13 @@ class _CyberRigVerifyEmailPageState extends State<CyberRigVerifyEmailPage> {
                               child: ElevatedButton(
                                 onPressed: () {
                                   String finalCleanPin = _getCalculatedPin();
-                                  print("Bypassing validation check. Navigating to Access Key generation step. Raw context: $finalCleanPin");
+                                  print("Bypassing validation check. Navigating next. isRegister: ${widget.isRegister}. Pin: $finalCleanPin");
                                   
-                                  // Navigates directly to your password page setup
-                                  context.push('/new-password');
+                                  if (widget.isRegister) {
+                                    context.go('/dashboard');
+                                  } else {
+                                    context.push('/new-password');
+                                  }
                                 },
                                 style: ElevatedButton.styleFrom(
                                   backgroundColor: Colors.transparent,
