@@ -12,6 +12,9 @@ class CyberRigLoginPage extends StatefulWidget {
 class _CyberRigLoginPageState extends State<CyberRigLoginPage> {
   bool _isPasswordObscured = true;
 
+  final _emailController = TextEditingController();
+  final _passwordController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -118,6 +121,7 @@ class _CyberRigLoginPageState extends State<CyberRigLoginPage> {
                               label: 'Email address input field',
                               textField: true,
                               child: TextField(
+                                controller: _emailController,
                                 style: GoogleFonts.shareTechMono(color: Colors.white),
                                 decoration: _buildInputDecoration(
                                   hintText: 'Email or Username',
@@ -165,6 +169,7 @@ class _CyberRigLoginPageState extends State<CyberRigLoginPage> {
                               label: 'Password input field',
                               textField: true,
                               child: TextField(
+                                controller: _passwordController,
                                 obscureText: _isPasswordObscured,
                                 style: GoogleFonts.shareTechMono(color: Colors.white),
                                 decoration: _buildInputDecoration(
@@ -205,10 +210,7 @@ class _CyberRigLoginPageState extends State<CyberRigLoginPage> {
                                   ),
                                 ),
                                 child: ElevatedButton(
-                                  onPressed: () {
-                                    // Clear backstack stack history and launch directly into main engine dashboard
-                                     context.go('/dashboard');
-                                  },
+                                  onPressed: _login,
                                   style: ElevatedButton.styleFrom(
                                     backgroundColor: Colors.transparent,
                                     shadowColor: Colors.transparent,
@@ -307,6 +309,30 @@ class _CyberRigLoginPageState extends State<CyberRigLoginPage> {
           ),
         ),
       ),
+    );
+  }
+
+  Future<void> _login() async {
+    final email = _emailController.text.trim();
+    final password = _passwordController.text;
+
+    if (email.isEmpty || password.isEmpty) {
+      _showMessage("Please enter your email and password.");
+      return;
+    }
+
+    // Mock authentication
+    if (email == "ngim@gmail.com" &&
+        password == "123456") {
+      context.go('/dashboard');
+    } else {
+      _showMessage("Invalid email or password.");
+    }
+  }
+
+  void _showMessage(String message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text(message)),
     );
   }
 
