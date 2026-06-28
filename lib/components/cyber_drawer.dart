@@ -41,7 +41,7 @@ class CyberDrawer extends StatelessWidget {
                 ),
                 IconButton(
                   icon: const Icon(Icons.close, color: Colors.white70),
-                  onPressed: () => Navigator.of(context).pop(),
+                  onPressed: () => context.pop(),
                 ),
               ],
             ),
@@ -56,7 +56,7 @@ class CyberDrawer extends StatelessWidget {
                   icon: Icons.home_outlined,
                   title: 'Home',
                   onTap: () {
-                    Navigator.of(context).pop();
+                    context.pop();
                     context.go('/dashboard');
                     context.read<AppStateNotifier>().setScreen(AppScreen.home);
                   },
@@ -65,7 +65,7 @@ class CyberDrawer extends StatelessWidget {
                   icon: Icons.shopping_cart_outlined,
                   title: 'Cart',
                   onTap: () {
-                    Navigator.of(context).pop();
+                    context.pop();
                     context.push('/cart');
                   },
                 ),
@@ -73,7 +73,7 @@ class CyberDrawer extends StatelessWidget {
                   icon: Icons.compare_arrows,
                   title: 'Compare Components',
                   onTap: () {
-                    Navigator.of(context).pop();
+                    context.pop();
                     context.push('/compare');
                   },
                 ),
@@ -81,7 +81,7 @@ class CyberDrawer extends StatelessWidget {
                   icon: Icons.bookmark_border_outlined,
                   title: 'Saved Builds',
                   onTap: () {
-                    Navigator.of(context).pop();
+                    context.pop();
                     context.push('/saved-builds');
                   },
                 ),
@@ -89,7 +89,7 @@ class CyberDrawer extends StatelessWidget {
                   icon: Icons.build_circle_outlined,
                   title: 'Book / Track Repair',
                   onTap: () {
-                    Navigator.of(context).pop();
+                    context.pop();
                     context.push('/services');
                   },
                 ),
@@ -97,7 +97,7 @@ class CyberDrawer extends StatelessWidget {
                   icon: Icons.local_offer_outlined,
                   title: 'Deals & Sales',
                   onTap: () {
-                    Navigator.of(context).pop();
+                    context.pop();
                     context.push('/deals-sales');
                   },
                 ),
@@ -105,7 +105,7 @@ class CyberDrawer extends StatelessWidget {
                   icon: Icons.people_outline,
                   title: 'Community',
                   onTap: () {
-                    Navigator.of(context).pop();
+                    context.pop();
                     context.push('/community');
                   },
                 ),
@@ -113,7 +113,7 @@ class CyberDrawer extends StatelessWidget {
                   icon: Icons.location_on_outlined,
                   title: 'Locations',
                   onTap: () {
-                    Navigator.of(context).pop();
+                    context.pop();
                     context.push('/map');
                   },
                 ),
@@ -121,7 +121,7 @@ class CyberDrawer extends StatelessWidget {
                   icon: Icons.support_agent_outlined,
                   title: 'Chat',
                   onTap: () {
-                    Navigator.of(context).pop();
+                    context.pop();
                     context.push('/chat');
                   },
                 ),
@@ -129,7 +129,7 @@ class CyberDrawer extends StatelessWidget {
                   icon: Icons.info_outline,
                   title: 'About Us',
                   onTap: () {
-                    Navigator.of(context).pop();
+                    context.pop();
                     context.push('/about-us');
                   },
                 ),
@@ -137,7 +137,7 @@ class CyberDrawer extends StatelessWidget {
                   icon: Icons.help_outline,
                   title: 'Help & Support',
                   onTap: () {
-                    Navigator.of(context).pop();
+                    context.pop();
                     context.push('/help-support');
                   },
                 ),
